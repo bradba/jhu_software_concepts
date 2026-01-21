@@ -5,16 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ profile.name }} — Portfolio</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+      /* Ensure main content isn't hidden under fixed navbar */
+      body { padding-top: 70px; }
+      /* Slight highlight for active nav link */
+      .nav-link.active { background-color: rgba(255,255,255,0.15); border-radius: .25rem; }
+    </style>
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+    <!-- Colored navbar fixed to top; nav links aligned to top-right -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
       <div class="container">
-        <a class="navbar-brand" href="/">{{ profile.name }}</a>
-        <div class="collapse navbar-collapse">
+        <a class="navbar-brand text-white" href="/">{{ profile.name }}</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="mainNav">
           <ul class="navbar-nav ms-auto">
-            <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
-            <li class="nav-item"><a class="nav-link" href="/projects">Projects</a></li>
-            <li class="nav-item"><a class="nav-link" href="https://github.com/bradba/jhu_software_concepts" target="_blank">GitHub</a></li>
+            {% set path = request.path %}
+            <li class="nav-item">
+              <a class="nav-link {% if path == '/' %}active{% endif %}" href="/" aria-current="page">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link {% if path.startswith('/projects') %}active{% endif %}" href="/projects">Projects</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="https://github.com/bradba/jhu_software_concepts" target="_blank">GitHub</a>
+            </li>
           </ul>
         </div>
       </div>
