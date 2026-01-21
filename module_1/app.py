@@ -1,7 +1,12 @@
-from flask import Flask, render_template, url_for
 import os
+from flask import Flask, render_template, url_for
 
-app = Flask(__name__)
+# Set template and static folders to point to the repository-level folders
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
+STATIC_DIR = os.path.join(BASE_DIR, 'static')
+
+app = Flask(__name__, template_folder=TEMPLATE_DIR, static_folder=STATIC_DIR)
 
 profile = {
     "name": "Brad Ballinger",
@@ -30,8 +35,6 @@ def projects():
 
 
 if __name__ == "__main__":
-    # Allow configuring host and port via environment variables.
-    # Defaults: host=127.0.0.1 (localhost), port=8080
     host = os.environ.get("HOST", "127.0.0.1")
     port = int(os.environ.get("PORT", "8080"))
     app.run(debug=True, host=host, port=port)
