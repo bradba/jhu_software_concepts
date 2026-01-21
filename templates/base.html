@@ -6,15 +6,34 @@
     <title>{{ profile.name }} — Portfolio</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
+      /* Johns Hopkins University theme colors */
+      :root {
+        --jhu-blue: #003366; /* Hopkins blue */
+        --jhu-gold: #FFC72C; /* Hopkins gold */
+      }
+
       /* Ensure main content isn't hidden under fixed navbar */
       body { padding-top: 70px; }
-      /* Slight highlight for active nav link */
-      .nav-link.active { background-color: rgba(255,255,255,0.15); border-radius: .25rem; }
+
+      /* Navbar using JHU blue */
+      .bg-jhu { background-color: var(--jhu-blue) !important; }
+      .navbar-brand { font-weight: 600; }
+
+      /* Accent color for links/buttons */
+      .text-jhu-gold { color: var(--jhu-gold) !important; }
+      .btn-jhu { background-color: var(--jhu-gold); color: var(--jhu-blue); border: none; }
+
+      /* Slight highlight for active nav link (subtle gold tint) */
+      .nav-link.active { background-color: rgba(255,199,44,0.12); border-radius: .25rem; }
+      .nav-link { color: rgba(255,255,255,0.92) !important; }
+
+      /* Card header accent */
+      .card-title { color: var(--jhu-blue); }
     </style>
   </head>
   <body>
     <!-- Colored navbar fixed to top; nav links aligned to top-right -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-jhu fixed-top">
       <div class="container">
         <a class="navbar-brand text-white" href="/">{{ profile.name }}</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
