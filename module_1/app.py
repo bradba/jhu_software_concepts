@@ -1,5 +1,6 @@
 import os
-from flask import Flask, render_template, url_for
+from flask import Flask
+from module_1.pages import main_bp, projects_bp
 
 # Set template and static folders to point to the repository-level folders
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -8,6 +9,7 @@ STATIC_DIR = os.path.join(BASE_DIR, 'static')
 
 app = Flask(__name__, template_folder=TEMPLATE_DIR, static_folder=STATIC_DIR)
 
+# Application data shared to templates via context processor
 profile = {
     "name": "Brad Ballinger",
     "position": "Software Developer",
@@ -24,14 +26,14 @@ module1 = {
 }
 
 
-@app.route("/")
-def index():
-    return render_template("index.html", profile=profile)
+@app.context_processor
+def inject_globals():
+    return {"profile": profile, "module1": module1}
 
 
-@app.route("/projects")
-def projects():
-    return render_template("projects.html", profile=profile, module1=module1)
+# Register blueprints
+app.register_blueprint(main_bp)
+app.register_blueprint(projects_bp)
 
 
 if __name__ == "__main__":

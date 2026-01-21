@@ -1,0 +1,27 @@
+/* Johns Hopkins University theme colors */
+:root {
+  --jhu-blue: #003366; /* Hopkins blue */
+  --jhu-gold: #FFC72C; /* Hopkins gold */
+}
+
+/* Ensure main content isn't hidden under fixed navbar */
+body { padding-top: 70px; }
+
+/* Navbar using JHU blue */
+.bg-jhu { background-color: var(--jhu-blue) !important; }
+.navbar-brand { font-weight: 600; }
+
+/* Accent color for links/buttons */
+.text-jhu-gold { color: var(--jhu-gold) !important; }
+.btn-jhu { background-color: var(--jhu-gold); color: var(--jhu-blue); border: none; }
+
+/* Slight highlight for active nav link (subtle gold tint) */
+.nav-link.active { background-color: rgba(255,199,44,0.12); border-radius: .25rem; }
+.nav-link { color: rgba(255,255,255,0.92) !important; }
+
+/* Card header accent */
+.card-title { color: var(--jhu-blue); }
+
+/* Spacing helpers */
+.profile-bio { margin-top: 1rem; }
+.project-card { margin-bottom: 1rem; }
