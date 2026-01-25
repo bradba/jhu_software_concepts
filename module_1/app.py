@@ -13,7 +13,12 @@ app = Flask(__name__, template_folder=TEMPLATE_DIR, static_folder=STATIC_DIR)
 profile = {
     "name": "Brad Ballinger",
     "position": "Software Developer",
-    "bio": "I build reliable, testable Python software and enjoy clean design. This portfolio highlights projects from my coursework and personal work. Replace this text with your own bio.",
+    "bio": """Brad Ballinger is a senior engineering professional known for owning and delivering critical, high-impact technical initiatives. He approaches engineering with a strong product-aware mindset, recognizing how deeply technology decisions influence the business, and ensures that both company and team priorities stay aligned throughout execution.
+
+His expertise spans distributed systems, backend system design, open-source design practices, and the documentation standards needed to support long-lived platforms. Brad is frequently the go-to engineer for architecting and executing seamless live migrations and production rollouts, especially when system continuity is non-negotiable.
+
+With a deep interest in mathematics and data, Brad works effectively across engineering and data science organizations, particularly on projects involving large and complex datasets. This cross-domain fluency enables him to bridge gaps, accelerate delivery, and contribute meaningfully to analytical and ML-adjacent efforts.
+""",
     "email": "brad.ballinger@gmail.com",
     "linkedin": "https://www.linkedin.com/in/bradballinger/",
     "image": "images/profile.jpg",
