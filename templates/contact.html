@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+  <div class="col-md-8">
+    <h1 class="mt-3">Contact</h1>
+    <p>Please reach out via email or LinkedIn — I welcome conversations about engineering, data, and open-source work.</p>
+    <ul>
+      <li>Email: <a href="mailto:{{ profile.email }}">{{ profile.email }}</a></li>
+      <li>LinkedIn: <a href="{{ profile.linkedin }}" target="_blank">View profile</a></li>
+      <li>GitHub: <a href="https://github.com/bradba" target="_blank">bradba</a></li>
+    </ul>
+  </div>
+
+  <div class="col-md-4">
+    <div class="card mt-3">
+      <div class="card-body">
+        <h5 class="card-title">Quick Info</h5>
+        <p class="card-text">Name: {{ profile.name }}</p>
+        <p class="card-text">Position: {{ profile.position }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

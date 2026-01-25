@@ -1,6 +1,6 @@
 import os
 from flask import Flask
-from module_1.pages import main_bp, projects_bp
+from module_1.pages import main_bp, projects_bp, contact_bp
 
 # Set template and static folders to point to the repository-level folders
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -39,6 +39,7 @@ def inject_globals():
 # Register blueprints
 app.register_blueprint(main_bp)
 app.register_blueprint(projects_bp)
+app.register_blueprint(contact_bp)
 
 
 if __name__ == "__main__":
