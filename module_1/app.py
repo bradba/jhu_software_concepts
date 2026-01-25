@@ -25,9 +25,9 @@ With a deep interest in mathematics and data, Brad works effectively across engi
 }
 
 module1 = {
-    "title": "Module 1: Data Processing Pipeline",
-    "details": "This project demonstrates reading, cleaning, and summarizing datasets with a small pipeline. It includes parsing inputs, validation, and unit tests.",
-    "github": "https://github.com/bradba/jhu_software_concepts",
+    "title": "Module 1: Personal Developer Website",
+    "details": "This project builds a personal developer website that includes a biography, contact information and links, and details about Python projects. The site is implemented with Flask, uses blueprints for page organization, and demonstrates templating, static assets, and responsive layout.",
+    "github": "https://github.com/bradba/jhu_software_concepts/tree/main/module_1",
 }
 
 
