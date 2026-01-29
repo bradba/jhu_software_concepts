@@ -14,6 +14,7 @@ from typing import List, Dict, Optional
 from urllib import parse as urlparse
 import urllib3
 from bs4 import BeautifulSoup
+from clean import _clean_comment_text
 
 # Constants
 USER_AGENT = "GradCafeScraper/1.0 (+https://example.com/)"
@@ -150,18 +151,7 @@ def _extract_entries_from_page(html: str, source_url: str) -> List[Dict[str, Opt
                 gre_aw = gre_aw_match.group(1) if gre_aw_match else None
             
                 # Look for comments - text that's not part of standard badges
-                # Remove known badge patterns and see what's left
-                cleaned = details_text
-                for pattern in [r'(Fall|Spring|Summer|Winter)\s+\d{4}', r'International', 
-                               r'American', r'Domestic', r'GPA\s+[\d\.]+', 
-                               r'GRE\s+(?:General\s+)?\d+', r'GRE\s+V\s*\d+', r'AW\s+[\d\.]+',
-                               r'Accepted on \d+\s+\w+', r'Rejected on \d+\s+\w+']:
-                    cleaned = re.sub(pattern, '', cleaned, flags=re.IGNORECASE)
-            
-                # Clean whitespace and check if there's meaningful text left
-                cleaned = ' '.join(cleaned.split())
-                if len(cleaned) > 15 and not all(c in '.,;:!? ' for c in cleaned):
-                    comments = cleaned[:500]  # Limit length
+                comments = _clean_comment_text(details_text)
             
                 i += 2  # Skip both rows
             else:
