@@ -52,4 +52,5 @@ What happens when you run it:
 
 ---
 
-If you want, I can run the script here to produce `applicant_data.json` (sleeps politely between requests).
+**Author**
+- Brad Ballinger (JHED ID: 4B16D1)

@@ -25,7 +25,7 @@ JSON_OUTPUT = "applicant_data.json"
 _http = urllib3.PoolManager()
 
 
-def _fetch_url(url: str, sleep: float = 1.0) -> Optional[str]:
+def _fetch_url(url: str, sleep: float = 0.1) -> Optional[str]:
     """Fetch a URL. Returns HTML text or None."""
     resp = _http.request("GET", url, headers={"User-Agent": USER_AGENT})
     time.sleep(sleep)
@@ -195,64 +195,39 @@ def _extract_entries_from_page(html: str, source_url: str) -> List[Dict[str, Opt
 
     return entries
 
-def _find_post_links(html: str, base_url: str) -> List[str]:
-    """Find survey links from the base page."""
-    soup = BeautifulSoup(html, "html.parser")
-    links = set()
-
-    for a in soup.find_all("a", href=True):
-        href = a["href"].strip()
-        if not href:
-            continue
-        if "/survey" in href:
-            links.add(urlparse.urljoin(base_url, href))
-
-    base_survey = urlparse.urljoin(base_url, "/survey/")
-    ordered = [base_survey]
-    for link in sorted(links):
-        if link != base_survey:
-            ordered.append(link)
-
-    # de-dup preserve order
-    seen = set()
-    result = []
-    for link in ordered:
-        if link and link not in seen:
-            seen.add(link)
-            result.append(link)
-
-    return result
-
-
 def scrape_data(base_url: str = DEFAULT_BASE, limit: int = 50) -> List[Dict[str, Optional[str]]]:
-    """Fetch entries from the base survey URL up to limit. Parse each page to extract multiple entries."""
-    html = _fetch_url(base_url)
-    if not html:
-        return []
-
-    links = _find_post_links(html, base_url)
-    print(f"[scrape] found {len(links)} candidate links to process")
-
+    """Fetch entries by iterating through paginated survey pages (?page=1, ?page=2, etc.)."""
     results = []
     pages_processed = 0
+    page_num = 1
 
-    for link in links:
-        if len(results) >= limit:
-            break
+    while len(results) < limit:
+        # Build paginated URL
+        if page_num == 1:
+            page_url = urlparse.urljoin(base_url, "/survey/")
+        else:
+            page_url = urlparse.urljoin(base_url, f"/survey/?page={page_num}")
 
         pages_processed += 1
-        print(f"[scrape] page {pages_processed}: fetching {link}")
-        page_html = _fetch_url(link)
+        print(f"[scrape] page {pages_processed}: fetching {page_url}")
+        page_html = _fetch_url(page_url)
         if not page_html:
-            continue
+            print(f"[scrape] failed to fetch page {page_num}, stopping")
+            break
 
-        entries = _extract_entries_from_page(page_html, link)
-        print(f"[scrape] extracted {len(entries)} entries from page")
+        entries = _extract_entries_from_page(page_html, page_url)
+        if not entries:
+            print(f"[scrape] no entries found on page {page_num}, stopping")
+            break
+
+        print(f"[scrape] extracted {len(entries)} entries from page {page_num}")
 
         for entry in entries:
             if len(results) >= limit:
                 break
             results.append(entry)
+
+        page_num += 1
 
     print(f"[scrape] collected {len(results)} total entries from {pages_processed} pages")
     return results
