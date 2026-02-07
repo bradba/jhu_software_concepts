@@ -15,11 +15,17 @@ This project analyzes graduate school application data using PostgreSQL and Flas
 
 ### Prerequisites
 
+**Install Dependencies:**
 ```bash
-pip install psycopg2 flask reportlab beautifulsoup4 urllib3
+pip install -r requirements.txt
 ```
 
-Ensure PostgreSQL is running on localhost:5432
+Or install manually:
+```bash
+pip install psycopg2-binary flask reportlab beautifulsoup4 urllib3
+```
+
+**Ensure PostgreSQL is running** on localhost:5432
 
 ### Step 1: Load Data into Database
 
@@ -128,26 +134,21 @@ Use this button after manually adding data or to see the latest analytics withou
 
 ```
 module_3/
-├── load_data.py              # Data loader
-├── query_data.py             # Query runner
-├── app.py                    # Flask web app (includes /pull-data endpoint)
-├── generate_report.py        # PDF generator
-├── templates/index.html      # Web template (with Pull Data button)
-├── static/css/style.css      # Stylesheet (with button styling)
+├── README.md                           # This file
+├── requirements.txt                    # Python dependencies
+├── load_data.py                        # Data loader
+├── query_data.py                       # Query runner
+├── app.py                              # Flask web app (includes /pull-data endpoint)
+├── templates/
+│   └── index.html                     # Web template (with control panel)
+├── static/
+│   └── css/
+│       └── style.css                  # JHU-themed stylesheet
 ├── scripts/
-│   ├── scrape.py            # GradCafe scraper (from Module 2)
-│   └── clean.py             # Data cleaning utilities
-└── llm_extend_applicant_data.json  # Initial data
+│   ├── scrape.py                      # GradCafe scraper (from Module 2)
+│   └── clean.py                       # Data cleaning utilities
+└── llm_extend_applicant_data.json     # Initial data
 ```
-
-## Troubleshooting
-
-**Port 5000 in use?** App uses port 5001, or edit `app.py` to change port.
-
-**Database connection error?** Verify PostgreSQL is running and connection parameters are correct.
-
-**Data file not found?** Ensure `llm_extend_applicant_data.json` is in the current directory.
-
 ---
 
 **Johns Hopkins University - Modern Python Course**
