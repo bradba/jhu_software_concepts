@@ -270,6 +270,75 @@ def question_9(conn):
     return count_llm, count_original
 
 
+def question_10(conn):
+    """What are the top 10 most applied-to programs for Fall 2026?"""
+    cursor = conn.cursor()
+
+    query = """
+        SELECT
+            llm_generated_university,
+            llm_generated_program,
+            COUNT(*) as total_applications,
+            SUM(CASE WHEN status = 'Accepted' THEN 1 ELSE 0 END) as acceptances,
+            ROUND(100.0 * SUM(CASE WHEN status = 'Accepted' THEN 1 ELSE 0 END) / COUNT(*), 2) as acceptance_rate
+        FROM applicants
+        WHERE term = 'Fall 2026'
+            AND llm_generated_university IS NOT NULL
+            AND llm_generated_program IS NOT NULL
+        GROUP BY llm_generated_university, llm_generated_program
+        ORDER BY total_applications DESC
+        LIMIT 10;
+    """
+    cursor.execute(query)
+    results = cursor.fetchall()
+    cursor.close()
+
+    print("Question 10: Top 10 most applied-to programs for Fall 2026:")
+    print(f"{'Rank':<6}{'University':<40}{'Program':<30}{'Apps':<8}{'Accept Rate':<12}")
+    print("-" * 96)
+
+    for i, (university, program, total, acceptances, rate) in enumerate(results, 1):
+        print(f"{i:<6}{university[:39]:<40}{program[:29]:<30}{total:<8}{rate:.2f}%")
+
+    print()
+    return results
+
+
+def question_11(conn):
+    """How do acceptance rates compare between PhD and Masters programs?"""
+    cursor = conn.cursor()
+
+    query = """
+        SELECT
+            degree,
+            COUNT(*) as total_applications,
+            SUM(CASE WHEN status = 'Accepted' THEN 1 ELSE 0 END) as acceptances,
+            ROUND(100.0 * SUM(CASE WHEN status = 'Accepted' THEN 1 ELSE 0 END) / COUNT(*), 2) as acceptance_rate,
+            ROUND(CAST(AVG(CASE WHEN status = 'Accepted' AND gpa IS NOT NULL THEN gpa END) AS numeric), 2) as avg_gpa_accepted,
+            COUNT(CASE WHEN status = 'Accepted' AND gpa IS NOT NULL THEN 1 END) as gpa_count
+        FROM applicants
+        WHERE degree IN ('PhD', 'Masters')
+        GROUP BY degree
+        ORDER BY degree;
+    """
+    cursor.execute(query)
+    results = cursor.fetchall()
+    cursor.close()
+
+    print("Question 11: PhD vs Masters program comparison:")
+    print(f"{'Degree':<10}{'Total Apps':<12}{'Acceptances':<12}{'Accept Rate':<14}{'Avg GPA (Accepted)':<20}")
+    print("-" * 68)
+
+    for degree, total, acceptances, rate, avg_gpa, gpa_count in results:
+        gpa_str = f"{avg_gpa:.2f} (n={gpa_count:,})" if avg_gpa else "N/A"
+        total_str = f"{total:,}"
+        accept_str = f"{acceptances:,}"
+        print(f"{degree:<10}{total_str:<12}{accept_str:<12}{rate:.2f}%{' ':<10}{gpa_str:<20}")
+
+    print()
+    return results
+
+
 def main():
     """Run all queries and display results."""
     print("=" * 80)
@@ -291,6 +360,8 @@ def main():
         question_7(conn)
         question_8(conn)
         question_9(conn)
+        question_10(conn)
+        question_11(conn)
 
         conn.close()
         print("=" * 80)
