@@ -13,6 +13,16 @@
             <div class="header-content">
                 <h1>Grad School Exit Data Analysis</h1>
                 <p class="subtitle">Johns Hopkins University - Graduate Program Applicant Analytics</p>
+                <div class="pull-data-container">
+                    <button id="pullDataBtn" class="pull-data-btn" onclick="pullNewData()">
+                        <span class="btn-icon">🔄</span>
+                        <span class="btn-text">Pull Data</span>
+                    </button>
+                    <p class="pull-data-info">
+                        Click to scrape the latest application data from GradCafe and automatically add new entries to the database
+                    </p>
+                    <div id="pullDataStatus" class="pull-data-status"></div>
+                </div>
             </div>
         </div>
     </header>
@@ -251,5 +261,61 @@
 
     <footer>
     </footer>
+
+    <script>
+        async function pullNewData() {
+            const btn = document.getElementById('pullDataBtn');
+            const status = document.getElementById('pullDataStatus');
+
+            // Disable button and show loading state
+            btn.disabled = true;
+            btn.classList.add('loading');
+            btn.querySelector('.btn-text').textContent = 'Pulling Data...';
+            btn.querySelector('.btn-icon').textContent = '⏳';
+
+            status.className = 'pull-data-status info';
+            status.textContent = 'Scraping GradCafe for new application data... This may take 1-2 minutes.';
+
+            try {
+                const response = await fetch('/pull-data', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    if (data.status === 'success') {
+                        status.className = 'pull-data-status success';
+                        status.textContent = `✅ ${data.message} (${data.inserted} new, ${data.skipped} duplicates)`;
+
+                        // Offer to refresh page
+                        setTimeout(() => {
+                            if (data.inserted > 0 && confirm('New data added! Refresh page to see updated analytics?')) {
+                                location.reload();
+                            }
+                        }, 2000);
+                    } else if (data.status === 'warning') {
+                        status.className = 'pull-data-status warning';
+                        status.textContent = `⚠️ ${data.message}`;
+                    }
+                } else {
+                    status.className = 'pull-data-status error';
+                    status.textContent = `❌ Error: ${data.message}`;
+                }
+            } catch (error) {
+                status.className = 'pull-data-status error';
+                status.textContent = `❌ Network error: ${error.message}`;
+            } finally {
+                // Re-enable button
+                btn.disabled = false;
+                btn.classList.remove('loading');
+                btn.querySelector('.btn-text').textContent = 'Pull Data';
+                btn.querySelector('.btn-icon').textContent = '🔄';
+            }
+        }
+    </script>
 </body>
 </html>

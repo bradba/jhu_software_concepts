@@ -16,7 +16,7 @@ This project analyzes graduate school application data using PostgreSQL and Flas
 ### Prerequisites
 
 ```bash
-pip install psycopg2 flask reportlab
+pip install psycopg2 flask reportlab beautifulsoup4 urllib3
 ```
 
 Ensure PostgreSQL is running on localhost:5432
@@ -50,7 +50,17 @@ Or use the startup script:
 
 Then open http://127.0.0.1:5001 in your browser.
 
-### Step 4: Generate PDF Report (Optional)
+### Step 4: Pull New Data (Using Web Interface)
+
+Once the web app is running, click the **"Pull Data"** button in the header to:
+- Scrape the latest application data from GradCafe (up to 50 new entries)
+- Automatically add new entries to the database
+- Skip duplicate entries
+- See real-time status updates
+
+The scraping process typically takes 1-2 minutes.
+
+### Step 5: Generate PDF Report (Optional)
 
 ```bash
 python generate_report.py
@@ -93,17 +103,32 @@ conn_params = {
 - Fall 2026: 6,978 applications, 24.32% acceptance rate
 - Most popular program: UW-Madison Mathematics (39 applications)
 
+## Web Application Features
+
+### Pull Data Button
+The web interface includes a **"Pull Data"** button that:
+- **Scrapes GradCafe**: Fetches up to 50 of the latest application entries
+- **Automatic Import**: Converts and loads data directly into PostgreSQL
+- **Duplicate Detection**: Skips entries already in the database
+- **Real-time Feedback**: Shows progress and results (new entries added, duplicates skipped)
+- **Auto-refresh Option**: Prompts to reload page if new data is added
+
+This integrates the Module 2 scraping code (`scripts/scrape.py`) with the database system.
+
 ## Project Files
 
 ```
 module_3/
 ├── load_data.py              # Data loader
 ├── query_data.py             # Query runner
-├── app.py                    # Flask web app
+├── app.py                    # Flask web app (includes /pull-data endpoint)
 ├── generate_report.py        # PDF generator
-├── templates/index.html      # Web template
-├── static/css/style.css      # Stylesheet
-└── llm_extend_applicant_data.json  # Input data
+├── templates/index.html      # Web template (with Pull Data button)
+├── static/css/style.css      # Stylesheet (with button styling)
+├── scripts/
+│   ├── scrape.py            # GradCafe scraper (from Module 2)
+│   └── clean.py             # Data cleaning utilities
+└── llm_extend_applicant_data.json  # Initial data
 ```
 
 ## Troubleshooting
