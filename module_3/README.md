@@ -106,7 +106,7 @@ conn_params = {
 ## Web Application Features
 
 ### Pull Data Button
-The web interface includes a **"Pull Data"** button that:
+The web interface includes a **"Pull Data"** button (bottom left of header) that:
 - **Scrapes GradCafe**: Fetches up to 50 of the latest application entries
 - **Automatic Import**: Converts and loads data directly into PostgreSQL
 - **Duplicate Detection**: Skips entries already in the database
@@ -114,6 +114,15 @@ The web interface includes a **"Pull Data"** button that:
 - **Auto-refresh Option**: Prompts to reload page if new data is added
 
 This integrates the Module 2 scraping code (`scripts/scrape.py`) with the database system.
+
+### Update Analysis Button
+The web interface includes an **"Update Analysis"** button (top right of header) that:
+- **Refreshes Analytics**: Reloads the page to display the most current data from the database
+- **Smart Detection**: Prevents refresh if a data pull is currently running
+- **User Notifications**: Alerts users if they try to update during an active data pull
+- **Instant Update**: Quickly refreshes all queries and charts with latest database state
+
+Use this button after manually adding data or to see the latest analytics without pulling new data from GradCafe.
 
 ## Project Files
 

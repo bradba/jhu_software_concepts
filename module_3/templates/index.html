@@ -11,16 +11,37 @@
     <header>
         <div class="container">
             <div class="header-content">
-                <h1>Grad School Exit Data Analysis</h1>
-                <p class="subtitle">Johns Hopkins University - Graduate Program Applicant Analytics</p>
-                <div class="pull-data-container">
-                    <button id="pullDataBtn" class="pull-data-btn" onclick="pullNewData()">
-                        <span class="btn-icon">🔄</span>
-                        <span class="btn-text">Pull Data</span>
-                    </button>
-                    <p class="pull-data-info">
-                        Click to scrape the latest application data from GradCafe and automatically add new entries to the database
-                    </p>
+                <div class="header-title">
+                    <h1>Grad School Exit Data Analysis</h1>
+                    <p class="subtitle">Johns Hopkins University - Graduate Program Applicant Analytics</p>
+                </div>
+
+                <!-- Combined Control Panel -->
+                <div class="control-panel">
+                    <div class="control-panel-header">
+                        <h3>Data Management Controls</h3>
+                    </div>
+                    <div class="control-panel-buttons">
+                        <div class="control-item">
+                            <button id="pullDataBtn" class="control-btn pull-data-btn" onclick="pullNewData()">
+                                <span class="btn-icon">🔄</span>
+                                <span class="btn-text">Pull Data</span>
+                            </button>
+                            <p class="control-info">
+                                Scrape latest data from GradCafe and add to database
+                            </p>
+                        </div>
+                        <div class="control-divider"></div>
+                        <div class="control-item">
+                            <button id="updateAnalysisBtn" class="control-btn update-analysis-btn" onclick="updateAnalysis()">
+                                <span class="btn-icon">📊</span>
+                                <span class="btn-text">Update Analysis</span>
+                            </button>
+                            <p class="control-info">
+                                Refresh page with current database analytics
+                            </p>
+                        </div>
+                    </div>
                     <div id="pullDataStatus" class="pull-data-status"></div>
                 </div>
             </div>
@@ -263,12 +284,20 @@
     </footer>
 
     <script>
+        // Track if data pull is currently running
+        let isPullingData = false;
+
         async function pullNewData() {
             const btn = document.getElementById('pullDataBtn');
             const status = document.getElementById('pullDataStatus');
+            const updateBtn = document.getElementById('updateAnalysisBtn');
 
-            // Disable button and show loading state
+            // Set pulling state
+            isPullingData = true;
+
+            // Disable both buttons during pull
             btn.disabled = true;
+            updateBtn.disabled = true;
             btn.classList.add('loading');
             btn.querySelector('.btn-text').textContent = 'Pulling Data...';
             btn.querySelector('.btn-icon').textContent = '⏳';
@@ -309,12 +338,43 @@
                 status.className = 'pull-data-status error';
                 status.textContent = `❌ Network error: ${error.message}`;
             } finally {
-                // Re-enable button
+                // Reset pulling state
+                isPullingData = false;
+
+                // Re-enable buttons
                 btn.disabled = false;
+                updateBtn.disabled = false;
                 btn.classList.remove('loading');
                 btn.querySelector('.btn-text').textContent = 'Pull Data';
                 btn.querySelector('.btn-icon').textContent = '🔄';
             }
+        }
+
+        function updateAnalysis() {
+            const status = document.getElementById('pullDataStatus');
+
+            // Check if data pull is currently running
+            if (isPullingData) {
+                status.className = 'pull-data-status warning';
+                status.textContent = '⚠️ Cannot update analysis while pulling new data. Please wait for the data pull to complete.';
+
+                // Clear the message after 4 seconds
+                setTimeout(() => {
+                    status.textContent = '';
+                    status.className = 'pull-data-status';
+                }, 4000);
+
+                return;
+            }
+
+            // Show brief message before refresh
+            status.className = 'pull-data-status info';
+            status.textContent = '🔄 Refreshing analysis with current database...';
+
+            // Refresh the page to get updated analytics
+            setTimeout(() => {
+                location.reload();
+            }, 500);
         }
     </script>
 </body>

@@ -39,6 +39,11 @@ header {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+.header-title {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
 .header-content h1 {
     font-size: 2.5rem;
     font-weight: 700;
@@ -51,41 +56,80 @@ header {
     opacity: 0.95;
 }
 
-/* Pull Data Section */
-.pull-data-container {
-    margin-top: 25px;
-    padding: 20px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+/* Unified Control Panel */
+.control-panel {
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    padding: 25px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.pull-data-btn {
-    background: var(--white);
-    color: var(--jhu-blue);
+.control-panel-header {
+    text-align: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.control-panel-header h3 {
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin: 0;
+    opacity: 0.95;
+}
+
+.control-panel-buttons {
+    display: flex;
+    gap: 30px;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.control-item {
+    flex: 1;
+    max-width: 300px;
+    text-align: center;
+}
+
+.control-divider {
+    width: 2px;
+    background: rgba(255, 255, 255, 0.2);
+    align-self: stretch;
+}
+
+.control-btn {
+    width: 100%;
     border: none;
-    padding: 12px 30px;
-    border-radius: 6px;
+    padding: 14px 30px;
+    border-radius: 8px;
     font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    justify-content: center;
+    gap: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.control-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.pull-data-btn {
+    background: var(--white);
+    color: var(--jhu-blue);
 }
 
 .pull-data-btn:hover:not(:disabled) {
     background: var(--jhu-heritage-blue);
     color: var(--white);
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.pull-data-btn:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 .pull-data-btn.loading {
@@ -97,24 +141,36 @@ header {
     50% { opacity: 0.7; }
 }
 
+.update-analysis-btn {
+    background: linear-gradient(135deg, var(--jhu-heritage-blue) 0%, var(--jhu-spirit-blue) 100%);
+    color: var(--white);
+}
+
+.update-analysis-btn:hover:not(:disabled) {
+    background: linear-gradient(135deg, var(--jhu-spirit-blue) 0%, var(--jhu-heritage-blue) 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+}
+
 .btn-icon {
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     line-height: 1;
 }
 
-.pull-data-info {
-    margin-top: 12px;
-    font-size: 0.9rem;
+.control-info {
+    margin-top: 10px;
+    font-size: 0.85rem;
     opacity: 0.9;
-    max-width: 600px;
+    line-height: 1.4;
 }
 
 .pull-data-status {
-    margin-top: 15px;
-    padding: 12px 15px;
-    border-radius: 6px;
+    margin-top: 20px;
+    padding: 14px 18px;
+    border-radius: 8px;
     font-size: 0.95rem;
     display: none;
+    text-align: center;
 }
 
 .pull-data-status:not(:empty) {
@@ -379,6 +435,23 @@ footer p {
 
 /* Responsive Design */
 @media (max-width: 768px) {
+    .control-panel-buttons {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .control-divider {
+        display: none;
+    }
+
+    .control-item {
+        max-width: 100%;
+    }
+
+    .control-btn {
+        padding: 16px 30px;
+    }
+
     .header-content h1 {
         font-size: 1.8rem;
     }
