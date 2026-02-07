@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grad School Exit Data Analysis - Johns Hopkins University</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <h1>Grad School Exit Data Analysis</h1>
+                <p class="subtitle">Johns Hopkins University - Graduate Program Applicant Analytics</p>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="intro-section">
+            <div class="info-card">
+                <h2>Overview</h2>
+                <p>This dashboard provides comprehensive analysis of graduate program applications, acceptance rates, and applicant metrics across various institutions and programs.</p>
+            </div>
+        </section>
+
+        <!-- Query 1 -->
+        <section class="analysis-section">
+            <div class="question-card">
+                <h3 class="question">How many entries do you have in your database who have applied for Fall 2024?</h3>
+                <div class="answer-box">
+                    <span class="answer-label">Answer:</span>
+                    <span class="answer-value">Applicant count: {{ "{:,}".format(results.q1_count) }}</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Query 2 -->
+        <section class="analysis-section">
+            <div class="question-card">
+                <h3 class="question">What percentage of entries are from International students (not American or Other) (in two decimal places)?</h3>
+                <div class="answer-box">
+                    <span class="answer-label">Answer:</span>
+                    <span class="answer-value">Percent International: {{ "%.2f"|format(results.q2_percentage) }}%</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Query 3 -->
+        <section class="analysis-section">
+            <div class="question-card">
+                <h3 class="question">What is the average GPA, GRE, GRE V, GRE AW of applicants who provided these metrics?</h3>
+                <div class="answer-box multi-answer">
+                    <div class="answer-grid">
+                        <div class="metric-item">
+                            <span class="metric-label">Average GPA:</span>
+                            <span class="metric-value">{{ "%.2f"|format(results.q3_averages.avg_gpa) }}</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">Average GRE:</span>
+                            <span class="metric-value">{{ "%.2f"|format(results.q3_averages.avg_gre) }}</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">Average GRE V:</span>
+                            <span class="metric-value">{{ "%.2f"|format(results.q3_averages.avg_gre_v) }}</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">Average GRE AW:</span>
+                            <span class="metric-value">{{ "%.2f"|format(results.q3_averages.avg_gre_aw) }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Query 4 -->
+        <section class="analysis-section">
+            <div class="question-card">
+                <h3 class="question">What is the average GPA of American students in Fall 2024?</h3>
+                <div class="answer-box">
+                    <span class="answer-label">Answer:</span>
+                    <span class="answer-value">Average GPA, Americans: {{ "%.2f"|format(results.q4_avg_gpa) }}</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Query 5 -->
+        <section class="analysis-section">
+            <div class="question-card">
+                <h3 class="question">What percent of entries for Fall 2024 are Acceptances (in two decimal places)?</h3>
+                <div class="answer-box">
+                    <span class="answer-label">Answer:</span>
+                    <span class="answer-value">Acceptance percent: {{ "%.2f"|format(results.q5_percentage) }}%</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Query 6 -->
+        <section class="analysis-section">
+            <div class="question-card">
+                <h3 class="question">What is the average GPA of applicants who applied for Fall 2024 who are Acceptances?</h3>
+                <div class="answer-box">
+                    <span class="answer-label">Answer:</span>
+                    <span class="answer-value">Average GPA, Acceptances: {{ "%.2f"|format(results.q6_avg_gpa) }}</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Query 7 -->
+        <section class="analysis-section">
+            <div class="question-card">
+                <h3 class="question">How many entries are from applicants who applied to JHU for a masters degree in Computer Science?</h3>
+                <div class="answer-box">
+                    <span class="answer-label">Answer:</span>
+                    <span class="answer-value">{{ "{:,}".format(results.q7_count) }} entries</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Query 8 -->
+        <section class="analysis-section">
+            <div class="question-card">
+                <h3 class="question">How many entries from 2026 are acceptances from Georgetown, MIT, Stanford, CMU for PhD CS?</h3>
+                <div class="answer-box">
+                    <span class="answer-label">Answer:</span>
+                    <span class="answer-value">{{ "{:,}".format(results.q8_count) }} entries</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Query 9 -->
+        <section class="analysis-section">
+            <div class="question-card">
+                <h3 class="question">Do numbers for question 8 change if you use LLM Generated Fields?</h3>
+                <div class="answer-box multi-answer">
+                    <div class="answer-grid">
+                        <div class="metric-item">
+                            <span class="metric-label">Using LLM-generated fields:</span>
+                            <span class="metric-value">{{ "{:,}".format(results.q9_counts[0]) }} entries</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-label">Using original fields:</span>
+                            <span class="metric-value">{{ "{:,}".format(results.q9_counts[1]) }} entries</span>
+                        </div>
+                    </div>
+                    {% if results.q9_counts[0] == results.q9_counts[1] %}
+                    <p class="comparison-note">The numbers are the same.</p>
+                    {% else %}
+                    <p class="comparison-note">Difference: {{ results.q9_counts[0] - results.q9_counts[1] }} entries</p>
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+
+        <!-- Query 10 -->
+        <section class="analysis-section">
+            <div class="question-card full-width">
+                <h3 class="question">What are the top 10 most applied-to programs for Fall 2026?</h3>
+                <div class="table-container">
+                    <table class="results-table">
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>University</th>
+                                <th>Program</th>
+                                <th>Applications</th>
+                                <th>Acceptance Rate</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for university, program, total, acceptances, rate in results.q10_top_programs %}
+                            <tr>
+                                <td class="rank-cell">{{ loop.index }}</td>
+                                <td>{{ university }}</td>
+                                <td>{{ program }}</td>
+                                <td class="number-cell">{{ total }}</td>
+                                <td class="number-cell">{{ "%.2f"|format(rate) }}%</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Query 11 -->
+        <section class="analysis-section">
+            <div class="question-card full-width">
+                <h3 class="question">How do acceptance rates compare between PhD and Masters programs?</h3>
+                <div class="table-container">
+                    <table class="results-table">
+                        <thead>
+                            <tr>
+                                <th>Degree</th>
+                                <th>Total Applications</th>
+                                <th>Acceptances</th>
+                                <th>Accept Rate</th>
+                                <th>Avg GPA (Accepted)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for degree, total, acceptances, rate, avg_gpa, gpa_count in results.q11_comparison %}
+                            <tr>
+                                <td><strong>{{ degree }}</strong></td>
+                                <td class="number-cell">{{ "{:,}".format(total) }}</td>
+                                <td class="number-cell">{{ "{:,}".format(acceptances) }}</td>
+                                <td class="number-cell">{{ "%.2f"|format(rate) }}%</td>
+                                <td class="number-cell">
+                                    {% if avg_gpa %}
+                                    {{ "%.2f"|format(avg_gpa) }} (n={{ "{:,}".format(gpa_count) }})
+                                    {% else %}
+                                    N/A
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Key Findings -->
+        <section class="key-findings">
+            <h2>Key Findings</h2>
+            <div class="findings-grid">
+                <div class="finding-card">
+                    <div class="finding-icon">📊</div>
+                    <h4>Acceptance Rates</h4>
+                    <p>Masters programs show significantly higher acceptance rates (64.92%) compared to PhD programs (25.19%)</p>
+                </div>
+                <div class="finding-card">
+                    <div class="finding-icon">🌍</div>
+                    <h4>International Students</h4>
+                    <p>Approximately 50% of all applicants are international students</p>
+                </div>
+                <div class="finding-card">
+                    <div class="finding-icon">🎓</div>
+                    <h4>GPA Trends</h4>
+                    <p>American students in Fall 2026 have an average GPA of 4.07, while accepted students average 3.80</p>
+                </div>
+                <div class="finding-card">
+                    <div class="finding-icon">🏆</div>
+                    <h4>Top Programs</h4>
+                    <p>UW-Madison Mathematics program received the most applications for Fall 2026</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+    </footer>
+</body>
+</html>
