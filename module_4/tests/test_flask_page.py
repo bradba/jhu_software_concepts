@@ -150,15 +150,6 @@ class TestAnalysisPageRendering:
         assert 'updateAnalysisBtn' in html_content or 'update-analysis-btn' in html_content, \
             "Page should contain Update Analysis button element"
 
-    def test_page_contains_both_buttons(self, client):
-        """Test that page contains both required buttons."""
-        response = client.get('/')
-        html_content = response.data.decode('utf-8')
-
-        # Verify both buttons are present
-        assert 'Pull Data' in html_content and 'Update Analysis' in html_content, \
-            "Page should contain both 'Pull Data' and 'Update Analysis' buttons"
-
     def test_page_text_includes_analysis(self, client):
         """Test that page text includes 'Analysis'."""
         response = client.get('/')
