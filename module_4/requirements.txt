@@ -17,3 +17,7 @@ urllib3>=2.0.0
 # Additional dependencies (typically already included)
 Pillow>=9.0.0  # Required by reportlab for image handling
 charset-normalizer>=3.0.0  # Required by reportlab
+
+# Testing
+pytest>=7.4.0
+pytest-mock>=3.12.0
