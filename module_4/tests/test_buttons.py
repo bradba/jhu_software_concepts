@@ -90,6 +90,7 @@ def client(app):
     return app.test_client()
 
 
+@pytest.mark.buttons
 class TestPullDataEndpoint:
     """Test POST /pull-data endpoint behavior."""
 
@@ -234,6 +235,7 @@ class TestPullDataEndpoint:
         assert call_count['cursor_execute'] == 3
 
 
+@pytest.mark.buttons
 class TestUpdateAnalysisEndpoint:
     """Test POST /update-analysis endpoint behavior."""
 
@@ -255,6 +257,7 @@ class TestUpdateAnalysisEndpoint:
         assert data['status'] == 'success'
 
 
+@pytest.mark.buttons
 class TestBusyStateGating:
     """Test busy-state behavior for both endpoints."""
 
@@ -299,6 +302,7 @@ class TestBusyStateGating:
         assert update_response.status_code == 409
 
 
+@pytest.mark.buttons
 class TestUpdateAnalysisEndpointWithLLM:
     """Test POST /update-analysis with LLM processing."""
 
@@ -343,6 +347,7 @@ class TestUpdateAnalysisEndpointWithLLM:
         assert data['status'] == 'error'
 
 
+@pytest.mark.buttons
 class TestBusyStateManagement:
     """Test busy-state flag management."""
 

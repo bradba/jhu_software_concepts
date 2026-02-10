@@ -77,6 +77,7 @@ def client(app):
     return app.test_client()
 
 
+@pytest.mark.analysis
 class TestAnswerLabels:
     """Test that the page includes 'Answer' labels for rendered analysis."""
 
@@ -128,6 +129,7 @@ class TestAnswerLabels:
                 assert has_digits, f"Answer label at position {answer_pos} should have numeric content nearby"
 
 
+@pytest.mark.analysis
 class TestPercentageFormatting:
     """Test that percentages are formatted with two decimal places."""
 
@@ -209,6 +211,7 @@ class TestPercentageFormatting:
             pass
 
 
+@pytest.mark.analysis
 class TestAnswerAndPercentageIntegration:
     """Test the integration of Answer labels with percentage values."""
 

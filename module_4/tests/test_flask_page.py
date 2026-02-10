@@ -75,6 +75,7 @@ def client(app):
     return app.test_client()
 
 
+@pytest.mark.web
 class TestAppFactory:
     """Test Flask app factory and configuration."""
 
@@ -118,6 +119,7 @@ class TestAppFactory:
         assert 'POST' in rule.methods
 
 
+@pytest.mark.web
 class TestAnalysisPageRendering:
     """Test GET /analysis (main index page) rendering and content."""
 
@@ -194,6 +196,7 @@ class TestAnalysisPageRendering:
             "Page should display percentage from question 2"
 
 
+@pytest.mark.web
 class TestPageContent:
     """Additional tests for page content and structure."""
 
