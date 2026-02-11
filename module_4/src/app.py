@@ -10,9 +10,6 @@ from datetime import datetime
 import threading
 from contextlib import contextmanager
 
-# Add scripts directory to path
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'scripts'))
-
 app = Flask(__name__)
 
 # Busy-state management
@@ -113,7 +110,7 @@ def pull_data():
         with busy_state():
             # Step 1: Run the scraper
             print("[pull-data] Starting scraper...")
-            script_path = os.path.join(os.path.dirname(__file__), 'scripts', 'scrape.py')
+            script_path = os.path.join(os.path.dirname(__file__), 'scrape.py')
             output_path = os.path.join(os.path.dirname(__file__), '..', 'new_applicant_data.json')
             scrape_result = subprocess.run(
                 [sys.executable, script_path, '--limit', '50', '--out', output_path],
