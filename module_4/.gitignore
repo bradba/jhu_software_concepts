@@ -28,3 +28,7 @@ new_applicant_data.json
 # OS
 .DS_Store
 Thumbs.db
+
+# Environment configuration
+.env
+setup_env.sh

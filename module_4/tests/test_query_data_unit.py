@@ -71,6 +71,7 @@ class TestGetConnection:
             return MockConnection()
 
         monkeypatch.setattr('psycopg2.connect', mock_connect)
+        monkeypatch.delenv('DATABASE_URL', raising=False)
 
         query_data.get_connection()
 
@@ -79,6 +80,55 @@ class TestGetConnection:
         assert called[0]['port'] == 5432
         assert 'database' in called[0]
         assert 'user' in called[0]
+
+    def test_get_connection_with_database_url(self, monkeypatch):
+        """Test that get_connection parses DATABASE_URL correctly."""
+        import query_data
+
+        called = []
+
+        def mock_connect(**kwargs):
+            called.append(kwargs)
+            return MockConnection()
+
+        monkeypatch.setattr('psycopg2.connect', mock_connect)
+        monkeypatch.setenv('DATABASE_URL', 'postgresql://testuser:testpass@testhost:5433/testdb')
+
+        query_data.get_connection()
+
+        assert len(called) == 1
+        assert called[0]['host'] == 'testhost'
+        assert called[0]['port'] == 5433
+        assert called[0]['database'] == 'testdb'
+        assert called[0]['user'] == 'testuser'
+        assert called[0]['password'] == 'testpass'
+
+    def test_get_connection_with_individual_env_vars(self, monkeypatch):
+        """Test that get_connection uses individual DB_* environment variables."""
+        import query_data
+
+        called = []
+
+        def mock_connect(**kwargs):
+            called.append(kwargs)
+            return MockConnection()
+
+        monkeypatch.setattr('psycopg2.connect', mock_connect)
+        monkeypatch.delenv('DATABASE_URL', raising=False)
+        monkeypatch.setenv('DB_HOST', 'customhost')
+        monkeypatch.setenv('DB_PORT', '5433')
+        monkeypatch.setenv('DB_NAME', 'customdb')
+        monkeypatch.setenv('DB_USER', 'customuser')
+        monkeypatch.setenv('DB_PASSWORD', 'custompass')
+
+        query_data.get_connection()
+
+        assert len(called) == 1
+        assert called[0]['host'] == 'customhost'
+        assert called[0]['port'] == 5433
+        assert called[0]['database'] == 'customdb'
+        assert called[0]['user'] == 'customuser'
+        assert called[0]['password'] == 'custompass'
 
 
 @pytest.mark.db

@@ -585,6 +585,80 @@ class TestLoadDataMainBlock:
         captured = capsys.readouterr()
         assert 'Error:' in captured.out
 
+    def test_main_with_database_url(self, monkeypatch, capsys):
+        """Test main() with DATABASE_URL environment variable."""
+        class MockConnection:
+            def close(self):
+                pass
+
+        def mock_connect(**kwargs):
+            # Verify DATABASE_URL was parsed correctly
+            assert kwargs['host'] == 'envhost'
+            assert kwargs['port'] == 5433
+            assert kwargs['database'] == 'envdb'
+            assert kwargs['user'] == 'envuser'
+            return MockConnection()
+
+        def mock_create_table(conn):
+            pass
+
+        def mock_load_json_data(path, conn):
+            return 50
+
+        def mock_verify_data(conn):
+            pass
+
+        monkeypatch.setenv('DATABASE_URL', 'postgresql://envuser:envpass@envhost:5433/envdb')
+        monkeypatch.setattr('psycopg2.connect', mock_connect)
+        monkeypatch.setattr('load_data.create_applicants_table', mock_create_table)
+        monkeypatch.setattr('load_data.load_json_data', mock_load_json_data)
+        monkeypatch.setattr('load_data.verify_data', mock_verify_data)
+
+        load_data.main()
+
+        captured = capsys.readouterr()
+        assert 'Connection closed successfully' in captured.out
+
+    def test_main_with_individual_env_vars(self, monkeypatch, capsys):
+        """Test main() with individual DB_* environment variables."""
+        class MockConnection:
+            def close(self):
+                pass
+
+        def mock_connect(**kwargs):
+            # Verify individual env vars were used
+            assert kwargs['host'] == 'envhost2'
+            assert kwargs['port'] == 5434
+            assert kwargs['database'] == 'envdb2'
+            assert kwargs['user'] == 'envuser2'
+            assert kwargs['password'] == 'envpass2'
+            return MockConnection()
+
+        def mock_create_table(conn):
+            pass
+
+        def mock_load_json_data(path, conn):
+            return 25
+
+        def mock_verify_data(conn):
+            pass
+
+        monkeypatch.delenv('DATABASE_URL', raising=False)
+        monkeypatch.setenv('DB_HOST', 'envhost2')
+        monkeypatch.setenv('DB_PORT', '5434')
+        monkeypatch.setenv('DB_NAME', 'envdb2')
+        monkeypatch.setenv('DB_USER', 'envuser2')
+        monkeypatch.setenv('DB_PASSWORD', 'envpass2')
+        monkeypatch.setattr('psycopg2.connect', mock_connect)
+        monkeypatch.setattr('load_data.create_applicants_table', mock_create_table)
+        monkeypatch.setattr('load_data.load_json_data', mock_load_json_data)
+        monkeypatch.setattr('load_data.verify_data', mock_verify_data)
+
+        load_data.main()
+
+        captured = capsys.readouterr()
+        assert 'Connection closed successfully' in captured.out
+
 
 @pytest.mark.db
 class TestMainExecution:

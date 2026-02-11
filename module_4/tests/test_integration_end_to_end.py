@@ -95,13 +95,34 @@ def test_db_connection():
     """
     Create a connection to the test database.
     Uses the same database but with a test-specific table.
+    Respects DATABASE_URL and DB_* environment variables for test database configuration.
     """
-    conn_params = {
-        'host': 'localhost',
-        'port': 5432,
-        'database': 'bradleyballinger',
-        'user': 'bradleyballinger',
-    }
+    import os
+    from urllib.parse import urlparse
+
+    database_url = os.environ.get('TEST_DATABASE_URL') or os.environ.get('DATABASE_URL')
+
+    if database_url:
+        # Parse DATABASE_URL
+        parsed = urlparse(database_url)
+        conn_params = {
+            'host': parsed.hostname or 'localhost',
+            'port': parsed.port or 5432,
+            'database': parsed.path.lstrip('/') if parsed.path else 'bradleyballinger',
+            'user': parsed.username or 'bradleyballinger',
+        }
+        if parsed.password:
+            conn_params['password'] = parsed.password
+    else:
+        # Use individual environment variables or defaults
+        conn_params = {
+            'host': os.environ.get('DB_HOST', 'localhost'),
+            'port': int(os.environ.get('DB_PORT', '5432')),
+            'database': os.environ.get('DB_NAME', 'bradleyballinger'),
+            'user': os.environ.get('DB_USER', 'bradleyballinger'),
+        }
+        if os.environ.get('DB_PASSWORD'):
+            conn_params['password'] = os.environ.get('DB_PASSWORD')
 
     conn = psycopg2.connect(**conn_params)
     conn.autocommit = False

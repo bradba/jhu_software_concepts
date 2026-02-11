@@ -6,6 +6,7 @@ from __future__ import annotations
 import json
 import re
 import warnings
+import os
 from typing import Any, Dict, Iterable, List, Optional
 
 import urllib3
@@ -15,6 +16,9 @@ warnings.filterwarnings("ignore", category=MarkupResemblesLocatorWarning)
 
 # HTTP client for LLM API calls
 _http = urllib3.PoolManager()
+
+# Default LLM API URL from environment variable
+DEFAULT_LLM_API_URL = os.environ.get('LLM_API_URL', 'http://localhost:8000/standardize')
 
 
 def _strip_html(value: str) -> str:
@@ -94,20 +98,23 @@ def save_data(data: List[Dict[str, Any]], path: str) -> None:
 
 
 def _standardize_university_with_llm(
-    entry: Dict[str, Any], 
-    api_url: str = "http://localhost:8000/standardize"
+    entry: Dict[str, Any],
+    api_url: str = None
 ) -> Dict[str, Any]:
     """
     Call the LLM hosting API to standardize the university and program fields.
-    
+
     Args:
         entry: A single entry dictionary with 'university' and 'program_name' fields
-        api_url: The URL of the LLM standardization API endpoint
-        
+        api_url: The URL of the LLM standardization API endpoint (uses LLM_API_URL env var if not specified)
+
     Returns:
-        The entry dictionary with added 'llm-generated-university' and 
+        The entry dictionary with added 'llm-generated-university' and
         'llm-generated-program' fields, or the original entry if API call fails
     """
+    if api_url is None:
+        api_url = DEFAULT_LLM_API_URL
+
     try:
         # Send single entry wrapped in a list as the API expects a JSON array
         payload = json.dumps([entry]).encode("utf-8")
@@ -132,24 +139,27 @@ def _standardize_university_with_llm(
 
 
 def _standardize_with_llm(
-    data: List[Dict[str, Any]], 
-    api_url: str = "http://localhost:8000/standardize",
+    data: List[Dict[str, Any]],
+    api_url: str = None,
     output_path: Optional[str] = None,
     flush_every: int = 100
 ) -> List[Dict[str, Any]]:
     """
     Standardize university and program fields for all entries using LLM API.
-    
+
     Args:
         data: List of entry dictionaries
-        api_url: The URL of the LLM standardization API endpoint
+        api_url: The URL of the LLM standardization API endpoint (uses LLM_API_URL env var if not specified)
         output_path: If provided, save progress every flush_every entries
         flush_every: Number of entries to process before saving progress
-        
+
     Returns:
-        List of entries with added 'llm-generated-university' and 
+        List of entries with added 'llm-generated-university' and
         'llm-generated-program' fields
     """
+    if api_url is None:
+        api_url = DEFAULT_LLM_API_URL
+
     results = []
     for i, entry in enumerate(data, 1):
         standardized = _standardize_university_with_llm(entry, api_url)

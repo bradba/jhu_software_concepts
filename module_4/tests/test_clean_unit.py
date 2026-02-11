@@ -237,6 +237,69 @@ class TestStandardizeUniversityWithLLM:
         assert 'llm-generated-university' in result
         assert result['llm-generated-university'] == 'Stanford University'
 
+    def test_standardize_with_custom_api_url(self, monkeypatch):
+        """Test LLM API call with custom URL."""
+        entry = {'university': 'MIT', 'program_name': 'EE'}
+
+        called_urls = []
+
+        class MockResponse:
+            status = 200
+            def __init__(self):
+                self.data = json.dumps([{
+                    'university': 'MIT',
+                    'program_name': 'EE',
+                    'llm-generated-university': 'MIT',
+                    'llm-generated-program': 'Electrical Engineering'
+                }]).encode('utf-8')
+
+        class MockHTTP:
+            def request(self, method, url, *args, **kwargs):
+                called_urls.append(url)
+                return MockResponse()
+
+        monkeypatch.setattr('clean._http', MockHTTP())
+
+        # Test with explicit API URL
+        result = clean._standardize_university_with_llm(entry, api_url='http://custom:9000/api')
+
+        assert called_urls[0] == 'http://custom:9000/api'
+        assert 'llm-generated-university' in result
+
+    def test_standardize_uses_env_var_for_api_url(self, monkeypatch):
+        """Test that LLM API uses LLM_API_URL environment variable."""
+        # Reload the module to pick up the new environment variable
+        import importlib
+        import clean as clean_module
+
+        monkeypatch.setenv('LLM_API_URL', 'http://envapi:8080/standardize')
+        importlib.reload(clean_module)
+
+        entry = {'university': 'CMU', 'program_name': 'CS'}
+
+        called_urls = []
+
+        class MockResponse:
+            status = 200
+            def __init__(self):
+                self.data = json.dumps([entry]).encode('utf-8')
+
+        class MockHTTP:
+            def request(self, method, url, *args, **kwargs):
+                called_urls.append(url)
+                return MockResponse()
+
+        monkeypatch.setattr('clean._http', MockHTTP())
+
+        # Call without explicit api_url - should use environment variable
+        clean_module._standardize_university_with_llm(entry)
+
+        assert called_urls[0] == 'http://envapi:8080/standardize'
+
+        # Reload again with default
+        monkeypatch.delenv('LLM_API_URL', raising=False)
+        importlib.reload(clean_module)
+
     def test_standardize_with_api_error(self, monkeypatch, capsys):
         """Test handling of API errors."""
         entry = {'university': 'Stanford', 'program_name': 'CS'}
