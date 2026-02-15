@@ -500,7 +500,7 @@ Common Issues
 
 .. code-block:: text
 
-   psycopg2.OperationalError: could not connect to server
+   psycopg.OperationalError: could not connect to server
 
 Solution: Ensure PostgreSQL is running and environment variables are set correctly:
 

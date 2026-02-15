@@ -1,6 +1,5 @@
-import psycopg2
-from psycopg2 import sql
-from psycopg2.extras import execute_batch
+import psycopg
+from psycopg import sql
 import json
 import re
 import os
@@ -148,7 +147,7 @@ def load_json_data(json_file_path, conn):
 
                 # Batch insert every 1000 records
                 if len(records) >= 1000:
-                    execute_batch(cursor, insert_query, records)
+                    cursor.executemany(insert_query, records)
                     conn.commit()
                     print(f"Inserted {line_num - skipped} records...")
                     records = []
@@ -162,7 +161,7 @@ def load_json_data(json_file_path, conn):
 
     # Insert remaining records
     if records:
-        execute_batch(cursor, insert_query, records)
+        cursor.executemany(insert_query, records)
         conn.commit()
 
     cursor.close()
@@ -227,7 +226,7 @@ def main():
         conn_params = {
             'host': parsed.hostname or 'localhost',
             'port': parsed.port or 5432,
-            'database': parsed.path.lstrip('/') if parsed.path else 'bradleyballinger',
+            'dbname': parsed.path.lstrip('/') if parsed.path else 'bradleyballinger',
             'user': parsed.username or 'bradleyballinger',
         }
         if parsed.password:
@@ -237,7 +236,7 @@ def main():
         conn_params = {
             'host': os.environ.get('DB_HOST', 'localhost'),
             'port': int(os.environ.get('DB_PORT', '5432')),
-            'database': os.environ.get('DB_NAME', 'bradleyballinger'),
+            'dbname': os.environ.get('DB_NAME', 'bradleyballinger'),
             'user': os.environ.get('DB_USER', 'bradleyballinger'),
         }
         if os.environ.get('DB_PASSWORD'):
@@ -248,8 +247,8 @@ def main():
 
     try:
         # Establish connection
-        print(f"Connecting to database '{conn_params['database']}' at {conn_params['host']}:{conn_params['port']}...")
-        conn = psycopg2.connect(**conn_params)
+        print(f"Connecting to database '{conn_params['dbname']}' at {conn_params['host']}:{conn_params['port']}...")
+        conn = psycopg.connect(**conn_params)
 
         # Create table
         create_applicants_table(conn)
@@ -263,7 +262,7 @@ def main():
         conn.close()
         print("\nConnection closed successfully.")
 
-    except psycopg2.Error as e:
+    except psycopg.Error as e:
         print(f"Database error: {e}")
         raise
     except FileNotFoundError:

@@ -22,7 +22,7 @@ pip install -r requirements.txt
 
 Or install manually:
 ```bash
-pip install psycopg2-binary flask reportlab beautifulsoup4 urllib3
+pip install psycopg[binary] flask reportlab beautifulsoup4 urllib3
 ```
 
 **Ensure PostgreSQL is running** on localhost:5432

@@ -84,7 +84,7 @@ htmlhelp_basename = 'GradSchoolAnalysisdoc'
 intersphinx_mapping = {
     'python': ('https://docs.python.org/3', None),
     'flask': ('https://flask.palletsprojects.com/en/2.3.x/', None),
-    'psycopg2': ('https://www.psycopg.org/docs/', None),
+    'psycopg': ('https://www.psycopg.org/docs/', None),
 }
 
 # -- Options for todo extension ----------------------------------------------

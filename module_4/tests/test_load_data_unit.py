@@ -156,6 +156,10 @@ class TestCreateApplicantsTable:
             def execute(self, query):
                 self.queries.append(query)
 
+            def executemany(self, query, params_list):
+                for params in params_list:
+                    self.execute(query, params)
+
             def close(self):
                 self.closed = True
 
@@ -207,6 +211,10 @@ class TestLoadJSONData:
             def execute(self, query, params=None):
                 self.queries.append((query, params))
 
+            def executemany(self, query, params_list):
+                for params in params_list:
+                    self.execute(query, params)
+
             def close(self):
                 self.closed = True
 
@@ -221,12 +229,12 @@ class TestLoadJSONData:
             def commit(self):
                 self.committed = True
 
-        # Mock execute_batch to avoid psycopg2 dependency
-        def mock_execute_batch(cursor, query, records):
-            for record in records:
-                cursor.execute(query, record)
+        # Mock execute_batch to avoid psycopg dependency
+        # def mock_execute_batch(cursor, query, records):
+        #     for record in records:
+        #         cursor.execute(query, record)
 
-        monkeypatch.setattr('load_data.execute_batch', mock_execute_batch)
+        # monkeypatch.setattr('load_data.execute_batch', mock_execute_batch)
 
         mock_conn = MockConnection()
         result = load_data.load_json_data(str(json_file), mock_conn)
@@ -259,6 +267,10 @@ class TestLoadDataErrorPaths:
             def execute(self, query, params=None):
                 pass
 
+            def executemany(self, query, params_list):
+                for params in params_list:
+                    self.execute(query, params)
+
             def close(self):
                 self.closed = True
 
@@ -272,10 +284,10 @@ class TestLoadDataErrorPaths:
             def commit(self):
                 self.committed = True
 
-        def mock_execute_batch(cursor, query, records):
-            pass
+        # def mock_execute_batch(cursor, query, records):
+        #     pass
 
-        monkeypatch.setattr('load_data.execute_batch', mock_execute_batch)
+        # monkeypatch.setattr('load_data.execute_batch', mock_execute_batch)
 
         mock_conn = MockConnection()
         result = load_data.load_json_data(str(json_file), mock_conn)
@@ -301,6 +313,10 @@ class TestLoadDataErrorPaths:
             def execute(self, query, params=None):
                 pass
 
+            def executemany(self, query, params_list):
+                for params in params_list:
+                    self.execute(query, params)
+
             def close(self):
                 self.closed = True
 
@@ -314,10 +330,10 @@ class TestLoadDataErrorPaths:
             def commit(self):
                 self.committed = True
 
-        def mock_execute_batch(cursor, query, records):
-            pass
+        # def mock_execute_batch(cursor, query, records):
+        #     pass
 
-        monkeypatch.setattr('load_data.execute_batch', mock_execute_batch)
+        # monkeypatch.setattr('load_data.execute_batch', mock_execute_batch)
 
         mock_conn = MockConnection()
         result = load_data.load_json_data(str(json_file), mock_conn)
@@ -343,6 +359,10 @@ class TestLoadDataErrorPaths:
             def execute(self, query, params=None):
                 pass
 
+            def executemany(self, query, params_list):
+                for params in params_list:
+                    self.execute(query, params)
+
             def close(self):
                 self.closed = True
 
@@ -357,10 +377,10 @@ class TestLoadDataErrorPaths:
                 self.committed = True
 
         # Mock execute_batch to raise an error
-        def mock_execute_batch(cursor, query, records):
-            raise Exception("Database error")
+        # def mock_execute_batch(cursor, query, records):
+        #     raise Exception("Database error")
 
-        monkeypatch.setattr('load_data.execute_batch', mock_execute_batch)
+        # monkeypatch.setattr('load_data.execute_batch', mock_execute_batch)
 
         # Mock parse functions to trigger the error in the except block
         original_parse_date = load_data.parse_date
@@ -391,6 +411,10 @@ class TestLoadDataErrorPaths:
 
             def execute(self, query):
                 self.execute_count += 1
+
+            def executemany(self, query, params_list):
+                for params in params_list:
+                    self.execute(query, params)
 
             def fetchone(self):
                 return (1000,)  # Total count
@@ -447,6 +471,11 @@ class TestLoadDataBatchInsertion:
             def execute(self, query, params=None):
                 pass
 
+            def executemany(self, query, params_list):
+                batch_calls.append(len(params_list))
+                for params in params_list:
+                    self.execute(query, params)
+
             def close(self):
                 self.closed = True
 
@@ -460,10 +489,10 @@ class TestLoadDataBatchInsertion:
             def commit(self):
                 self.committed = True
 
-        def mock_execute_batch(cursor, query, records):
-            batch_calls.append(len(records))
+        # def mock_execute_batch(cursor, query, records):
+        #     batch_calls.append(len(records))
 
-        monkeypatch.setattr('load_data.execute_batch', mock_execute_batch)
+        # monkeypatch.setattr('load_data.execute_batch', mock_execute_batch)
 
         mock_conn = MockConnection()
         load_data.load_json_data(str(json_file), mock_conn)
@@ -501,7 +530,7 @@ class TestLoadDataMainBlock:
         def mock_verify_data(conn):
             pass
 
-        monkeypatch.setattr('psycopg2.connect', mock_connect)
+        monkeypatch.setattr('psycopg.connect', mock_connect)
         monkeypatch.setattr('load_data.create_applicants_table', mock_create_table)
         monkeypatch.setattr('load_data.load_json_data', mock_load_json_data)
         monkeypatch.setattr('load_data.verify_data', mock_verify_data)
@@ -512,16 +541,16 @@ class TestLoadDataMainBlock:
         captured = capsys.readouterr()
         assert 'Connection closed successfully' in captured.out
 
-    def test_main_with_psycopg2_error(self, monkeypatch, capsys):
-        """Test main() handling of psycopg2 errors."""
-        import psycopg2
+    def test_main_with_psycopg_error(self, monkeypatch, capsys):
+        """Test main() handling of psycopg errors."""
+        import psycopg
 
         def mock_connect(**kwargs):
-            raise psycopg2.Error("Connection failed")
+            raise psycopg.Error("Connection failed")
 
-        monkeypatch.setattr('psycopg2.connect', mock_connect)
+        monkeypatch.setattr('psycopg.connect', mock_connect)
 
-        with pytest.raises(psycopg2.Error):
+        with pytest.raises(psycopg.Error):
             load_data.main()
 
         captured = capsys.readouterr()
@@ -546,7 +575,7 @@ class TestLoadDataMainBlock:
         def mock_load_json_data(path, conn):
             raise FileNotFoundError(f"File not found: {path}")
 
-        monkeypatch.setattr('psycopg2.connect', mock_connect)
+        monkeypatch.setattr('psycopg.connect', mock_connect)
         monkeypatch.setattr('load_data.create_applicants_table', mock_create_table)
         monkeypatch.setattr('load_data.load_json_data', mock_load_json_data)
 
@@ -575,7 +604,7 @@ class TestLoadDataMainBlock:
         def mock_load_json_data(path, conn):
             raise ValueError("Unexpected error")
 
-        monkeypatch.setattr('psycopg2.connect', mock_connect)
+        monkeypatch.setattr('psycopg.connect', mock_connect)
         monkeypatch.setattr('load_data.create_applicants_table', mock_create_table)
         monkeypatch.setattr('load_data.load_json_data', mock_load_json_data)
 
@@ -595,7 +624,7 @@ class TestLoadDataMainBlock:
             # Verify DATABASE_URL was parsed correctly
             assert kwargs['host'] == 'envhost'
             assert kwargs['port'] == 5433
-            assert kwargs['database'] == 'envdb'
+            assert kwargs['dbname'] == 'envdb'
             assert kwargs['user'] == 'envuser'
             return MockConnection()
 
@@ -609,7 +638,7 @@ class TestLoadDataMainBlock:
             pass
 
         monkeypatch.setenv('DATABASE_URL', 'postgresql://envuser:envpass@envhost:5433/envdb')
-        monkeypatch.setattr('psycopg2.connect', mock_connect)
+        monkeypatch.setattr('psycopg.connect', mock_connect)
         monkeypatch.setattr('load_data.create_applicants_table', mock_create_table)
         monkeypatch.setattr('load_data.load_json_data', mock_load_json_data)
         monkeypatch.setattr('load_data.verify_data', mock_verify_data)
@@ -629,7 +658,7 @@ class TestLoadDataMainBlock:
             # Verify individual env vars were used
             assert kwargs['host'] == 'envhost2'
             assert kwargs['port'] == 5434
-            assert kwargs['database'] == 'envdb2'
+            assert kwargs['dbname'] == 'envdb2'
             assert kwargs['user'] == 'envuser2'
             assert kwargs['password'] == 'envpass2'
             return MockConnection()
@@ -649,7 +678,7 @@ class TestLoadDataMainBlock:
         monkeypatch.setenv('DB_NAME', 'envdb2')
         monkeypatch.setenv('DB_USER', 'envuser2')
         monkeypatch.setenv('DB_PASSWORD', 'envpass2')
-        monkeypatch.setattr('psycopg2.connect', mock_connect)
+        monkeypatch.setattr('psycopg.connect', mock_connect)
         monkeypatch.setattr('load_data.create_applicants_table', mock_create_table)
         monkeypatch.setattr('load_data.load_json_data', mock_load_json_data)
         monkeypatch.setattr('load_data.verify_data', mock_verify_data)
@@ -701,6 +730,10 @@ class MockCursor:
 
     def execute(self, query, params=None):
         pass
+
+    def executemany(self, query, params_list):
+        for params in params_list:
+            self.execute(query, params)
 
     def close(self):
         self.closed = True

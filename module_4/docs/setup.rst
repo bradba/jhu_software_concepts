@@ -24,7 +24,7 @@ Or install manually:
 
 .. code-block:: bash
 
-   pip install psycopg2-binary flask reportlab beautifulsoup4 urllib3 pytest pytest-cov
+   pip install psycopg[binary] flask reportlab beautifulsoup4 urllib3 pytest pytest-cov
 
 **Database Setup:**
 

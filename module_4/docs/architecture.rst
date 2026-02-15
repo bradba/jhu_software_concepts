@@ -245,8 +245,8 @@ The system supports flexible database configuration:
    def get_connection():
        """Create and return a database connection."""
        # Parse environment variables
-       # Return psycopg2 connection
-       return psycopg2.connect(**conn_params)
+       # Return psycopg connection
+       return psycopg.connect(**conn_params)
 
 Data Flow
 ---------

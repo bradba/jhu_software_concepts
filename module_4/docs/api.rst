@@ -271,7 +271,7 @@ Database Queries
    DB_* environment variables or defaults.
 
    :returns: PostgreSQL connection object
-   :rtype: psycopg2.connection
+   :rtype: psycopg.connection
 
 **Query Functions:**
 
@@ -449,7 +449,7 @@ All modules implement consistent error handling:
 
 * ``FileNotFoundError`` - Data file not found
 * ``json.JSONDecodeError`` - Invalid JSON format
-* ``psycopg2.Error`` - Database connection or query errors
+* ``psycopg.Error`` - Database connection or query errors
 * ``ValueError`` - Invalid data format
 * ``RuntimeError`` - System busy (concurrent operations)
 

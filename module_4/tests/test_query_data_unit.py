@@ -70,7 +70,7 @@ class TestGetConnection:
             called.append(kwargs)
             return MockConnection()
 
-        monkeypatch.setattr('psycopg2.connect', mock_connect)
+        monkeypatch.setattr('psycopg.connect', mock_connect)
         monkeypatch.delenv('DATABASE_URL', raising=False)
 
         query_data.get_connection()
@@ -78,7 +78,7 @@ class TestGetConnection:
         assert len(called) == 1
         assert called[0]['host'] == 'localhost'
         assert called[0]['port'] == 5432
-        assert 'database' in called[0]
+        assert 'dbname' in called[0]
         assert 'user' in called[0]
 
     def test_get_connection_with_database_url(self, monkeypatch):
@@ -91,7 +91,7 @@ class TestGetConnection:
             called.append(kwargs)
             return MockConnection()
 
-        monkeypatch.setattr('psycopg2.connect', mock_connect)
+        monkeypatch.setattr('psycopg.connect', mock_connect)
         monkeypatch.setenv('DATABASE_URL', 'postgresql://testuser:testpass@testhost:5433/testdb')
 
         query_data.get_connection()
@@ -99,7 +99,7 @@ class TestGetConnection:
         assert len(called) == 1
         assert called[0]['host'] == 'testhost'
         assert called[0]['port'] == 5433
-        assert called[0]['database'] == 'testdb'
+        assert called[0]['dbname'] == 'testdb'
         assert called[0]['user'] == 'testuser'
         assert called[0]['password'] == 'testpass'
 
@@ -113,7 +113,7 @@ class TestGetConnection:
             called.append(kwargs)
             return MockConnection()
 
-        monkeypatch.setattr('psycopg2.connect', mock_connect)
+        monkeypatch.setattr('psycopg.connect', mock_connect)
         monkeypatch.delenv('DATABASE_URL', raising=False)
         monkeypatch.setenv('DB_HOST', 'customhost')
         monkeypatch.setenv('DB_PORT', '5433')
@@ -126,7 +126,7 @@ class TestGetConnection:
         assert len(called) == 1
         assert called[0]['host'] == 'customhost'
         assert called[0]['port'] == 5433
-        assert called[0]['database'] == 'customdb'
+        assert called[0]['dbname'] == 'customdb'
         assert called[0]['user'] == 'customuser'
         assert called[0]['password'] == 'custompass'
 
@@ -523,17 +523,17 @@ class TestQueryDataMainBlock:
         assert 'Connected to database successfully' in captured.out
         assert 'All queries completed successfully' in captured.out
 
-    def test_main_with_psycopg2_error(self, monkeypatch, capsys):
-        """Test main() handling of psycopg2 errors."""
+    def test_main_with_psycopg_error(self, monkeypatch, capsys):
+        """Test main() handling of psycopg errors."""
         import query_data
-        import psycopg2
+        import psycopg
 
         def mock_get_connection():
-            raise psycopg2.Error("Connection failed")
+            raise psycopg.Error("Connection failed")
 
         monkeypatch.setattr('query_data.get_connection', mock_get_connection)
 
-        with pytest.raises(psycopg2.Error):
+        with pytest.raises(psycopg.Error):
             query_data.main()
 
         captured = capsys.readouterr()

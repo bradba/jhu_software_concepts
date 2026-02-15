@@ -8,7 +8,7 @@ import pytest
 import sys
 import os
 import json
-import psycopg2
+import psycopg
 
 # Add src directory to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
@@ -108,7 +108,7 @@ def test_db_connection():
         conn_params = {
             'host': parsed.hostname or 'localhost',
             'port': parsed.port or 5432,
-            'database': parsed.path.lstrip('/') if parsed.path else 'bradleyballinger',
+            'dbname': parsed.path.lstrip('/') if parsed.path else 'bradleyballinger',
             'user': parsed.username or 'bradleyballinger',
         }
         if parsed.password:
@@ -118,13 +118,13 @@ def test_db_connection():
         conn_params = {
             'host': os.environ.get('DB_HOST', 'localhost'),
             'port': int(os.environ.get('DB_PORT', '5432')),
-            'database': os.environ.get('DB_NAME', 'bradleyballinger'),
+            'dbname': os.environ.get('DB_NAME', 'bradleyballinger'),
             'user': os.environ.get('DB_USER', 'bradleyballinger'),
         }
         if os.environ.get('DB_PASSWORD'):
             conn_params['password'] = os.environ.get('DB_PASSWORD')
 
-    conn = psycopg2.connect(**conn_params)
+    conn = psycopg.connect(**conn_params)
     conn.autocommit = False
 
     yield conn

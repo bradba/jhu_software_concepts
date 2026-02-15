@@ -1,5 +1,5 @@
-import psycopg2
-from psycopg2 import sql
+import psycopg
+from psycopg import sql
 import os
 from urllib.parse import urlparse
 
@@ -23,7 +23,7 @@ def get_connection():
         conn_params = {
             'host': parsed.hostname or 'localhost',
             'port': parsed.port or 5432,
-            'database': parsed.path.lstrip('/') if parsed.path else 'bradleyballinger',
+            'dbname': parsed.path.lstrip('/') if parsed.path else 'bradleyballinger',
             'user': parsed.username or 'bradleyballinger',
         }
         if parsed.password:
@@ -33,13 +33,13 @@ def get_connection():
         conn_params = {
             'host': os.environ.get('DB_HOST', 'localhost'),
             'port': int(os.environ.get('DB_PORT', '5432')),
-            'database': os.environ.get('DB_NAME', 'bradleyballinger'),
+            'dbname': os.environ.get('DB_NAME', 'bradleyballinger'),
             'user': os.environ.get('DB_USER', 'bradleyballinger'),
         }
         if os.environ.get('DB_PASSWORD'):
             conn_params['password'] = os.environ.get('DB_PASSWORD')
 
-    return psycopg2.connect(**conn_params)
+    return psycopg.connect(**conn_params)
 
 
 def question_1(conn):
@@ -397,7 +397,7 @@ def main():
         print("All queries completed successfully!")
         print("=" * 80)
 
-    except psycopg2.Error as e:
+    except psycopg.Error as e:
         print(f"Database error: {e}")
         raise
     except Exception as e:
