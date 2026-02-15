@@ -33,13 +33,13 @@ The project includes shell scripts that handle environment variable setup automa
 
 ```bash
 # Step 1: Load data into database
-./scripts/scripts/run_load_data.sh
+./scripts/run_load_data.sh
 
 # Step 2: Run queries (optional)
-./scripts/scripts/run_queries.sh
+./scripts/run_queries.sh
 
 # Step 3: Start the web application
-./scripts/scripts/run_app.sh
+./scripts/run_app.sh
 ```
 
 These scripts use default environment variables and can be customized by setting environment variables before running.
@@ -124,7 +124,7 @@ source scripts/setup_env.sh
 
 Then run any command:
 ```bash
-./scripts/scripts/run_app.sh
+./scripts/run_app.sh
 # or
 python src/load_data.py
 ```
@@ -185,6 +185,7 @@ open _build/html/index.html
 The documentation includes:
 - **Setup Guide**: Installation, environment variables, and quick start
 - **Architecture**: System design, layers, and data flow
+- **Operational Notes**: Busy-state policy, idempotency, uniqueness keys, and troubleshooting
 - **API Reference**: Complete autodoc for all modules and functions
 - **Testing Guide**: How to run tests, use fixtures, and test markers
 
@@ -200,21 +201,21 @@ The project includes a comprehensive test suite with 100% code coverage (166 tes
 
 ```bash
 # Run all tests
-./scripts/scripts/run_tests.sh
+./scripts/run_tests.sh
 
 # Run with coverage report
-./scripts/scripts/run_tests.sh coverage
+./scripts/run_tests.sh coverage
 
 # Run specific test categories
-./scripts/scripts/run_tests.sh integration  # Integration tests only
-./scripts/scripts/run_tests.sh unit        # Unit tests only
-./scripts/scripts/run_tests.sh db          # Database tests
-./scripts/scripts/run_tests.sh buttons     # Flask endpoint tests
-./scripts/scripts/run_tests.sh verbose     # Verbose output
-./scripts/scripts/run_tests.sh quick       # Quick run without coverage
+./scripts/run_tests.sh integration  # Integration tests only
+./scripts/run_tests.sh unit        # Unit tests only
+./scripts/run_tests.sh db          # Database tests
+./scripts/run_tests.sh buttons     # Flask endpoint tests
+./scripts/run_tests.sh verbose     # Verbose output
+./scripts/run_tests.sh quick       # Quick run without coverage
 
 # Show all options
-./scripts/scripts/run_tests.sh help
+./scripts/run_tests.sh help
 ```
 
 ### Using pytest Directly

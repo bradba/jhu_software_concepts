@@ -25,6 +25,7 @@ Quick Links
 
 * :doc:`setup` - Get started with installation and configuration
 * :doc:`architecture` - Understand the system architecture
+* :doc:`operational` - Operational notes and troubleshooting
 * :doc:`api` - API reference for all modules
 * :doc:`testing` - Testing guide and conventions
 
@@ -43,6 +44,12 @@ Table of Contents
    :caption: API Reference
 
    api
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Operations Guide
+
+   operational
 
 .. toctree::
    :maxdepth: 2
