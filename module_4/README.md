@@ -166,7 +166,7 @@ If no environment variables are set, the application uses these defaults:
 
 ## Documentation
 
-Comprehensive Sphinx documentation is available covering setup, architecture, API reference, and testing.
+API documentation is automatically generated from code docstrings using Sphinx autodoc.
 
 ### Building Documentation
 
@@ -183,15 +183,13 @@ open _build/html/index.html
 ```
 
 The documentation includes:
-- **Setup Guide**: Installation, environment variables, and quick start
-- **Architecture**: System design, layers, and data flow
-- **Operational Notes**: Busy-state policy, idempotency, uniqueness keys, and troubleshooting
-- **API Reference**: Complete autodoc for all modules and functions
-- **Testing Guide**: How to run tests, use fixtures, and test markers
+- **API Reference**: Complete autodoc for all modules (app, scrape, clean, load_data, query_data)
+- **Function Signatures**: Parameters, return types, and descriptions
+- **Module Index**: Searchable index of all functions and classes
 
 ### Viewing Documentation
 
-After building, open `docs/_build/html/index.html` in your browser to view the complete documentation.
+After building, open `docs/_build/html/index.html` in your browser to view the API documentation.
 
 ## Running Tests
 
@@ -319,10 +317,7 @@ module_4/
 │   ├── Makefile                        # Documentation build file
 │   ├── conf.py                         # Sphinx configuration
 │   ├── index.rst                       # Documentation home page
-│   ├── setup.rst                       # Setup guide
-│   ├── architecture.rst                # Architecture documentation
 │   ├── api.rst                         # API reference
-│   └── testing.rst                     # Testing guide
 ├── src/                                # Source code directory
 │   ├── __init__.py                     # Package initialization
 │   ├── app.py                          # Flask web app (includes /pull-data endpoint)

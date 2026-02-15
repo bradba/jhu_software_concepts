@@ -19,8 +19,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Operational Notes" href="operational.html" />
-    <link rel="prev" title="System Architecture" href="architecture.html" /> 
+    <link rel="prev" title="Graduate School Applicant Database Analysis System" href="index.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -42,88 +41,25 @@
   </form>
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="setup.html">Setup &amp; Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="setup.html#prerequisites">Prerequisites</a></li>
-<li class="toctree-l2"><a class="reference internal" href="setup.html#environment-variables">Environment Variables</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="setup.html#option-1-database-url-recommended">Option 1: DATABASE_URL (Recommended)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="setup.html#option-2-individual-variables">Option 2: Individual Variables</a></li>
-<li class="toctree-l3"><a class="reference internal" href="setup.html#option-3-setup-script">Option 3: Setup Script</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="setup.html#quick-start">Quick Start</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="setup.html#using-convenience-scripts-recommended">Using Convenience Scripts (Recommended)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="setup.html#manual-setup">Manual Setup</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="setup.html#running-tests">Running Tests</a></li>
-<li class="toctree-l2"><a class="reference internal" href="setup.html#docker-setup-optional">Docker Setup (Optional)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="setup.html#troubleshooting">Troubleshooting</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="setup.html#common-issues">Common Issues</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="setup.html#next-steps">Next Steps</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="architecture.html">System Architecture</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="architecture.html#overview">Overview</a></li>
-<li class="toctree-l2"><a class="reference internal" href="architecture.html#web-layer">Web Layer</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="architecture.html#key-components">Key Components</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="architecture.html#etl-layer">ETL Layer</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="architecture.html#scraping-module-scrape-py">Scraping Module (scrape.py)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="architecture.html#cleaning-module-clean-py">Cleaning Module (clean.py)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="architecture.html#loading-module-load-data-py">Loading Module (load_data.py)</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="architecture.html#database-layer">Database Layer</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="architecture.html#database-queries">Database Queries</a></li>
-<li class="toctree-l3"><a class="reference internal" href="architecture.html#query-optimization">Query Optimization</a></li>
-<li class="toctree-l3"><a class="reference internal" href="architecture.html#connection-management">Connection Management</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="architecture.html#data-flow">Data Flow</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="architecture.html#complete-data-flow-example">Complete Data Flow Example</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="architecture.html#error-handling">Error Handling</a></li>
-<li class="toctree-l2"><a class="reference internal" href="architecture.html#security-considerations">Security Considerations</a></li>
-<li class="toctree-l2"><a class="reference internal" href="architecture.html#scalability">Scalability</a></li>
-<li class="toctree-l2"><a class="reference internal" href="architecture.html#performance-metrics">Performance Metrics</a></li>
-<li class="toctree-l2"><a class="reference internal" href="architecture.html#next-steps">Next Steps</a></li>
-</ul>
-</li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
-<ul class="current">
+              <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">API Reference</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#module-app">Web Application</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-app">Flask Application</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#app.is_busy"><code class="docutils literal notranslate"><span class="pre">is_busy()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#app.busy_state"><code class="docutils literal notranslate"><span class="pre">busy_state()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#app.index"><code class="docutils literal notranslate"><span class="pre">index()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#app.pull_data"><code class="docutils literal notranslate"><span class="pre">pull_data()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#app.update_analysis"><code class="docutils literal notranslate"><span class="pre">update_analysis()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id0"><code class="docutils literal notranslate"><span class="pre">index()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id1"><code class="docutils literal notranslate"><span class="pre">pull_data()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id2"><code class="docutils literal notranslate"><span class="pre">update_analysis()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#module-scrape">Data Scraping</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-scrape">Web Scraping</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#scrape.scrape_data"><code class="docutils literal notranslate"><span class="pre">scrape_data()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#scrape.save_data"><code class="docutils literal notranslate"><span class="pre">save_data()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id3"><code class="docutils literal notranslate"><span class="pre">scrape_data()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id4"><code class="docutils literal notranslate"><span class="pre">save_data()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#module-clean">Data Cleaning</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#clean.load_data"><code class="docutils literal notranslate"><span class="pre">load_data()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#clean.clean_data"><code class="docutils literal notranslate"><span class="pre">clean_data()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#clean.save_data"><code class="docutils literal notranslate"><span class="pre">save_data()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id5"><code class="docutils literal notranslate"><span class="pre">load_data()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id6"><code class="docutils literal notranslate"><span class="pre">clean_data()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id7"><code class="docutils literal notranslate"><span class="pre">save_data()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#module-load_data">Data Loading</a><ul>
@@ -136,15 +72,6 @@
 <li class="toctree-l3"><a class="reference internal" href="#load_data.load_json_data"><code class="docutils literal notranslate"><span class="pre">load_json_data()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#load_data.verify_data"><code class="docutils literal notranslate"><span class="pre">verify_data()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#load_data.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id8"><code class="docutils literal notranslate"><span class="pre">parse_gpa()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id9"><code class="docutils literal notranslate"><span class="pre">parse_gre_score()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id10"><code class="docutils literal notranslate"><span class="pre">parse_date()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id11"><code class="docutils literal notranslate"><span class="pre">extract_p_id_from_url()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id12"><code class="docutils literal notranslate"><span class="pre">clean_string()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id13"><code class="docutils literal notranslate"><span class="pre">create_applicants_table()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id14"><code class="docutils literal notranslate"><span class="pre">load_json_data()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id15"><code class="docutils literal notranslate"><span class="pre">verify_data()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id16"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#module-query_data">Database Queries</a><ul>
@@ -161,140 +88,8 @@
 <li class="toctree-l3"><a class="reference internal" href="#query_data.question_10"><code class="docutils literal notranslate"><span class="pre">question_10()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#query_data.question_11"><code class="docutils literal notranslate"><span class="pre">question_11()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#query_data.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id17"><code class="docutils literal notranslate"><span class="pre">get_connection()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id18"><code class="docutils literal notranslate"><span class="pre">question_1()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id19"><code class="docutils literal notranslate"><span class="pre">question_2()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id20"><code class="docutils literal notranslate"><span class="pre">question_3()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id21"><code class="docutils literal notranslate"><span class="pre">question_4()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id22"><code class="docutils literal notranslate"><span class="pre">question_5()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id23"><code class="docutils literal notranslate"><span class="pre">question_6()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id24"><code class="docutils literal notranslate"><span class="pre">question_7()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id25"><code class="docutils literal notranslate"><span class="pre">question_8()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id26"><code class="docutils literal notranslate"><span class="pre">question_9()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id27"><code class="docutils literal notranslate"><span class="pre">question_10()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id28"><code class="docutils literal notranslate"><span class="pre">question_11()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id29"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#data-types">Data Types</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#error-handling">Error Handling</a></li>
-</ul>
-</li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Operations Guide</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="operational.html">Operational Notes</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="operational.html#busy-state-policy">Busy-State Policy</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="operational.html#overview">Overview</a></li>
-<li class="toctree-l3"><a class="reference internal" href="operational.html#implementation">Implementation</a></li>
-<li class="toctree-l3"><a class="reference internal" href="operational.html#concurrent-request-handling">Concurrent Request Handling</a></li>
-<li class="toctree-l3"><a class="reference internal" href="operational.html#best-practices">Best Practices</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="operational.html#idempotency-strategy">Idempotency Strategy</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="operational.html#id1">Overview</a></li>
-<li class="toctree-l3"><a class="reference internal" href="operational.html#database-operations">Database Operations</a></li>
-<li class="toctree-l3"><a class="reference internal" href="operational.html#scraping-operations">Scraping Operations</a></li>
-<li class="toctree-l3"><a class="reference internal" href="operational.html#file-operations">File Operations</a></li>
-<li class="toctree-l3"><a class="reference internal" href="operational.html#retry-strategy">Retry Strategy</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="operational.html#uniqueness-keys">Uniqueness Keys</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="operational.html#primary-keys">Primary Keys</a></li>
-<li class="toctree-l3"><a class="reference internal" href="operational.html#extraction">Extraction</a></li>
-<li class="toctree-l3"><a class="reference internal" href="operational.html#composite-uniqueness">Composite Uniqueness</a></li>
-<li class="toctree-l3"><a class="reference internal" href="operational.html#index-strategy">Index Strategy</a></li>
-<li class="toctree-l3"><a class="reference internal" href="operational.html#data-integrity-checks">Data Integrity Checks</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="operational.html#troubleshooting">Troubleshooting</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="operational.html#common-local-issues">Common Local Issues</a></li>
-<li class="toctree-l3"><a class="reference internal" href="operational.html#common-ci-cd-issues">Common CI/CD Issues</a></li>
-<li class="toctree-l3"><a class="reference internal" href="operational.html#performance-issues">Performance Issues</a></li>
-<li class="toctree-l3"><a class="reference internal" href="operational.html#memory-issues">Memory Issues</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="operational.html#health-checks">Health Checks</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="operational.html#application-health">Application Health</a></li>
-<li class="toctree-l3"><a class="reference internal" href="operational.html#database-health">Database Health</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="operational.html#monitoring">Monitoring</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="operational.html#key-metrics">Key Metrics</a></li>
-<li class="toctree-l3"><a class="reference internal" href="operational.html#logging">Logging</a></li>
-<li class="toctree-l3"><a class="reference internal" href="operational.html#alerting">Alerting</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="operational.html#id2">Best Practices</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="operational.html#development">Development</a></li>
-<li class="toctree-l3"><a class="reference internal" href="operational.html#staging">Staging</a></li>
-<li class="toctree-l3"><a class="reference internal" href="operational.html#production">Production</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="operational.html#backup-and-recovery">Backup and Recovery</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="operational.html#database-backups">Database Backups</a></li>
-<li class="toctree-l3"><a class="reference internal" href="operational.html#disaster-recovery">Disaster Recovery</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Developer Guide</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing Guide</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="testing.html#test-suite-overview">Test Suite Overview</a></li>
-<li class="toctree-l2"><a class="reference internal" href="testing.html#running-tests">Running Tests</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="testing.html#using-test-script-recommended">Using Test Script (Recommended)</a></li>
-<li class="toctree-l3"><a class="reference internal" href="testing.html#using-pytest-directly">Using pytest Directly</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="testing.html#test-markers">Test Markers</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="testing.html#available-markers">Available Markers</a></li>
-<li class="toctree-l3"><a class="reference internal" href="testing.html#combining-markers">Combining Markers</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="testing.html#test-fixtures">Test Fixtures</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="testing.html#database-fixtures">Database Fixtures</a></li>
-<li class="toctree-l3"><a class="reference internal" href="testing.html#flask-application-fixtures">Flask Application Fixtures</a></li>
-<li class="toctree-l3"><a class="reference internal" href="testing.html#test-data-fixtures">Test Data Fixtures</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="testing.html#test-doubles-and-mocking">Test Doubles and Mocking</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="testing.html#monkeypatch-for-environment-variables">Monkeypatch for Environment Variables</a></li>
-<li class="toctree-l3"><a class="reference internal" href="testing.html#mock-external-dependencies">Mock External Dependencies</a></li>
-<li class="toctree-l3"><a class="reference internal" href="testing.html#patching-database-connections">Patching Database Connections</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="testing.html#test-organization">Test Organization</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="testing.html#test-file-structure">Test File Structure</a></li>
-<li class="toctree-l3"><a class="reference internal" href="testing.html#test-naming-conventions">Test Naming Conventions</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="testing.html#running-specific-test-categories">Running Specific Test Categories</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="testing.html#by-module">By Module</a></li>
-<li class="toctree-l3"><a class="reference internal" href="testing.html#by-functionality">By Functionality</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="testing.html#test-configuration">Test Configuration</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="testing.html#database-configuration-for-tests">Database Configuration for Tests</a></li>
-<li class="toctree-l3"><a class="reference internal" href="testing.html#coverage-configuration">Coverage Configuration</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="testing.html#expected-test-output">Expected Test Output</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="testing.html#successful-test-run">Successful Test Run</a></li>
-<li class="toctree-l3"><a class="reference internal" href="testing.html#failed-test-example">Failed Test Example</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="testing.html#troubleshooting">Troubleshooting</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="testing.html#common-issues">Common Issues</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="testing.html#best-practices">Best Practices</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="testing.html#writing-new-tests">Writing New Tests</a></li>
-<li class="toctree-l3"><a class="reference internal" href="testing.html#continuous-integration">Continuous Integration</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="testing.html#additional-resources">Additional Resources</a></li>
 </ul>
 </li>
 </ul>
@@ -325,9 +120,9 @@
              
   <section id="api-reference">
 <h1>API Reference<a class="headerlink" href="#api-reference" title="Link to this heading"></a></h1>
-<p>This section provides detailed API documentation for all modules in the system.</p>
+<p>This section provides complete API documentation for all modules, automatically generated from docstrings.</p>
 <section id="module-app">
-<span id="web-application"></span><h2>Web Application<a class="headerlink" href="#module-app" title="Link to this heading"></a></h2>
+<span id="flask-application"></span><h2>Flask Application<a class="headerlink" href="#module-app" title="Link to this heading"></a></h2>
 <p>Flask application for displaying applicant database analytics.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="app.is_busy">
@@ -361,88 +156,9 @@ Returns JSON with status and message.</p>
 Returns JSON with status and message.</p>
 </dd></dl>
 
-<p><strong>Key Routes:</strong></p>
-<dl class="py function">
-<dt class="sig sig-object py" id="id0">
-<span class="sig-prename descclassname"><span class="pre">app.</span></span><span class="sig-name descname"><span class="pre">index</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app.html#index"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id0" title="Link to this definition"></a></dt>
-<dd><p>Main dashboard route that displays all query results.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Rendered HTML template with query results</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="id1">
-<span class="sig-prename descclassname"><span class="pre">app.</span></span><span class="sig-name descname"><span class="pre">pull_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app.html#pull_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id1" title="Link to this definition"></a></dt>
-<dd><p>Scrape new data from GradCafe and insert into database.</p>
-<p><strong>Workflow:</strong></p>
-<ol class="arabic simple">
-<li><p>Check if system is busy</p></li>
-<li><p>Run scraper subprocess</p></li>
-<li><p>Load scraped JSON data</p></li>
-<li><p>Parse and insert records into database</p></li>
-<li><p>Return status and counts</p></li>
-</ol>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>JSON response with status, inserted count, and skipped count</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://flask.palletsprojects.com/en/stable/api/#flask.Response" title="(in Flask v3.1.x)">flask.Response</a></p>
-</dd>
-<dt class="field-odd">Status<span class="colon">:</span></dt>
-<dd class="field-odd"><p>200 OK on success</p>
-</dd>
-<dt class="field-even">Status<span class="colon">:</span></dt>
-<dd class="field-even"><p>409 Conflict if busy</p>
-</dd>
-<dt class="field-odd">Status<span class="colon">:</span></dt>
-<dd class="field-odd"><p>500 Internal Server Error on failure</p>
-</dd>
-</dl>
-<p><strong>Response Format:</strong></p>
-<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-<span class="w">  </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;success&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Successfully added 42 new entries to database&quot;</span><span class="p">,</span>
-<span class="w">  </span><span class="nt">&quot;inserted&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">42</span><span class="p">,</span>
-<span class="w">  </span><span class="nt">&quot;skipped&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span>
-<span class="w">  </span><span class="nt">&quot;timestamp&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2026-02-09T15:30:45.123456&quot;</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="id2">
-<span class="sig-prename descclassname"><span class="pre">app.</span></span><span class="sig-name descname"><span class="pre">update_analysis</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app.html#update_analysis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id2" title="Link to this definition"></a></dt>
-<dd><p>Update LLM-generated analysis fields for applicants.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>JSON response with status and message</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://flask.palletsprojects.com/en/stable/api/#flask.Response" title="(in Flask v3.1.x)">flask.Response</a></p>
-</dd>
-<dt class="field-odd">Status<span class="colon">:</span></dt>
-<dd class="field-odd"><p>200 OK on success</p>
-</dd>
-<dt class="field-even">Status<span class="colon">:</span></dt>
-<dd class="field-even"><p>409 Conflict if busy</p>
-</dd>
-<dt class="field-odd">Status<span class="colon">:</span></dt>
-<dd class="field-odd"><p>500 Internal Server Error on failure</p>
-</dd>
-</dl>
-</dd></dl>
-
 </section>
 <section id="module-scrape">
-<span id="data-scraping"></span><h2>Data Scraping<a class="headerlink" href="#module-scrape" title="Link to this heading"></a></h2>
+<span id="web-scraping"></span><h2>Web Scraping<a class="headerlink" href="#module-scrape" title="Link to this heading"></a></h2>
 <p>This script fetches applicant posts from The Grad Cafe.
 It extracts relevant fields from each post and saves the data in JSON format.</p>
 <dl class="py function">
@@ -455,66 +171,6 @@ It extracts relevant fields from each post and saves the data in JSON format.</p
 <dt class="sig sig-object py" id="scrape.save_data">
 <span class="sig-prename descclassname"><span class="pre">scrape.</span></span><span class="sig-name descname"><span class="pre">save_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'applicant_data.json'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="reference internal" href="_modules/scrape.html#save_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scrape.save_data" title="Link to this definition"></a></dt>
 <dd><p>Save data (list of dicts) to JSON file.</p>
-</dd></dl>
-
-<p><strong>Main Functions:</strong></p>
-<dl class="py function">
-<dt class="sig sig-object py" id="id3">
-<span class="sig-prename descclassname"><span class="pre">scrape.</span></span><span class="sig-name descname"><span class="pre">scrape_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">base_url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'https://www.thegradcafe.com/'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">50</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/scrape.html#scrape_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id3" title="Link to this definition"></a></dt>
-<dd><p>Fetch entries by iterating through paginated survey pages (?page=1, ?page=2, etc.).</p>
-<p>Scrape graduate school application data from GradCafe.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>limit</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – Maximum number of entries to scrape</p></li>
-<li><p><strong>page_offset</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – Starting page number (default: 1)</p></li>
-<li><p><strong>user_agent</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – User agent string for HTTP requests</p></li>
-<li><p><strong>search_url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Base URL for GradCafe search</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>List of entry dictionaries</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>List[Dict[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a>, Any]]</p>
-</dd>
-</dl>
-<p><strong>Entry Format:</strong></p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-    <span class="s2">&quot;url&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="s2">&quot;university&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="s2">&quot;program_name&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="s2">&quot;comments&quot;</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
-    <span class="s2">&quot;date_posted&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="s2">&quot;applicant_status&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>  <span class="c1"># &quot;Accepted&quot;, &quot;Rejected&quot;, &quot;Waitlist&quot;</span>
-    <span class="s2">&quot;start_term&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>  <span class="c1"># &quot;Fall 2026&quot;, &quot;Spring 2026&quot;, etc.</span>
-    <span class="s2">&quot;citizenship&quot;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>  <span class="c1"># &quot;International&quot;, &quot;American&quot;</span>
-    <span class="s2">&quot;gpa&quot;</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
-    <span class="s2">&quot;gre_score&quot;</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
-    <span class="s2">&quot;gre_v&quot;</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
-    <span class="s2">&quot;gre_aw&quot;</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
-    <span class="s2">&quot;degree&quot;</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># &quot;PhD&quot;, &quot;Masters&quot;, &quot;Other&quot;</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="id4">
-<span class="sig-prename descclassname"><span class="pre">scrape.</span></span><span class="sig-name descname"><span class="pre">save_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'applicant_data.json'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="reference internal" href="_modules/scrape.html#save_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id4" title="Link to this definition"></a></dt>
-<dd><p>Save data (list of dicts) to JSON file.</p>
-<p>Save scraped data to JSON file.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> (<em>List</em><em>[</em><em>Dict</em><em>]</em>) – List of entry dictionaries</p></li>
-<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Output file path</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
 </dd></dl>
 
 </section>
@@ -541,75 +197,6 @@ It extracts relevant fields from each post and saves the data in JSON format.</p
 <dt class="sig sig-object py" id="clean.save_data">
 <span class="sig-prename descclassname"><span class="pre">clean.</span></span><span class="sig-name descname"><span class="pre">save_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="reference internal" href="_modules/clean.html#save_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#clean.save_data" title="Link to this definition"></a></dt>
 <dd><p>Save cleaned data into a JSON file.</p>
-</dd></dl>
-
-<p><strong>Main Functions:</strong></p>
-<dl class="py function">
-<dt class="sig sig-object py" id="id5">
-<span class="sig-prename descclassname"><span class="pre">clean.</span></span><span class="sig-name descname"><span class="pre">load_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/clean.html#load_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id5" title="Link to this definition"></a></dt>
-<dd><p>Load application data from a JSON file.</p>
-<p>Load application data from a JSON file.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Path to JSON file</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>List of records</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>List[Dict[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a>, Any]]</p>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If data is not a list</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="id6">
-<span class="sig-prename descclassname"><span class="pre">clean.</span></span><span class="sig-name descname"><span class="pre">clean_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.14)"><span class="pre">Iterable</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">missing_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/clean.html#clean_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id6" title="Link to this definition"></a></dt>
-<dd><p>Convert data into a structured, cleaned format.</p>
-<ul class="simple">
-<li><p>Strips HTML from all string fields.</p></li>
-<li><p>Normalizes missing/empty values to a consistent format (default: None).</p></li>
-</ul>
-<p>Convert data into a structured, cleaned format.</p>
-<ul class="simple">
-<li><p>Strips HTML from all string fields</p></li>
-<li><p>Normalizes missing/empty values to a consistent format</p></li>
-</ul>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> (<em>Iterable</em><em>[</em><em>Dict</em><em>]</em>) – Raw data records</p></li>
-<li><p><strong>missing_value</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em>) – Value to use for missing data (default: None)</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>List of cleaned records</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>List[Dict[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a>, Any]]</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="id7">
-<span class="sig-prename descclassname"><span class="pre">clean.</span></span><span class="sig-name descname"><span class="pre">save_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="reference internal" href="_modules/clean.html#save_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id7" title="Link to this definition"></a></dt>
-<dd><p>Save cleaned data into a JSON file.</p>
-<p>Save cleaned data into a JSON file.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> (<em>List</em><em>[</em><em>Dict</em><em>]</em>) – Cleaned data records</p></li>
-<li><p><strong>path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Output file path</p></li>
-</ul>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
 </dd></dl>
 
 </section>
@@ -678,190 +265,6 @@ Otherwise uses individual environment variables or defaults:
 - DB_NAME (default: bradleyballinger)
 - DB_USER (default: bradleyballinger)
 - DB_PASSWORD (default: empty)</p>
-</dd></dl>
-
-<p><strong>Parsing Functions:</strong></p>
-<dl class="py function">
-<dt class="sig sig-object py" id="id8">
-<span class="sig-prename descclassname"><span class="pre">load_data.</span></span><span class="sig-name descname"><span class="pre">parse_gpa</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gpa_str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/load_data.html#parse_gpa"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id8" title="Link to this definition"></a></dt>
-<dd><p>Extract numeric GPA value from string like ‘GPA 3.89’.</p>
-<p>Extract numeric GPA value from string like ‘GPA 3.89’.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>gpa_str</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em>) – GPA string to parse</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Numeric GPA value or None</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Optional[<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)">float</a>]</p>
-</dd>
-</dl>
-<p><strong>Examples:</strong></p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">parse_gpa</span><span class="p">(</span><span class="s1">&#39;GPA 3.89&#39;</span><span class="p">)</span>
-<span class="go">3.89</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">parse_gpa</span><span class="p">(</span><span class="s1">&#39;3.75&#39;</span><span class="p">)</span>
-<span class="go">3.75</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">parse_gpa</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
-<span class="go">None</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="id9">
-<span class="sig-prename descclassname"><span class="pre">load_data.</span></span><span class="sig-name descname"><span class="pre">parse_gre_score</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gre_str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/load_data.html#parse_gre_score"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id9" title="Link to this definition"></a></dt>
-<dd><p>Extract numeric GRE score from strings like:
-- ‘GRE 327’ (total)
-- ‘GRE V 157’ (verbal)
-- ‘GRE AW 3.50’ (analytical writing)</p>
-<p>Extract numeric GRE score from strings like ‘GRE 327’, ‘GRE V 157’.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>gre_str</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em>) – GRE score string to parse</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Numeric score or None</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Optional[<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)">float</a>]</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="id10">
-<span class="sig-prename descclassname"><span class="pre">load_data.</span></span><span class="sig-name descname"><span class="pre">parse_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">date_str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/load_data.html#parse_date"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id10" title="Link to this definition"></a></dt>
-<dd><p>Parse date string like ‘January 31, 2026’ to date object.
-Returns None if parsing fails.</p>
-<p>Parse date string like ‘January 31, 2026’ to date object.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>date_str</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em>) – Date string to parse</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Date object or None if parsing fails</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Optional[<a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.date" title="(in Python v3.14)">datetime.date</a>]</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="id11">
-<span class="sig-prename descclassname"><span class="pre">load_data.</span></span><span class="sig-name descname"><span class="pre">extract_p_id_from_url</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/load_data.html#extract_p_id_from_url"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id11" title="Link to this definition"></a></dt>
-<dd><p>Extract the ID from the GradCafe URL.</p>
-<p>Extract the ID from the GradCafe URL.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>url</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em>) – GradCafe URL</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Extracted p_id or None</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Optional[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)">int</a>]</p>
-</dd>
-</dl>
-<p><strong>Example:</strong></p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">extract_p_id_from_url</span><span class="p">(</span><span class="s1">&#39;https://www.thegradcafe.com/survey/result/12345&#39;</span><span class="p">)</span>
-<span class="go">12345</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="id12">
-<span class="sig-prename descclassname"><span class="pre">load_data.</span></span><span class="sig-name descname"><span class="pre">clean_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/load_data.html#clean_string"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id12" title="Link to this definition"></a></dt>
-<dd><p>Remove NUL characters and other problematic characters from strings.</p>
-<p>Remove NUL characters from string.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>s</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a><em>]</em>) – String to clean</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Cleaned string or None</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Optional[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a>]</p>
-</dd>
-</dl>
-</dd></dl>
-
-<p><strong>Database Functions:</strong></p>
-<dl class="py function">
-<dt class="sig sig-object py" id="id13">
-<span class="sig-prename descclassname"><span class="pre">load_data.</span></span><span class="sig-name descname"><span class="pre">create_applicants_table</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/load_data.html#create_applicants_table"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id13" title="Link to this definition"></a></dt>
-<dd><p>Create the applicants table if it doesn’t exist.</p>
-<p>Create the applicants table in the database.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>conn</strong> (<a class="reference external" href="https://www.psycopg.org/docs/connection.html#connection" title="(in Psycopg v2.9)"><em>connection</em></a>) – PostgreSQL connection object</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="id14">
-<span class="sig-prename descclassname"><span class="pre">load_data.</span></span><span class="sig-name descname"><span class="pre">load_json_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">json_file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conn</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/load_data.html#load_json_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id14" title="Link to this definition"></a></dt>
-<dd><p>Load data from JSON Lines file into the applicants table.</p>
-<p>Load JSON data from file and insert into database.</p>
-<p>Reads JSON lines format, parses each record, and performs batch insertion
-with automatic duplicate handling via ON CONFLICT.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>json_file_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Path to JSON lines file</p></li>
-<li><p><strong>conn</strong> (<a class="reference external" href="https://www.psycopg.org/docs/connection.html#connection" title="(in Psycopg v2.9)"><em>connection</em></a>) – PostgreSQL connection object</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Total number of records inserted</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)">int</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="id15">
-<span class="sig-prename descclassname"><span class="pre">load_data.</span></span><span class="sig-name descname"><span class="pre">verify_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/load_data.html#verify_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id15" title="Link to this definition"></a></dt>
-<dd><p>Verify the loaded data by showing some statistics.</p>
-<p>Display statistics about the loaded data.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>conn</strong> (<a class="reference external" href="https://www.psycopg.org/docs/connection.html#connection" title="(in Psycopg v2.9)"><em>connection</em></a>) – PostgreSQL connection object</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="id16">
-<span class="sig-prename descclassname"><span class="pre">load_data.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/load_data.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id16" title="Link to this definition"></a></dt>
-<dd><p>Main function to create table and load data.</p>
-<p>Uses DATABASE_URL environment variable if set (format: postgresql://user:password&#64;host:port/database)
-Otherwise uses individual environment variables or defaults:
-- DB_HOST (default: localhost)
-- DB_PORT (default: 5432)
-- DB_NAME (default: bradleyballinger)
-- DB_USER (default: bradleyballinger)
-- DB_PASSWORD (default: empty)</p>
-<p>Main function to create table and load data.</p>
-<p>Connects to database, creates table if needed, loads data from
-<code class="docutils literal notranslate"><span class="pre">llm_extend_applicant_data.json</span></code>, and displays verification statistics.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>None</p>
-</dd>
-</dl>
 </dd></dl>
 
 </section>
@@ -952,323 +355,6 @@ Otherwise uses individual environment variables or defaults:
 <dd><p>Run all queries and display results.</p>
 </dd></dl>
 
-<p><strong>Connection Management:</strong></p>
-<dl class="py function">
-<dt class="sig sig-object py" id="id17">
-<span class="sig-prename descclassname"><span class="pre">query_data.</span></span><span class="sig-name descname"><span class="pre">get_connection</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/query_data.html#get_connection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id17" title="Link to this definition"></a></dt>
-<dd><p>Create and return a database connection.</p>
-<p>Uses DATABASE_URL environment variable if set (format: postgresql://user:password&#64;host:port/database)
-Otherwise uses individual environment variables or defaults:
-- DB_HOST (default: localhost)
-- DB_PORT (default: 5432)
-- DB_NAME (default: bradleyballinger)
-- DB_USER (default: bradleyballinger)
-- DB_PASSWORD (default: empty)</p>
-<p>Create and return a database connection.</p>
-<p>Uses DATABASE_URL environment variable if set, otherwise uses individual
-DB_* environment variables or defaults.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>PostgreSQL connection object</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>psycopg.connection</p>
-</dd>
-</dl>
-</dd></dl>
-
-<p><strong>Query Functions:</strong></p>
-<dl class="py function">
-<dt class="sig sig-object py" id="id18">
-<span class="sig-prename descclassname"><span class="pre">query_data.</span></span><span class="sig-name descname"><span class="pre">question_1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/query_data.html#question_1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id18" title="Link to this definition"></a></dt>
-<dd><p>How many entries do you have in your database who have applied for Fall 2026?</p>
-<p>How many entries do you have in your database who have applied for Fall 2026?</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>conn</strong> (<a class="reference external" href="https://www.psycopg.org/docs/connection.html#connection" title="(in Psycopg v2.9)"><em>connection</em></a>) – Database connection</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Count of Fall 2026 applicants</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)">int</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="id19">
-<span class="sig-prename descclassname"><span class="pre">query_data.</span></span><span class="sig-name descname"><span class="pre">question_2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/query_data.html#question_2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id19" title="Link to this definition"></a></dt>
-<dd><p>What percentage of entries are from international students (not American or Other)?</p>
-<p>What percentage of entries are from international students?</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>conn</strong> (<a class="reference external" href="https://www.psycopg.org/docs/connection.html#connection" title="(in Psycopg v2.9)"><em>connection</em></a>) – Database connection</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Percentage of international students</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)">float</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="id20">
-<span class="sig-prename descclassname"><span class="pre">query_data.</span></span><span class="sig-name descname"><span class="pre">question_3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/query_data.html#question_3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id20" title="Link to this definition"></a></dt>
-<dd><p>What is the average GPA, GRE, GRE V, GRE AW of applicants who provide these metrics?</p>
-<p>What are the average GPA and GRE scores?</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>conn</strong> (<a class="reference external" href="https://www.psycopg.org/docs/connection.html#connection" title="(in Psycopg v2.9)"><em>connection</em></a>) – Database connection</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Dictionary with average scores</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Dict[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)">float</a>]</p>
-</dd>
-</dl>
-<p><strong>Return Format:</strong></p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-    <span class="s2">&quot;avg_gpa&quot;</span><span class="p">:</span> <span class="mf">3.75</span><span class="p">,</span>
-    <span class="s2">&quot;avg_gre&quot;</span><span class="p">:</span> <span class="mf">325.5</span><span class="p">,</span>
-    <span class="s2">&quot;avg_gre_v&quot;</span><span class="p">:</span> <span class="mf">162.3</span><span class="p">,</span>
-    <span class="s2">&quot;avg_gre_aw&quot;</span><span class="p">:</span> <span class="mf">4.2</span>
-<span class="p">}</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="id21">
-<span class="sig-prename descclassname"><span class="pre">query_data.</span></span><span class="sig-name descname"><span class="pre">question_4</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/query_data.html#question_4"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id21" title="Link to this definition"></a></dt>
-<dd><p>What is the average GPA of American students in Fall 2026?</p>
-<p>What is the average GPA for American students applying for Fall 2026?</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>conn</strong> (<a class="reference external" href="https://www.psycopg.org/docs/connection.html#connection" title="(in Psycopg v2.9)"><em>connection</em></a>) – Database connection</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Average GPA</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)">float</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="id22">
-<span class="sig-prename descclassname"><span class="pre">query_data.</span></span><span class="sig-name descname"><span class="pre">question_5</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/query_data.html#question_5"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id22" title="Link to this definition"></a></dt>
-<dd><p>What percent of entries for Fall 2026 are Acceptances?</p>
-<p>What percentage of applicants for Fall 2026 were accepted?</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>conn</strong> (<a class="reference external" href="https://www.psycopg.org/docs/connection.html#connection" title="(in Psycopg v2.9)"><em>connection</em></a>) – Database connection</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Acceptance percentage</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)">float</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="id23">
-<span class="sig-prename descclassname"><span class="pre">query_data.</span></span><span class="sig-name descname"><span class="pre">question_6</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/query_data.html#question_6"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id23" title="Link to this definition"></a></dt>
-<dd><p>What is the average GPA of applicants who applied for Fall 2026 who are Acceptances?</p>
-<p>What is the average GPA of accepted applicants for Fall 2026?</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>conn</strong> (<a class="reference external" href="https://www.psycopg.org/docs/connection.html#connection" title="(in Psycopg v2.9)"><em>connection</em></a>) – Database connection</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Average GPA</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)">float</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="id24">
-<span class="sig-prename descclassname"><span class="pre">query_data.</span></span><span class="sig-name descname"><span class="pre">question_7</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/query_data.html#question_7"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id24" title="Link to this definition"></a></dt>
-<dd><p>How many entries are from applicants who applied to JHU for a masters degree in Computer Science?</p>
-<p>How many unique universities are represented?</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>conn</strong> (<a class="reference external" href="https://www.psycopg.org/docs/connection.html#connection" title="(in Psycopg v2.9)"><em>connection</em></a>) – Database connection</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Count of unique universities</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)">int</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="id25">
-<span class="sig-prename descclassname"><span class="pre">query_data.</span></span><span class="sig-name descname"><span class="pre">question_8</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/query_data.html#question_8"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id25" title="Link to this definition"></a></dt>
-<dd><p>How many entries from 2026 are acceptances from Georgetown, MIT, Stanford, CMU for PhD CS?</p>
-<p>How many unique programs are represented?</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>conn</strong> (<a class="reference external" href="https://www.psycopg.org/docs/connection.html#connection" title="(in Psycopg v2.9)"><em>connection</em></a>) – Database connection</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Count of unique programs</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)">int</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="id26">
-<span class="sig-prename descclassname"><span class="pre">query_data.</span></span><span class="sig-name descname"><span class="pre">question_9</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/query_data.html#question_9"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id26" title="Link to this definition"></a></dt>
-<dd><p>Do numbers for question 8 change if you use LLM Generated Fields?</p>
-<p>Compare counts using LLM-generated vs original fields.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>conn</strong> (<a class="reference external" href="https://www.psycopg.org/docs/connection.html#connection" title="(in Psycopg v2.9)"><em>connection</em></a>) – Database connection</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Tuple of (llm_count, original_count)</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Tuple[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)">int</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)">int</a>]</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="id27">
-<span class="sig-prename descclassname"><span class="pre">query_data.</span></span><span class="sig-name descname"><span class="pre">question_10</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/query_data.html#question_10"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id27" title="Link to this definition"></a></dt>
-<dd><p>What are the top 10 most applied-to programs for Fall 2026?</p>
-<p>Top 10 most applied-to programs for Fall 2026.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>conn</strong> (<a class="reference external" href="https://www.psycopg.org/docs/connection.html#connection" title="(in Psycopg v2.9)"><em>connection</em></a>) – Database connection</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>List of (university, program, count) tuples</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>List[Tuple[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)">int</a>]]</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="id28">
-<span class="sig-prename descclassname"><span class="pre">query_data.</span></span><span class="sig-name descname"><span class="pre">question_11</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/query_data.html#question_11"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id28" title="Link to this definition"></a></dt>
-<dd><p>How do acceptance rates compare between PhD and Masters programs?</p>
-<p>Compare PhD vs Masters acceptance rates.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>conn</strong> (<a class="reference external" href="https://www.psycopg.org/docs/connection.html#connection" title="(in Psycopg v2.9)"><em>connection</em></a>) – Database connection</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>List of degree statistics</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>List[Tuple]</p>
-</dd>
-</dl>
-<p><strong>Return Format:</strong></p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span>
-    <span class="p">(</span><span class="n">degree</span><span class="p">,</span> <span class="n">total_count</span><span class="p">,</span> <span class="n">accepted_count</span><span class="p">,</span> <span class="n">acceptance_rate</span><span class="p">,</span> <span class="n">avg_gpa</span><span class="p">,</span> <span class="n">gpa_count</span><span class="p">),</span>
-    <span class="o">...</span>
-<span class="p">]</span>
-</pre></div>
-</div>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="id29">
-<span class="sig-prename descclassname"><span class="pre">query_data.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/query_data.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id29" title="Link to this definition"></a></dt>
-<dd><p>Run all queries and display results.</p>
-<p>Main function to run all queries.</p>
-<p>Connects to database, executes all 11 queries, prints results, and closes connection.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>None</p>
-</dd>
-</dl>
-</dd></dl>
-
-</section>
-<section id="data-types">
-<h2>Data Types<a class="headerlink" href="#data-types" title="Link to this heading"></a></h2>
-<p>Common data types used throughout the API:</p>
-<p><strong>Entry Dictionary:</strong></p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Entry</span> <span class="o">=</span> <span class="n">TypedDict</span><span class="p">(</span><span class="s1">&#39;Entry&#39;</span><span class="p">,</span> <span class="p">{</span>
-    <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="s1">&#39;university&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="s1">&#39;program_name&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="s1">&#39;comments&#39;</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
-    <span class="s1">&#39;date_posted&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="s1">&#39;applicant_status&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="s1">&#39;start_term&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="s1">&#39;citizenship&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="s1">&#39;gpa&#39;</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
-    <span class="s1">&#39;gre_score&#39;</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
-    <span class="s1">&#39;gre_v&#39;</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
-    <span class="s1">&#39;gre_aw&#39;</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
-    <span class="s1">&#39;degree&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="s1">&#39;llm_generated_program&#39;</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
-    <span class="s1">&#39;llm_generated_university&#39;</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
-<span class="p">})</span>
-</pre></div>
-</div>
-<p><strong>Database Record:</strong></p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Record</span> <span class="o">=</span> <span class="n">Tuple</span><span class="p">[</span>
-    <span class="nb">int</span><span class="p">,</span>    <span class="c1"># p_id</span>
-    <span class="nb">str</span><span class="p">,</span>    <span class="c1"># program</span>
-    <span class="nb">str</span><span class="p">,</span>    <span class="c1"># comments</span>
-    <span class="n">date</span><span class="p">,</span>   <span class="c1"># date_added</span>
-    <span class="nb">str</span><span class="p">,</span>    <span class="c1"># url</span>
-    <span class="nb">str</span><span class="p">,</span>    <span class="c1"># status</span>
-    <span class="nb">str</span><span class="p">,</span>    <span class="c1"># term</span>
-    <span class="nb">str</span><span class="p">,</span>    <span class="c1"># us_or_international</span>
-    <span class="nb">float</span><span class="p">,</span>  <span class="c1"># gpa</span>
-    <span class="nb">float</span><span class="p">,</span>  <span class="c1"># gre</span>
-    <span class="nb">float</span><span class="p">,</span>  <span class="c1"># gre_v</span>
-    <span class="nb">float</span><span class="p">,</span>  <span class="c1"># gre_aw</span>
-    <span class="nb">str</span><span class="p">,</span>    <span class="c1"># degree</span>
-    <span class="nb">str</span><span class="p">,</span>    <span class="c1"># llm_generated_program</span>
-    <span class="nb">str</span>     <span class="c1"># llm_generated_university</span>
-<span class="p">]</span>
-</pre></div>
-</div>
-</section>
-<section id="error-handling">
-<h2>Error Handling<a class="headerlink" href="#error-handling" title="Link to this heading"></a></h2>
-<p>All modules implement consistent error handling:</p>
-<p><strong>Common Exceptions:</strong></p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">FileNotFoundError</span></code> - Data file not found</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">json.JSONDecodeError</span></code> - Invalid JSON format</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">psycopg.Error</span></code> - Database connection or query errors</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">ValueError</span></code> - Invalid data format</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">RuntimeError</span></code> - System busy (concurrent operations)</p></li>
-</ul>
-<p><strong>Error Response Format:</strong></p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
-    <span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;error&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="s2">&quot;Description of what went wrong&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;timestamp&quot;</span><span class="p">:</span> <span class="s2">&quot;2026-02-09T15:30:45.123456&quot;</span>
-<span class="p">}</span>
-</pre></div>
-</div>
 </section>
 </section>
 
@@ -1276,8 +362,7 @@ DB_* environment variables or defaults.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="architecture.html" class="btn btn-neutral float-left" title="System Architecture" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="operational.html" class="btn btn-neutral float-right" title="Operational Notes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="index.html" class="btn btn-neutral float-left" title="Graduate School Applicant Database Analysis System" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>

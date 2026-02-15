@@ -20,42 +20,13 @@ A comprehensive Flask-based web application for analyzing graduate school applic
 * **Testing**: 166 tests with 100% code coverage
 * **Environment Management**: Flexible configuration via environment variables
 
-Quick Links
------------
-
-* :doc:`setup` - Get started with installation and configuration
-* :doc:`architecture` - Understand the system architecture
-* :doc:`operational` - Operational notes and troubleshooting
-* :doc:`api` - API reference for all modules
-* :doc:`testing` - Testing guide and conventions
-
-Table of Contents
+API Documentation
 -----------------
 
 .. toctree::
    :maxdepth: 2
-   :caption: User Guide
-
-   setup
-   architecture
-
-.. toctree::
-   :maxdepth: 2
-   :caption: API Reference
 
    api
-
-.. toctree::
-   :maxdepth: 2
-   :caption: Operations Guide
-
-   operational
-
-.. toctree::
-   :maxdepth: 2
-   :caption: Developer Guide
-
-   testing
 
 Indices and tables
 ==================
