@@ -164,6 +164,34 @@ If no environment variables are set, the application uses these defaults:
 - **Password**: (empty)
 - **LLM API URL**: http://localhost:8000/standardize
 
+## Documentation
+
+Comprehensive Sphinx documentation is available covering setup, architecture, API reference, and testing.
+
+### Building Documentation
+
+```bash
+# Install documentation dependencies
+pip install sphinx sphinx-rtd-theme
+
+# Build HTML documentation
+cd docs
+make html
+
+# Open documentation in browser
+open _build/html/index.html
+```
+
+The documentation includes:
+- **Setup Guide**: Installation, environment variables, and quick start
+- **Architecture**: System design, layers, and data flow
+- **API Reference**: Complete autodoc for all modules and functions
+- **Testing Guide**: How to run tests, use fixtures, and test markers
+
+### Viewing Documentation
+
+After building, open `docs/_build/html/index.html` in your browser to view the complete documentation.
+
 ## Running Tests
 
 The project includes a comprehensive test suite with 100% code coverage (166 tests).
