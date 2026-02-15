@@ -42,6 +42,9 @@
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../api.html">API Reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#module-app">Flask Application</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#app.app"><code class="docutils literal notranslate"><span class="pre">app</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#app._busy_lock"><code class="docutils literal notranslate"><span class="pre">_busy_lock</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#app._is_busy"><code class="docutils literal notranslate"><span class="pre">_is_busy</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api.html#app.is_busy"><code class="docutils literal notranslate"><span class="pre">is_busy()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api.html#app.busy_state"><code class="docutils literal notranslate"><span class="pre">busy_state()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api.html#app.index"><code class="docutils literal notranslate"><span class="pre">index()</span></code></a></li>
@@ -50,17 +53,22 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#module-scrape">Web Scraping</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#scrape.USER_AGENT"><code class="docutils literal notranslate"><span class="pre">USER_AGENT</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#scrape.DEFAULT_BASE"><code class="docutils literal notranslate"><span class="pre">DEFAULT_BASE</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#scrape.JSON_OUTPUT"><code class="docutils literal notranslate"><span class="pre">JSON_OUTPUT</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api.html#scrape.scrape_data"><code class="docutils literal notranslate"><span class="pre">scrape_data()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api.html#scrape.save_data"><code class="docutils literal notranslate"><span class="pre">save_data()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#module-clean">Data Cleaning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#clean.DEFAULT_LLM_API_URL"><code class="docutils literal notranslate"><span class="pre">DEFAULT_LLM_API_URL</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api.html#clean.load_data"><code class="docutils literal notranslate"><span class="pre">load_data()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api.html#clean.clean_data"><code class="docutils literal notranslate"><span class="pre">clean_data()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api.html#clean.save_data"><code class="docutils literal notranslate"><span class="pre">save_data()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#module-load_data">Data Loading</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#load_data.None"><code class="docutils literal notranslate"><span class="pre">None</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api.html#load_data.parse_gpa"><code class="docutils literal notranslate"><span class="pre">parse_gpa()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api.html#load_data.parse_gre_score"><code class="docutils literal notranslate"><span class="pre">parse_gre_score()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api.html#load_data.parse_date"><code class="docutils literal notranslate"><span class="pre">parse_date()</span></code></a></li>
@@ -73,6 +81,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#module-query_data">Database Queries</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#query_data.None"><code class="docutils literal notranslate"><span class="pre">None</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api.html#query_data.get_connection"><code class="docutils literal notranslate"><span class="pre">get_connection()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api.html#query_data.question_1"><code class="docutils literal notranslate"><span class="pre">question_1()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api.html#query_data.question_2"><code class="docutils literal notranslate"><span class="pre">question_2()</span></code></a></li>
@@ -117,7 +126,38 @@
            <div itemprop="articleBody">
              
   <h1>Source code for query_data</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">psycopg</span>
+<span></span><span class="sd">&quot;&quot;&quot;Database query module for analyzing graduate school applicant data.</span>
+
+<span class="sd">This module provides a comprehensive set of analytical queries for the applicant</span>
+<span class="sd">database. It includes utilities for connecting to PostgreSQL and executing</span>
+<span class="sd">various statistical and analytical queries on the graduate school application data.</span>
+
+<span class="sd">The module is designed to answer key questions about:</span>
+<span class="sd">    - Application volumes and trends</span>
+<span class="sd">    - Demographic distributions</span>
+<span class="sd">    - Acceptance rates and selectivity</span>
+<span class="sd">    - Academic metrics (GPA, GRE scores)</span>
+<span class="sd">    - Program-specific statistics</span>
+
+<span class="sd">Example:</span>
+<span class="sd">    Basic usage::</span>
+
+<span class="sd">        import query_data</span>
+
+<span class="sd">        conn = query_data.get_connection()</span>
+<span class="sd">        fall_2026_count = query_data.question_1(conn)</span>
+<span class="sd">        international_pct = query_data.question_2(conn)</span>
+<span class="sd">        conn.close()</span>
+
+<span class="sd">Attributes:</span>
+<span class="sd">    None</span>
+
+<span class="sd">See Also:</span>
+<span class="sd">    - :mod:`load_data`: For loading data into the database</span>
+<span class="sd">    - :mod:`app`: For the Flask web interface</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">psycopg</span>
 <span class="kn">from</span> <span class="nn">psycopg</span> <span class="kn">import</span> <span class="n">sql</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">from</span> <span class="nn">urllib.parse</span> <span class="kn">import</span> <span class="n">urlparse</span>
@@ -167,7 +207,19 @@
 <div class="viewcode-block" id="question_1">
 <a class="viewcode-back" href="../api.html#query_data.question_1">[docs]</a>
 <span class="k">def</span> <span class="nf">question_1</span><span class="p">(</span><span class="n">conn</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;How many entries do you have in your database who have applied for Fall 2026?&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Count entries for Fall 2026 applications.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        conn (psycopg.Connection): Active database connection</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        int: Number of Fall 2026 application entries</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; conn = get_connection()</span>
+<span class="sd">        &gt;&gt;&gt; count = question_1(conn)</span>
+<span class="sd">        &gt;&gt;&gt; print(f&quot;Fall 2026 applications: {count}&quot;)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">cursor</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
     <span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">        SELECT COUNT(*)</span>
@@ -187,7 +239,23 @@
 <div class="viewcode-block" id="question_2">
 <a class="viewcode-back" href="../api.html#query_data.question_2">[docs]</a>
 <span class="k">def</span> <span class="nf">question_2</span><span class="p">(</span><span class="n">conn</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;What percentage of entries are from international students (not American or Other)?&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate percentage of international student applications.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        conn (psycopg.Connection): Active database connection</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        float: Percentage of entries from international students (0-100)</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        Only counts entries where citizenship status is explicitly &#39;International&#39;,</span>
+<span class="sd">        excluding American and other categories.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; conn = get_connection()</span>
+<span class="sd">        &gt;&gt;&gt; pct = question_2(conn)</span>
+<span class="sd">        &gt;&gt;&gt; print(f&quot;International students: {pct:.2f}%&quot;)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">cursor</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
 
     <span class="c1"># Total entries</span>
@@ -215,7 +283,30 @@
 <div class="viewcode-block" id="question_3">
 <a class="viewcode-back" href="../api.html#query_data.question_3">[docs]</a>
 <span class="k">def</span> <span class="nf">question_3</span><span class="p">(</span><span class="n">conn</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;What is the average GPA, GRE, GRE V, GRE AW of applicants who provide these metrics?&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate average academic metrics across all applicants.</span>
+
+<span class="sd">    Computes mean values for GPA and GRE scores among applicants who</span>
+<span class="sd">    provided these metrics.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        conn (psycopg.Connection): Active database connection</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        dict: Dictionary containing:</span>
+<span class="sd">            - avg_gpa (float): Average GPA</span>
+<span class="sd">            - avg_gre (float): Average total GRE score</span>
+<span class="sd">            - avg_gre_v (float): Average GRE verbal score</span>
+<span class="sd">            - avg_gre_aw (float): Average GRE analytical writing score</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        Only includes non-null values in the averages. The number of</span>
+<span class="sd">        entries contributing to each average may differ.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; conn = get_connection()</span>
+<span class="sd">        &gt;&gt;&gt; metrics = question_3(conn)</span>
+<span class="sd">        &gt;&gt;&gt; print(f&quot;Average GPA: {metrics[&#39;avg_gpa&#39;]:.2f}&quot;)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">cursor</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
 
     <span class="c1"># Get averages for each metric</span>
@@ -257,7 +348,25 @@
 <div class="viewcode-block" id="question_4">
 <a class="viewcode-back" href="../api.html#query_data.question_4">[docs]</a>
 <span class="k">def</span> <span class="nf">question_4</span><span class="p">(</span><span class="n">conn</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;What is the average GPA of American students in Fall 2026?&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculate average GPA for American students applying to Fall 2026.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        conn (psycopg.Connection): Active database connection</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        float: Average GPA of American students for Fall 2026</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        Only includes entries with:</span>
+<span class="sd">            - term = &#39;Fall 2026&#39;</span>
+<span class="sd">            - us_or_international = &#39;American&#39;</span>
+<span class="sd">            - Non-null GPA value</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; conn = get_connection()</span>
+<span class="sd">        &gt;&gt;&gt; avg_gpa = question_4(conn)</span>
+<span class="sd">        &gt;&gt;&gt; print(f&quot;American students avg GPA: {avg_gpa:.2f}&quot;)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">cursor</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
 
     <span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
@@ -451,7 +560,31 @@
 <div class="viewcode-block" id="question_10">
 <a class="viewcode-back" href="../api.html#query_data.question_10">[docs]</a>
 <span class="k">def</span> <span class="nf">question_10</span><span class="p">(</span><span class="n">conn</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;What are the top 10 most applied-to programs for Fall 2026?&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Find the top 10 most popular programs for Fall 2026.</span>
+
+<span class="sd">    Ranks programs by application volume and calculates acceptance rates.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        conn (psycopg.Connection): Active database connection</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        list of tuple: Each tuple contains:</span>
+<span class="sd">            - university (str): Standardized university name</span>
+<span class="sd">            - program (str): Standardized program name</span>
+<span class="sd">            - total_applications (int): Number of applications</span>
+<span class="sd">            - acceptances (int): Number of acceptances</span>
+<span class="sd">            - acceptance_rate (float): Percentage accepted (0-100)</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        Uses LLM-generated standardized university and program names for</span>
+<span class="sd">        better aggregation of similar programs.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; conn = get_connection()</span>
+<span class="sd">        &gt;&gt;&gt; top_programs = question_10(conn)</span>
+<span class="sd">        &gt;&gt;&gt; for uni, prog, apps, acc, rate in top_programs:</span>
+<span class="sd">        ...     print(f&quot;{uni} - {prog}: {apps} applications&quot;)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">cursor</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
 
     <span class="n">query</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
@@ -526,7 +659,27 @@
 <div class="viewcode-block" id="main">
 <a class="viewcode-back" href="../api.html#query_data.main">[docs]</a>
 <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Run all queries and display results.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Execute all analytical queries and display results.</span>
+
+<span class="sd">    Runs all 11 analytical queries in sequence and prints formatted results</span>
+<span class="sd">    to stdout. Handles database connection setup and teardown.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        None</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        psycopg.Error: If database connection or query execution fails</span>
+<span class="sd">        Exception: For other unexpected errors</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        Run from command line::</span>
+
+<span class="sd">            python query_data.py</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        Database connection parameters are read from environment variables.</span>
+<span class="sd">        See :func:`get_connection` for details.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">80</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;APPLICANT DATABASE QUERIES&quot;</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span> <span class="o">*</span> <span class="mi">80</span><span class="p">)</span>

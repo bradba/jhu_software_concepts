@@ -1,5 +1,56 @@
 #!/usr/bin/env python3
-"""Utilities for loading, cleaning, and saving GradCafe application data."""
+"""Data cleaning and standardization utilities for GradCafe applicant data.
+
+This module provides comprehensive data cleaning and standardization functions
+for graduate school applicant data scraped from The GradCafe. It handles:
+
+- HTML tag removal and text normalization
+- Missing value standardization
+- Comment text cleanup (removing badges and boilerplate)
+- LLM-powered university and program name standardization
+
+The cleaning pipeline prepares raw scraped data for database insertion by
+removing noise, standardizing formats, and optionally enriching data using
+a language model API.
+
+Example:
+    Basic cleaning workflow::
+
+        from clean import load_data, clean_data, save_data
+
+        # Load raw scraped data
+        raw_data = load_data('applicant_data.json')
+
+        # Clean and normalize
+        cleaned = clean_data(raw_data)
+
+        # Save cleaned data
+        save_data(cleaned, 'applicant_data_clean.json')
+
+    With LLM standardization::
+
+        python clean.py --input raw.json --output clean.json --standardize
+
+Attributes:
+    DEFAULT_LLM_API_URL (str): Default LLM API endpoint from environment
+
+Functions:
+    Public:
+        - load_data: Load JSON data from file
+        - clean_data: Clean and normalize data records
+        - save_data: Save data to JSON file
+
+    Private:
+        - _strip_html: Remove HTML tags and normalize whitespace
+        - _normalize_value: Handle missing values consistently
+        - _clean_record: Clean a single data record
+        - _clean_comment_text: Remove badges from comments
+        - _standardize_with_llm: Use LLM to standardize names
+
+See Also:
+    - :mod:`scrape`: For generating raw data to clean
+    - :mod:`load_data`: For loading cleaned data into database
+"""
 
 from __future__ import annotations
 
@@ -22,7 +73,18 @@ DEFAULT_LLM_API_URL = os.environ.get('LLM_API_URL', 'http://localhost:8000/stand
 
 
 def _strip_html(value: str) -> str:
-    """Remove any HTML tags/entities and normalize whitespace."""
+    """Remove HTML tags and entities, normalize whitespace.
+
+    Args:
+        value: String potentially containing HTML markup
+
+    Returns:
+        Clean text with HTML removed and whitespace normalized
+
+    Example:
+        >>> _strip_html('<p>Hello  World</p>')
+        'Hello World'
+    """
     if not value:
         return value
     text = BeautifulSoup(value, "html.parser").get_text(" ", strip=True)
@@ -49,7 +111,22 @@ def _clean_record(record: Dict[str, Any], missing_value: Optional[str]) -> Dict[
 
 
 def _clean_comment_text(text: Optional[str]) -> Optional[str]:
-    """Remove badge-like tokens and boilerplate from comments text."""
+    """Extract meaningful comments by removing structured badges.
+
+    Removes common badge patterns like "Fall 2026", "International",
+    "GPA 3.8", "GRE 320", etc., leaving only free-form applicant comments.
+
+    Args:
+        text: Raw comment text potentially containing badges
+
+    Returns:
+        Cleaned comment text (max 500 chars), or None if no meaningful
+        text remains after badge removal
+
+    Note:
+        Returns None for very short text or text containing only punctuation,
+        as these are likely formatting artifacts rather than real comments.
+    """
     if not text:
         return None
     cleaned = _strip_html(text)
@@ -74,7 +151,19 @@ def _clean_comment_text(text: Optional[str]) -> Optional[str]:
 
 
 def load_data(path: str) -> List[Dict[str, Any]]:
-    """Load application data from a JSON file."""
+    """Load application data from JSON file.
+
+    Args:
+        path: Path to JSON file
+
+    Returns:
+        List of data records (dictionaries)
+
+    Raises:
+        FileNotFoundError: If file doesn't exist
+        json.JSONDecodeError: If file contains invalid JSON
+        ValueError: If JSON root is not a list
+    """
     with open(path, "r", encoding="utf-8") as fh:
         data = json.load(fh)
     if not isinstance(data, list):
@@ -83,16 +172,41 @@ def load_data(path: str) -> List[Dict[str, Any]]:
 
 
 def clean_data(data: Iterable[Dict[str, Any]], missing_value: Optional[str] = None) -> List[Dict[str, Any]]:
-    """Convert data into a structured, cleaned format.
+    """Clean and normalize applicant data records.
 
-    - Strips HTML from all string fields.
-    - Normalizes missing/empty values to a consistent format (default: None).
+    Performs comprehensive cleaning:
+        - Strips HTML from all string fields
+        - Normalizes missing/empty values to consistent format
+        - Removes extra whitespace
+
+    Args:
+        data: Iterable of data records (dictionaries)
+        missing_value: Value to use for missing/empty fields (default: None)
+
+    Returns:
+        List of cleaned data records
+
+    Example:
+        >>> raw = [{'name': '<p>MIT</p>', 'gpa': None}]
+        >>> clean_data(raw)
+        [{'name': 'MIT', 'gpa': None}]
     """
     return [_clean_record(record, missing_value) for record in data]
 
 
 def save_data(data: List[Dict[str, Any]], path: str) -> None:
-    """Save cleaned data into a JSON file."""
+    """Save cleaned data to JSON file.
+
+    Args:
+        data: List of data records to save
+        path: Output file path
+
+    Returns:
+        None
+
+    Note:
+        Output is UTF-8 encoded with 2-space indentation.
+    """
     with open(path, "w", encoding="utf-8") as fh:
         json.dump(data, fh, indent=2, ensure_ascii=False)
 

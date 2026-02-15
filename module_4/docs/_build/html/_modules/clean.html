@@ -42,6 +42,9 @@
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../api.html">API Reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#module-app">Flask Application</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#app.app"><code class="docutils literal notranslate"><span class="pre">app</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#app._busy_lock"><code class="docutils literal notranslate"><span class="pre">_busy_lock</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#app._is_busy"><code class="docutils literal notranslate"><span class="pre">_is_busy</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api.html#app.is_busy"><code class="docutils literal notranslate"><span class="pre">is_busy()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api.html#app.busy_state"><code class="docutils literal notranslate"><span class="pre">busy_state()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api.html#app.index"><code class="docutils literal notranslate"><span class="pre">index()</span></code></a></li>
@@ -50,17 +53,22 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#module-scrape">Web Scraping</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#scrape.USER_AGENT"><code class="docutils literal notranslate"><span class="pre">USER_AGENT</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#scrape.DEFAULT_BASE"><code class="docutils literal notranslate"><span class="pre">DEFAULT_BASE</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#scrape.JSON_OUTPUT"><code class="docutils literal notranslate"><span class="pre">JSON_OUTPUT</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api.html#scrape.scrape_data"><code class="docutils literal notranslate"><span class="pre">scrape_data()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api.html#scrape.save_data"><code class="docutils literal notranslate"><span class="pre">save_data()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#module-clean">Data Cleaning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#clean.DEFAULT_LLM_API_URL"><code class="docutils literal notranslate"><span class="pre">DEFAULT_LLM_API_URL</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api.html#clean.load_data"><code class="docutils literal notranslate"><span class="pre">load_data()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api.html#clean.clean_data"><code class="docutils literal notranslate"><span class="pre">clean_data()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api.html#clean.save_data"><code class="docutils literal notranslate"><span class="pre">save_data()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#module-load_data">Data Loading</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#load_data.None"><code class="docutils literal notranslate"><span class="pre">None</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api.html#load_data.parse_gpa"><code class="docutils literal notranslate"><span class="pre">parse_gpa()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api.html#load_data.parse_gre_score"><code class="docutils literal notranslate"><span class="pre">parse_gre_score()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api.html#load_data.parse_date"><code class="docutils literal notranslate"><span class="pre">parse_date()</span></code></a></li>
@@ -73,6 +81,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#module-query_data">Database Queries</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#query_data.None"><code class="docutils literal notranslate"><span class="pre">None</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api.html#query_data.get_connection"><code class="docutils literal notranslate"><span class="pre">get_connection()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api.html#query_data.question_1"><code class="docutils literal notranslate"><span class="pre">question_1()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api.html#query_data.question_2"><code class="docutils literal notranslate"><span class="pre">question_2()</span></code></a></li>
@@ -118,7 +127,58 @@
              
   <h1>Source code for clean</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python3</span>
-<span class="sd">&quot;&quot;&quot;Utilities for loading, cleaning, and saving GradCafe application data.&quot;&quot;&quot;</span>
+<span class="sd">&quot;&quot;&quot;Data cleaning and standardization utilities for GradCafe applicant data.</span>
+
+<span class="sd">This module provides comprehensive data cleaning and standardization functions</span>
+<span class="sd">for graduate school applicant data scraped from The GradCafe. It handles:</span>
+
+<span class="sd">- HTML tag removal and text normalization</span>
+<span class="sd">- Missing value standardization</span>
+<span class="sd">- Comment text cleanup (removing badges and boilerplate)</span>
+<span class="sd">- LLM-powered university and program name standardization</span>
+
+<span class="sd">The cleaning pipeline prepares raw scraped data for database insertion by</span>
+<span class="sd">removing noise, standardizing formats, and optionally enriching data using</span>
+<span class="sd">a language model API.</span>
+
+<span class="sd">Example:</span>
+<span class="sd">    Basic cleaning workflow::</span>
+
+<span class="sd">        from clean import load_data, clean_data, save_data</span>
+
+<span class="sd">        # Load raw scraped data</span>
+<span class="sd">        raw_data = load_data(&#39;applicant_data.json&#39;)</span>
+
+<span class="sd">        # Clean and normalize</span>
+<span class="sd">        cleaned = clean_data(raw_data)</span>
+
+<span class="sd">        # Save cleaned data</span>
+<span class="sd">        save_data(cleaned, &#39;applicant_data_clean.json&#39;)</span>
+
+<span class="sd">    With LLM standardization::</span>
+
+<span class="sd">        python clean.py --input raw.json --output clean.json --standardize</span>
+
+<span class="sd">Attributes:</span>
+<span class="sd">    DEFAULT_LLM_API_URL (str): Default LLM API endpoint from environment</span>
+
+<span class="sd">Functions:</span>
+<span class="sd">    Public:</span>
+<span class="sd">        - load_data: Load JSON data from file</span>
+<span class="sd">        - clean_data: Clean and normalize data records</span>
+<span class="sd">        - save_data: Save data to JSON file</span>
+
+<span class="sd">    Private:</span>
+<span class="sd">        - _strip_html: Remove HTML tags and normalize whitespace</span>
+<span class="sd">        - _normalize_value: Handle missing values consistently</span>
+<span class="sd">        - _clean_record: Clean a single data record</span>
+<span class="sd">        - _clean_comment_text: Remove badges from comments</span>
+<span class="sd">        - _standardize_with_llm: Use LLM to standardize names</span>
+
+<span class="sd">See Also:</span>
+<span class="sd">    - :mod:`scrape`: For generating raw data to clean</span>
+<span class="sd">    - :mod:`load_data`: For loading cleaned data into database</span>
+<span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 
@@ -141,7 +201,18 @@
 
 
 <span class="k">def</span> <span class="nf">_strip_html</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Remove any HTML tags/entities and normalize whitespace.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Remove HTML tags and entities, normalize whitespace.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        value: String potentially containing HTML markup</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Clean text with HTML removed and whitespace normalized</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; _strip_html(&#39;&lt;p&gt;Hello  World&lt;/p&gt;&#39;)</span>
+<span class="sd">        &#39;Hello World&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">value</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">value</span>
     <span class="n">text</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="s2">&quot;html.parser&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">get_text</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="n">strip</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -168,7 +239,22 @@
 
 
 <span class="k">def</span> <span class="nf">_clean_comment_text</span><span class="p">(</span><span class="n">text</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Remove badge-like tokens and boilerplate from comments text.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extract meaningful comments by removing structured badges.</span>
+
+<span class="sd">    Removes common badge patterns like &quot;Fall 2026&quot;, &quot;International&quot;,</span>
+<span class="sd">    &quot;GPA 3.8&quot;, &quot;GRE 320&quot;, etc., leaving only free-form applicant comments.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        text: Raw comment text potentially containing badges</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Cleaned comment text (max 500 chars), or None if no meaningful</span>
+<span class="sd">        text remains after badge removal</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        Returns None for very short text or text containing only punctuation,</span>
+<span class="sd">        as these are likely formatting artifacts rather than real comments.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">text</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">None</span>
     <span class="n">cleaned</span> <span class="o">=</span> <span class="n">_strip_html</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
@@ -195,7 +281,19 @@
 <div class="viewcode-block" id="load_data">
 <a class="viewcode-back" href="../api.html#clean.load_data">[docs]</a>
 <span class="k">def</span> <span class="nf">load_data</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load application data from a JSON file.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load application data from JSON file.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        path: Path to JSON file</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        List of data records (dictionaries)</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        FileNotFoundError: If file doesn&#39;t exist</span>
+<span class="sd">        json.JSONDecodeError: If file contains invalid JSON</span>
+<span class="sd">        ValueError: If JSON root is not a list</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">fh</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
@@ -207,10 +305,24 @@
 <div class="viewcode-block" id="clean_data">
 <a class="viewcode-back" href="../api.html#clean.clean_data">[docs]</a>
 <span class="k">def</span> <span class="nf">clean_data</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span> <span class="n">missing_value</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert data into a structured, cleaned format.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Clean and normalize applicant data records.</span>
 
-<span class="sd">    - Strips HTML from all string fields.</span>
-<span class="sd">    - Normalizes missing/empty values to a consistent format (default: None).</span>
+<span class="sd">    Performs comprehensive cleaning:</span>
+<span class="sd">        - Strips HTML from all string fields</span>
+<span class="sd">        - Normalizes missing/empty values to consistent format</span>
+<span class="sd">        - Removes extra whitespace</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        data: Iterable of data records (dictionaries)</span>
+<span class="sd">        missing_value: Value to use for missing/empty fields (default: None)</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        List of cleaned data records</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; raw = [{&#39;name&#39;: &#39;&lt;p&gt;MIT&lt;/p&gt;&#39;, &#39;gpa&#39;: None}]</span>
+<span class="sd">        &gt;&gt;&gt; clean_data(raw)</span>
+<span class="sd">        [{&#39;name&#39;: &#39;MIT&#39;, &#39;gpa&#39;: None}]</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="p">[</span><span class="n">_clean_record</span><span class="p">(</span><span class="n">record</span><span class="p">,</span> <span class="n">missing_value</span><span class="p">)</span> <span class="k">for</span> <span class="n">record</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span></div>
 
@@ -219,7 +331,18 @@
 <div class="viewcode-block" id="save_data">
 <a class="viewcode-back" href="../api.html#clean.save_data">[docs]</a>
 <span class="k">def</span> <span class="nf">save_data</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Save cleaned data into a JSON file.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Save cleaned data to JSON file.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        data: List of data records to save</span>
+<span class="sd">        path: Output file path</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        None</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        Output is UTF-8 encoded with 2-space indentation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
         <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">fh</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ensure_ascii</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
 

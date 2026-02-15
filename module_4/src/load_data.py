@@ -1,3 +1,32 @@
+"""Database loading module for GradCafe applicant data.
+
+This module provides utilities for loading, parsing, and inserting applicant data
+into a PostgreSQL database. It handles data cleaning, type conversion, and
+database schema creation.
+
+The module supports both batch loading from JSON files and individual record insertion.
+It automatically handles duplicate entries using PostgreSQL's ON CONFLICT clause.
+
+Example:
+    Load data from a JSON file::
+
+        from load_data import create_applicants_table, load_json_data
+        import psycopg
+
+        conn = psycopg.connect(host='localhost', dbname='mydb')
+        create_applicants_table(conn)
+        load_json_data('applicant_data.json', conn)
+        conn.close()
+
+Attributes:
+    None
+
+See Also:
+    - :mod:`query_data`: For querying the loaded data
+    - :mod:`clean`: For data cleaning utilities
+    - :mod:`scrape`: For web scraping applicant data
+"""
+
 import psycopg
 from psycopg import sql
 import json
@@ -8,7 +37,24 @@ from urllib.parse import urlparse
 
 
 def parse_gpa(gpa_str):
-    """Extract numeric GPA value from string like 'GPA 3.89'."""
+    """Extract numeric GPA value from string.
+
+    Parses strings like 'GPA 3.89' or '3.89' and extracts the numeric value.
+
+    Args:
+        gpa_str (str): String containing GPA information
+
+    Returns:
+        float: Extracted GPA value, or None if parsing fails
+
+    Example:
+        >>> parse_gpa('GPA 3.89')
+        3.89
+        >>> parse_gpa('3.5')
+        3.5
+        >>> parse_gpa('invalid')
+        None
+    """
     if not gpa_str:
         return None
     match = re.search(r'(\d+\.?\d*)', gpa_str)
@@ -16,11 +62,24 @@ def parse_gpa(gpa_str):
 
 
 def parse_gre_score(gre_str):
-    """
-    Extract numeric GRE score from strings like:
-    - 'GRE 327' (total)
-    - 'GRE V 157' (verbal)
-    - 'GRE AW 3.50' (analytical writing)
+    """Extract numeric GRE score from various string formats.
+
+    Supports parsing of different GRE score formats including total scores,
+    verbal scores, and analytical writing scores.
+
+    Args:
+        gre_str (str): String containing GRE score information
+
+    Returns:
+        float: Extracted GRE score, or None if parsing fails
+
+    Example:
+        >>> parse_gre_score('GRE 327')
+        327.0
+        >>> parse_gre_score('GRE V 157')
+        157.0
+        >>> parse_gre_score('GRE AW 3.50')
+        3.5
     """
     if not gre_str:
         return None
@@ -29,9 +88,21 @@ def parse_gre_score(gre_str):
 
 
 def parse_date(date_str):
-    """
-    Parse date string like 'January 31, 2026' to date object.
-    Returns None if parsing fails.
+    """Parse date string into date object.
+
+    Converts date strings in the format 'Month DD, YYYY' to Python date objects.
+
+    Args:
+        date_str (str): Date string in format 'January 31, 2026'
+
+    Returns:
+        datetime.date: Parsed date object, or None if parsing fails
+
+    Example:
+        >>> parse_date('January 31, 2026')
+        datetime.date(2026, 1, 31)
+        >>> parse_date('invalid')
+        None
     """
     if not date_str:
         return None
@@ -42,7 +113,21 @@ def parse_date(date_str):
 
 
 def extract_p_id_from_url(url):
-    """Extract the ID from the GradCafe URL."""
+    """Extract the post ID from a GradCafe result URL.
+
+    Parses GradCafe URLs to extract the unique post identifier (p_id).
+    URLs typically follow the pattern: https://www.thegradcafe.com/survey/result/123456
+
+    Args:
+        url (str): GradCafe result URL
+
+    Returns:
+        int: Extracted post ID, or None if URL doesn't match expected format
+
+    Example:
+        >>> extract_p_id_from_url('https://www.thegradcafe.com/survey/result/123456')
+        123456
+    """
     if not url:
         return None
     match = re.search(r'/result/(\d+)', url)
@@ -50,7 +135,20 @@ def extract_p_id_from_url(url):
 
 
 def clean_string(s):
-    """Remove NUL characters and other problematic characters from strings."""
+    """Remove problematic characters from strings for PostgreSQL compatibility.
+
+    Removes NUL characters (0x00) which PostgreSQL doesn't accept in text fields.
+
+    Args:
+        s (str): String to clean
+
+    Returns:
+        str: Cleaned string with NUL characters removed, or None if input is None
+
+    Note:
+        PostgreSQL will reject any string containing NUL bytes, so this function
+        must be called on all user-provided text before insertion.
+    """
     if s is None:
         return None
     # Remove NUL characters (0x00) which PostgreSQL doesn't accept
@@ -58,8 +156,33 @@ def clean_string(s):
 
 
 def create_applicants_table(conn):
-    """
-    Create the applicants table if it doesn't exist.
+    """Create the applicants table in the database if it doesn't exist.
+
+    Creates a table with the following schema:
+        - p_id (INTEGER PRIMARY KEY): Unique post identifier
+        - program (TEXT): Program name
+        - comments (TEXT): Applicant comments
+        - date_added (DATE): Date the entry was posted
+        - url (TEXT): Source URL from GradCafe
+        - status (TEXT): Application status (Accepted, Rejected, etc.)
+        - term (TEXT): Start term (e.g., 'Fall 2026')
+        - us_or_international (TEXT): Citizenship status
+        - gpa (REAL): Grade Point Average
+        - gre (REAL): GRE total score
+        - gre_v (REAL): GRE verbal score
+        - gre_aw (REAL): GRE analytical writing score
+        - degree (TEXT): Degree type (PhD, Masters)
+        - llm_generated_program (TEXT): LLM-standardized program name
+        - llm_generated_university (TEXT): LLM-standardized university name
+
+    Args:
+        conn (psycopg.Connection): Active database connection
+
+    Returns:
+        None
+
+    Note:
+        This function is idempotent - it can be called multiple times safely.
     """
     create_table_query = """
     CREATE TABLE IF NOT EXISTS applicants (
@@ -90,8 +213,33 @@ def create_applicants_table(conn):
 
 
 def load_json_data(json_file_path, conn):
-    """
-    Load data from JSON Lines file into the applicants table.
+    """Load applicant data from a JSON Lines file into the database.
+
+    Reads a JSON Lines file where each line is a JSON object representing
+    one applicant entry. Data is cleaned, parsed, and inserted in batches
+    for efficiency. Duplicate entries (based on p_id) are automatically skipped.
+
+    Args:
+        json_file_path (str): Path to the JSON Lines file
+        conn (psycopg.Connection): Active database connection
+
+    Returns:
+        int: Total number of records successfully processed
+
+    Raises:
+        FileNotFoundError: If the JSON file doesn't exist
+        json.JSONDecodeError: If the file contains invalid JSON
+        psycopg.Error: If database insertion fails
+
+    Note:
+        - Data is committed in batches of 1000 records for efficiency
+        - Duplicate p_id values are silently skipped (ON CONFLICT DO NOTHING)
+        - Invalid entries are logged and skipped rather than causing failure
+
+    Example:
+        >>> conn = psycopg.connect(host='localhost', dbname='mydb')
+        >>> records_loaded = load_json_data('applicants.json', conn)
+        >>> print(f"Loaded {records_loaded} records")
     """
     cursor = conn.cursor()
 
@@ -175,8 +323,21 @@ def load_json_data(json_file_path, conn):
 
 
 def verify_data(conn):
-    """
-    Verify the loaded data by showing some statistics.
+    """Verify loaded data by displaying database statistics.
+
+    Prints summary statistics including:
+        - Total record count
+        - Sample records
+        - Distribution of application statuses
+
+    Args:
+        conn (psycopg.Connection): Active database connection
+
+    Returns:
+        None
+
+    Note:
+        This function only prints to stdout and doesn't modify the database.
     """
     cursor = conn.cursor()
 
@@ -207,16 +368,32 @@ def verify_data(conn):
 
 
 def main():
-    """
-    Main function to create table and load data.
+    """Main entry point for data loading script.
 
-    Uses DATABASE_URL environment variable if set (format: postgresql://user:password@host:port/database)
-    Otherwise uses individual environment variables or defaults:
-    - DB_HOST (default: localhost)
-    - DB_PORT (default: 5432)
-    - DB_NAME (default: bradleyballinger)
-    - DB_USER (default: bradleyballinger)
-    - DB_PASSWORD (default: empty)
+    Connects to the database, creates the schema if needed, loads data from
+    a JSON file, and displays verification statistics.
+
+    Environment Variables:
+        Either use DATABASE_URL (recommended)::
+
+            DATABASE_URL=postgresql://user:password@host:port/database
+
+        Or use individual variables::
+
+            DB_HOST (default: localhost)
+            DB_PORT (default: 5432)
+            DB_NAME (default: bradleyballinger)
+            DB_USER (default: bradleyballinger)
+            DB_PASSWORD (default: empty string)
+
+    Raises:
+        psycopg.Error: If database connection or operations fail
+        FileNotFoundError: If the data file cannot be found
+        Exception: For other unexpected errors
+
+    Note:
+        The data file is expected at: ../llm_extend_applicant_data.json
+        relative to this script's location.
     """
     database_url = os.environ.get('DATABASE_URL')
 

@@ -1,3 +1,34 @@
+"""Database query module for analyzing graduate school applicant data.
+
+This module provides a comprehensive set of analytical queries for the applicant
+database. It includes utilities for connecting to PostgreSQL and executing
+various statistical and analytical queries on the graduate school application data.
+
+The module is designed to answer key questions about:
+    - Application volumes and trends
+    - Demographic distributions
+    - Acceptance rates and selectivity
+    - Academic metrics (GPA, GRE scores)
+    - Program-specific statistics
+
+Example:
+    Basic usage::
+
+        import query_data
+
+        conn = query_data.get_connection()
+        fall_2026_count = query_data.question_1(conn)
+        international_pct = query_data.question_2(conn)
+        conn.close()
+
+Attributes:
+    None
+
+See Also:
+    - :mod:`load_data`: For loading data into the database
+    - :mod:`app`: For the Flask web interface
+"""
+
 import psycopg
 from psycopg import sql
 import os
@@ -43,7 +74,19 @@ def get_connection():
 
 
 def question_1(conn):
-    """How many entries do you have in your database who have applied for Fall 2026?"""
+    """Count entries for Fall 2026 applications.
+
+    Args:
+        conn (psycopg.Connection): Active database connection
+
+    Returns:
+        int: Number of Fall 2026 application entries
+
+    Example:
+        >>> conn = get_connection()
+        >>> count = question_1(conn)
+        >>> print(f"Fall 2026 applications: {count}")
+    """
     cursor = conn.cursor()
     query = """
         SELECT COUNT(*)
@@ -60,7 +103,23 @@ def question_1(conn):
 
 
 def question_2(conn):
-    """What percentage of entries are from international students (not American or Other)?"""
+    """Calculate percentage of international student applications.
+
+    Args:
+        conn (psycopg.Connection): Active database connection
+
+    Returns:
+        float: Percentage of entries from international students (0-100)
+
+    Note:
+        Only counts entries where citizenship status is explicitly 'International',
+        excluding American and other categories.
+
+    Example:
+        >>> conn = get_connection()
+        >>> pct = question_2(conn)
+        >>> print(f"International students: {pct:.2f}%")
+    """
     cursor = conn.cursor()
 
     # Total entries
@@ -85,7 +144,30 @@ def question_2(conn):
 
 
 def question_3(conn):
-    """What is the average GPA, GRE, GRE V, GRE AW of applicants who provide these metrics?"""
+    """Calculate average academic metrics across all applicants.
+
+    Computes mean values for GPA and GRE scores among applicants who
+    provided these metrics.
+
+    Args:
+        conn (psycopg.Connection): Active database connection
+
+    Returns:
+        dict: Dictionary containing:
+            - avg_gpa (float): Average GPA
+            - avg_gre (float): Average total GRE score
+            - avg_gre_v (float): Average GRE verbal score
+            - avg_gre_aw (float): Average GRE analytical writing score
+
+    Note:
+        Only includes non-null values in the averages. The number of
+        entries contributing to each average may differ.
+
+    Example:
+        >>> conn = get_connection()
+        >>> metrics = question_3(conn)
+        >>> print(f"Average GPA: {metrics['avg_gpa']:.2f}")
+    """
     cursor = conn.cursor()
 
     # Get averages for each metric
@@ -124,7 +206,25 @@ def question_3(conn):
 
 
 def question_4(conn):
-    """What is the average GPA of American students in Fall 2026?"""
+    """Calculate average GPA for American students applying to Fall 2026.
+
+    Args:
+        conn (psycopg.Connection): Active database connection
+
+    Returns:
+        float: Average GPA of American students for Fall 2026
+
+    Note:
+        Only includes entries with:
+            - term = 'Fall 2026'
+            - us_or_international = 'American'
+            - Non-null GPA value
+
+    Example:
+        >>> conn = get_connection()
+        >>> avg_gpa = question_4(conn)
+        >>> print(f"American students avg GPA: {avg_gpa:.2f}")
+    """
     cursor = conn.cursor()
 
     query = """
@@ -300,7 +400,31 @@ def question_9(conn):
 
 
 def question_10(conn):
-    """What are the top 10 most applied-to programs for Fall 2026?"""
+    """Find the top 10 most popular programs for Fall 2026.
+
+    Ranks programs by application volume and calculates acceptance rates.
+
+    Args:
+        conn (psycopg.Connection): Active database connection
+
+    Returns:
+        list of tuple: Each tuple contains:
+            - university (str): Standardized university name
+            - program (str): Standardized program name
+            - total_applications (int): Number of applications
+            - acceptances (int): Number of acceptances
+            - acceptance_rate (float): Percentage accepted (0-100)
+
+    Note:
+        Uses LLM-generated standardized university and program names for
+        better aggregation of similar programs.
+
+    Example:
+        >>> conn = get_connection()
+        >>> top_programs = question_10(conn)
+        >>> for uni, prog, apps, acc, rate in top_programs:
+        ...     print(f"{uni} - {prog}: {apps} applications")
+    """
     cursor = conn.cursor()
 
     query = """
@@ -369,7 +493,27 @@ def question_11(conn):
 
 
 def main():
-    """Run all queries and display results."""
+    """Execute all analytical queries and display results.
+
+    Runs all 11 analytical queries in sequence and prints formatted results
+    to stdout. Handles database connection setup and teardown.
+
+    Returns:
+        None
+
+    Raises:
+        psycopg.Error: If database connection or query execution fails
+        Exception: For other unexpected errors
+
+    Example:
+        Run from command line::
+
+            python query_data.py
+
+    Note:
+        Database connection parameters are read from environment variables.
+        See :func:`get_connection` for details.
+    """
     print("=" * 80)
     print("APPLICANT DATABASE QUERIES")
     print("=" * 80)

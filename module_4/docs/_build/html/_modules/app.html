@@ -42,6 +42,9 @@
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../api.html">API Reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#module-app">Flask Application</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#app.app"><code class="docutils literal notranslate"><span class="pre">app</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#app._busy_lock"><code class="docutils literal notranslate"><span class="pre">_busy_lock</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#app._is_busy"><code class="docutils literal notranslate"><span class="pre">_is_busy</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api.html#app.is_busy"><code class="docutils literal notranslate"><span class="pre">is_busy()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api.html#app.busy_state"><code class="docutils literal notranslate"><span class="pre">busy_state()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api.html#app.index"><code class="docutils literal notranslate"><span class="pre">index()</span></code></a></li>
@@ -50,17 +53,22 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#module-scrape">Web Scraping</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#scrape.USER_AGENT"><code class="docutils literal notranslate"><span class="pre">USER_AGENT</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#scrape.DEFAULT_BASE"><code class="docutils literal notranslate"><span class="pre">DEFAULT_BASE</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#scrape.JSON_OUTPUT"><code class="docutils literal notranslate"><span class="pre">JSON_OUTPUT</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api.html#scrape.scrape_data"><code class="docutils literal notranslate"><span class="pre">scrape_data()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api.html#scrape.save_data"><code class="docutils literal notranslate"><span class="pre">save_data()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#module-clean">Data Cleaning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#clean.DEFAULT_LLM_API_URL"><code class="docutils literal notranslate"><span class="pre">DEFAULT_LLM_API_URL</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api.html#clean.load_data"><code class="docutils literal notranslate"><span class="pre">load_data()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api.html#clean.clean_data"><code class="docutils literal notranslate"><span class="pre">clean_data()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api.html#clean.save_data"><code class="docutils literal notranslate"><span class="pre">save_data()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#module-load_data">Data Loading</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#load_data.None"><code class="docutils literal notranslate"><span class="pre">None</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api.html#load_data.parse_gpa"><code class="docutils literal notranslate"><span class="pre">parse_gpa()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api.html#load_data.parse_gre_score"><code class="docutils literal notranslate"><span class="pre">parse_gre_score()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api.html#load_data.parse_date"><code class="docutils literal notranslate"><span class="pre">parse_date()</span></code></a></li>
@@ -73,6 +81,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#module-query_data">Database Queries</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#query_data.None"><code class="docutils literal notranslate"><span class="pre">None</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api.html#query_data.get_connection"><code class="docutils literal notranslate"><span class="pre">get_connection()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api.html#query_data.question_1"><code class="docutils literal notranslate"><span class="pre">question_1()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api.html#query_data.question_2"><code class="docutils literal notranslate"><span class="pre">question_2()</span></code></a></li>
@@ -117,7 +126,43 @@
            <div itemprop="articleBody">
              
   <h1>Source code for app</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Flask application for displaying applicant database analytics.&quot;&quot;&quot;</span>
+<span></span><span class="sd">&quot;&quot;&quot;Flask web application for graduate school applicant analytics.</span>
+
+<span class="sd">This module implements a Flask-based web dashboard that displays analytical</span>
+<span class="sd">insights from the GradCafe applicant database. It provides both a visual</span>
+<span class="sd">interface for viewing query results and REST API endpoints for data operations.</span>
+
+<span class="sd">The application features:</span>
+<span class="sd">    - Dashboard with 11 analytical queries</span>
+<span class="sd">    - Live data scraping from GradCafe</span>
+<span class="sd">    - LLM-powered data analysis updates</span>
+<span class="sd">    - Concurrent operation management with busy-state locking</span>
+
+<span class="sd">Routes:</span>
+<span class="sd">    - GET /: Main dashboard displaying all analytics</span>
+<span class="sd">    - POST /pull-data: Scrape new data from GradCafe and load into database</span>
+<span class="sd">    - POST /update-analysis: Trigger LLM analysis of applicant data</span>
+
+<span class="sd">Example:</span>
+<span class="sd">    Run the application::</span>
+
+<span class="sd">        python app.py</span>
+
+<span class="sd">    Or with Flask CLI::</span>
+
+<span class="sd">        export FLASK_APP=app.py</span>
+<span class="sd">        flask run --port 5001</span>
+
+<span class="sd">Attributes:</span>
+<span class="sd">    app (Flask): The Flask application instance</span>
+<span class="sd">    _busy_lock (threading.Lock): Lock for managing concurrent operations</span>
+<span class="sd">    _is_busy (bool): Flag indicating if a background operation is running</span>
+
+<span class="sd">See Also:</span>
+<span class="sd">    - :mod:`query_data`: Database query functions used by the dashboard</span>
+<span class="sd">    - :mod:`scrape`: Web scraping functionality</span>
+<span class="sd">    - :mod:`load_data`: Data loading utilities</span>
+<span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span><span class="p">,</span> <span class="n">render_template</span><span class="p">,</span> <span class="n">jsonify</span>
 <span class="kn">import</span> <span class="nn">query_data</span>
@@ -139,7 +184,17 @@
 <div class="viewcode-block" id="is_busy">
 <a class="viewcode-back" href="../api.html#app.is_busy">[docs]</a>
 <span class="k">def</span> <span class="nf">is_busy</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if the system is currently busy with an operation.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if the system is currently processing an operation.</span>
+
+<span class="sd">    Thread-safe check for whether a background operation (scraping or</span>
+<span class="sd">    LLM analysis) is currently running.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        bool: True if an operation is in progress, False otherwise</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        This is used to prevent concurrent operations that could conflict.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">global</span> <span class="n">_is_busy</span>
     <span class="k">with</span> <span class="n">_busy_lock</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">_is_busy</span></div>
@@ -150,7 +205,22 @@
 <a class="viewcode-back" href="../api.html#app.busy_state">[docs]</a>
 <span class="nd">@contextmanager</span>
 <span class="k">def</span> <span class="nf">busy_state</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Context manager to set/unset busy state.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Context manager for managing busy state during operations.</span>
+
+<span class="sd">    Acquires the busy state at entry and releases it on exit. Prevents</span>
+<span class="sd">    concurrent operations from interfering with each other.</span>
+
+<span class="sd">    Yields:</span>
+<span class="sd">        None</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        RuntimeError: If system is already busy with another operation</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; with busy_state():</span>
+<span class="sd">        ...     # Perform exclusive operation</span>
+<span class="sd">        ...     scrape_data()</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">global</span> <span class="n">_is_busy</span>
 
     <span class="c1"># Try to acquire busy state</span>
@@ -172,7 +242,18 @@
 <a class="viewcode-back" href="../api.html#app.index">[docs]</a>
 <span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
 <span class="k">def</span> <span class="nf">index</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Main page displaying all query results.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Render the main analytics dashboard.</span>
+
+<span class="sd">    Executes all 11 analytical queries and displays results in a formatted</span>
+<span class="sd">    web interface with JHU branding.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: Rendered HTML template with query results</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        Creates a new database connection for each request. The connection</span>
+<span class="sd">        is properly closed after all queries complete.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># Connect to database</span>
     <span class="n">conn</span> <span class="o">=</span> <span class="n">query_data</span><span class="o">.</span><span class="n">get_connection</span><span class="p">()</span>
@@ -224,9 +305,29 @@
 <a class="viewcode-back" href="../api.html#app.pull_data">[docs]</a>
 <span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/pull-data&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;POST&#39;</span><span class="p">])</span>
 <span class="k">def</span> <span class="nf">pull_data</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Scrape new data from GradCafe and add it to the database.</span>
-<span class="sd">    Returns JSON with status and message.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Scrape new applicant data from GradCafe and load into database.</span>
+
+<span class="sd">    This endpoint orchestrates a multi-step process:</span>
+<span class="sd">        1. Runs the web scraper to fetch recent GradCafe posts</span>
+<span class="sd">        2. Parses and cleans the scraped data</span>
+<span class="sd">        3. Inserts new entries into the database (skipping duplicates)</span>
+<span class="sd">        4. Returns statistics about inserted/skipped records</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tuple: JSON response and HTTP status code</span>
+<span class="sd">            - Success (200): {&quot;status&quot;: &quot;success&quot;, &quot;inserted&quot;: N, &quot;skipped&quot;: M}</span>
+<span class="sd">            - Busy (409): {&quot;status&quot;: &quot;busy&quot;, &quot;message&quot;: &quot;...&quot;}</span>
+<span class="sd">            - Error (500): {&quot;status&quot;: &quot;error&quot;, &quot;message&quot;: &quot;...&quot;}</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        subprocess.TimeoutExpired: If scraping takes longer than 5 minutes</span>
+<span class="sd">        RuntimeError: If system is already busy with another operation</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        - Limits scraping to 50 most recent posts by default</span>
+<span class="sd">        - Uses ON CONFLICT to skip duplicate entries</span>
+<span class="sd">        - Automatically cleans up temporary files</span>
+<span class="sd">        - Thread-safe with busy-state management</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Check if system is busy</span>
     <span class="k">if</span> <span class="n">is_busy</span><span class="p">():</span>
@@ -379,9 +480,24 @@
 <a class="viewcode-back" href="../api.html#app.update_analysis">[docs]</a>
 <span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/update-analysis&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;POST&#39;</span><span class="p">])</span>
 <span class="k">def</span> <span class="nf">update_analysis</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Update LLM-generated analysis for applicants in the database.</span>
-<span class="sd">    Returns JSON with status and message.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Trigger LLM-powered analysis of applicant data.</span>
+
+<span class="sd">    Uses a language model to standardize university and program names,</span>
+<span class="sd">    improving data quality for analytical queries.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        tuple: JSON response and HTTP status code</span>
+<span class="sd">            - Success (200): {&quot;status&quot;: &quot;success&quot;, &quot;message&quot;: &quot;...&quot;}</span>
+<span class="sd">            - Busy (409): {&quot;status&quot;: &quot;busy&quot;, &quot;message&quot;: &quot;...&quot;}</span>
+<span class="sd">            - Error (500): {&quot;status&quot;: &quot;error&quot;, &quot;message&quot;: &quot;...&quot;}</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        subprocess.TimeoutExpired: If analysis takes longer than 5 minutes</span>
+<span class="sd">        RuntimeError: If system is already busy with another operation</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        This is currently a placeholder implementation. Full LLM integration</span>
+<span class="sd">        should be added via scripts/update_llm.py when available.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Check if system is busy</span>
     <span class="k">if</span> <span class="n">is_busy</span><span class="p">():</span>

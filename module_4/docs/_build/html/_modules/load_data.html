@@ -42,6 +42,9 @@
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="../api.html">API Reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#module-app">Flask Application</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#app.app"><code class="docutils literal notranslate"><span class="pre">app</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#app._busy_lock"><code class="docutils literal notranslate"><span class="pre">_busy_lock</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#app._is_busy"><code class="docutils literal notranslate"><span class="pre">_is_busy</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api.html#app.is_busy"><code class="docutils literal notranslate"><span class="pre">is_busy()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api.html#app.busy_state"><code class="docutils literal notranslate"><span class="pre">busy_state()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api.html#app.index"><code class="docutils literal notranslate"><span class="pre">index()</span></code></a></li>
@@ -50,17 +53,22 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#module-scrape">Web Scraping</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#scrape.USER_AGENT"><code class="docutils literal notranslate"><span class="pre">USER_AGENT</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#scrape.DEFAULT_BASE"><code class="docutils literal notranslate"><span class="pre">DEFAULT_BASE</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#scrape.JSON_OUTPUT"><code class="docutils literal notranslate"><span class="pre">JSON_OUTPUT</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api.html#scrape.scrape_data"><code class="docutils literal notranslate"><span class="pre">scrape_data()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api.html#scrape.save_data"><code class="docutils literal notranslate"><span class="pre">save_data()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#module-clean">Data Cleaning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#clean.DEFAULT_LLM_API_URL"><code class="docutils literal notranslate"><span class="pre">DEFAULT_LLM_API_URL</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api.html#clean.load_data"><code class="docutils literal notranslate"><span class="pre">load_data()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api.html#clean.clean_data"><code class="docutils literal notranslate"><span class="pre">clean_data()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api.html#clean.save_data"><code class="docutils literal notranslate"><span class="pre">save_data()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#module-load_data">Data Loading</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#load_data.None"><code class="docutils literal notranslate"><span class="pre">None</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api.html#load_data.parse_gpa"><code class="docutils literal notranslate"><span class="pre">parse_gpa()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api.html#load_data.parse_gre_score"><code class="docutils literal notranslate"><span class="pre">parse_gre_score()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api.html#load_data.parse_date"><code class="docutils literal notranslate"><span class="pre">parse_date()</span></code></a></li>
@@ -73,6 +81,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../api.html#module-query_data">Database Queries</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#query_data.None"><code class="docutils literal notranslate"><span class="pre">None</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api.html#query_data.get_connection"><code class="docutils literal notranslate"><span class="pre">get_connection()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api.html#query_data.question_1"><code class="docutils literal notranslate"><span class="pre">question_1()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="../api.html#query_data.question_2"><code class="docutils literal notranslate"><span class="pre">question_2()</span></code></a></li>
@@ -117,7 +126,36 @@
            <div itemprop="articleBody">
              
   <h1>Source code for load_data</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">psycopg</span>
+<span></span><span class="sd">&quot;&quot;&quot;Database loading module for GradCafe applicant data.</span>
+
+<span class="sd">This module provides utilities for loading, parsing, and inserting applicant data</span>
+<span class="sd">into a PostgreSQL database. It handles data cleaning, type conversion, and</span>
+<span class="sd">database schema creation.</span>
+
+<span class="sd">The module supports both batch loading from JSON files and individual record insertion.</span>
+<span class="sd">It automatically handles duplicate entries using PostgreSQL&#39;s ON CONFLICT clause.</span>
+
+<span class="sd">Example:</span>
+<span class="sd">    Load data from a JSON file::</span>
+
+<span class="sd">        from load_data import create_applicants_table, load_json_data</span>
+<span class="sd">        import psycopg</span>
+
+<span class="sd">        conn = psycopg.connect(host=&#39;localhost&#39;, dbname=&#39;mydb&#39;)</span>
+<span class="sd">        create_applicants_table(conn)</span>
+<span class="sd">        load_json_data(&#39;applicant_data.json&#39;, conn)</span>
+<span class="sd">        conn.close()</span>
+
+<span class="sd">Attributes:</span>
+<span class="sd">    None</span>
+
+<span class="sd">See Also:</span>
+<span class="sd">    - :mod:`query_data`: For querying the loaded data</span>
+<span class="sd">    - :mod:`clean`: For data cleaning utilities</span>
+<span class="sd">    - :mod:`scrape`: For web scraping applicant data</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">psycopg</span>
 <span class="kn">from</span> <span class="nn">psycopg</span> <span class="kn">import</span> <span class="n">sql</span>
 <span class="kn">import</span> <span class="nn">json</span>
 <span class="kn">import</span> <span class="nn">re</span>
@@ -129,7 +167,24 @@
 <div class="viewcode-block" id="parse_gpa">
 <a class="viewcode-back" href="../api.html#load_data.parse_gpa">[docs]</a>
 <span class="k">def</span> <span class="nf">parse_gpa</span><span class="p">(</span><span class="n">gpa_str</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extract numeric GPA value from string like &#39;GPA 3.89&#39;.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extract numeric GPA value from string.</span>
+
+<span class="sd">    Parses strings like &#39;GPA 3.89&#39; or &#39;3.89&#39; and extracts the numeric value.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        gpa_str (str): String containing GPA information</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        float: Extracted GPA value, or None if parsing fails</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; parse_gpa(&#39;GPA 3.89&#39;)</span>
+<span class="sd">        3.89</span>
+<span class="sd">        &gt;&gt;&gt; parse_gpa(&#39;3.5&#39;)</span>
+<span class="sd">        3.5</span>
+<span class="sd">        &gt;&gt;&gt; parse_gpa(&#39;invalid&#39;)</span>
+<span class="sd">        None</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">gpa_str</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">None</span>
     <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;(\d+\.?\d*)&#39;</span><span class="p">,</span> <span class="n">gpa_str</span><span class="p">)</span>
@@ -140,11 +195,24 @@
 <div class="viewcode-block" id="parse_gre_score">
 <a class="viewcode-back" href="../api.html#load_data.parse_gre_score">[docs]</a>
 <span class="k">def</span> <span class="nf">parse_gre_score</span><span class="p">(</span><span class="n">gre_str</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Extract numeric GRE score from strings like:</span>
-<span class="sd">    - &#39;GRE 327&#39; (total)</span>
-<span class="sd">    - &#39;GRE V 157&#39; (verbal)</span>
-<span class="sd">    - &#39;GRE AW 3.50&#39; (analytical writing)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extract numeric GRE score from various string formats.</span>
+
+<span class="sd">    Supports parsing of different GRE score formats including total scores,</span>
+<span class="sd">    verbal scores, and analytical writing scores.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        gre_str (str): String containing GRE score information</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        float: Extracted GRE score, or None if parsing fails</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; parse_gre_score(&#39;GRE 327&#39;)</span>
+<span class="sd">        327.0</span>
+<span class="sd">        &gt;&gt;&gt; parse_gre_score(&#39;GRE V 157&#39;)</span>
+<span class="sd">        157.0</span>
+<span class="sd">        &gt;&gt;&gt; parse_gre_score(&#39;GRE AW 3.50&#39;)</span>
+<span class="sd">        3.5</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">gre_str</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">None</span>
@@ -156,9 +224,21 @@
 <div class="viewcode-block" id="parse_date">
 <a class="viewcode-back" href="../api.html#load_data.parse_date">[docs]</a>
 <span class="k">def</span> <span class="nf">parse_date</span><span class="p">(</span><span class="n">date_str</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Parse date string like &#39;January 31, 2026&#39; to date object.</span>
-<span class="sd">    Returns None if parsing fails.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Parse date string into date object.</span>
+
+<span class="sd">    Converts date strings in the format &#39;Month DD, YYYY&#39; to Python date objects.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        date_str (str): Date string in format &#39;January 31, 2026&#39;</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        datetime.date: Parsed date object, or None if parsing fails</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; parse_date(&#39;January 31, 2026&#39;)</span>
+<span class="sd">        datetime.date(2026, 1, 31)</span>
+<span class="sd">        &gt;&gt;&gt; parse_date(&#39;invalid&#39;)</span>
+<span class="sd">        None</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">date_str</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">None</span>
@@ -172,7 +252,21 @@
 <div class="viewcode-block" id="extract_p_id_from_url">
 <a class="viewcode-back" href="../api.html#load_data.extract_p_id_from_url">[docs]</a>
 <span class="k">def</span> <span class="nf">extract_p_id_from_url</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extract the ID from the GradCafe URL.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extract the post ID from a GradCafe result URL.</span>
+
+<span class="sd">    Parses GradCafe URLs to extract the unique post identifier (p_id).</span>
+<span class="sd">    URLs typically follow the pattern: https://www.thegradcafe.com/survey/result/123456</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        url (str): GradCafe result URL</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        int: Extracted post ID, or None if URL doesn&#39;t match expected format</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; extract_p_id_from_url(&#39;https://www.thegradcafe.com/survey/result/123456&#39;)</span>
+<span class="sd">        123456</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">url</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">None</span>
     <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;/result/(\d+)&#39;</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span>
@@ -183,7 +277,20 @@
 <div class="viewcode-block" id="clean_string">
 <a class="viewcode-back" href="../api.html#load_data.clean_string">[docs]</a>
 <span class="k">def</span> <span class="nf">clean_string</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Remove NUL characters and other problematic characters from strings.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Remove problematic characters from strings for PostgreSQL compatibility.</span>
+
+<span class="sd">    Removes NUL characters (0x00) which PostgreSQL doesn&#39;t accept in text fields.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        s (str): String to clean</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: Cleaned string with NUL characters removed, or None if input is None</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        PostgreSQL will reject any string containing NUL bytes, so this function</span>
+<span class="sd">        must be called on all user-provided text before insertion.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">s</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="kc">None</span>
     <span class="c1"># Remove NUL characters (0x00) which PostgreSQL doesn&#39;t accept</span>
@@ -194,8 +301,33 @@
 <div class="viewcode-block" id="create_applicants_table">
 <a class="viewcode-back" href="../api.html#load_data.create_applicants_table">[docs]</a>
 <span class="k">def</span> <span class="nf">create_applicants_table</span><span class="p">(</span><span class="n">conn</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Create the applicants table if it doesn&#39;t exist.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create the applicants table in the database if it doesn&#39;t exist.</span>
+
+<span class="sd">    Creates a table with the following schema:</span>
+<span class="sd">        - p_id (INTEGER PRIMARY KEY): Unique post identifier</span>
+<span class="sd">        - program (TEXT): Program name</span>
+<span class="sd">        - comments (TEXT): Applicant comments</span>
+<span class="sd">        - date_added (DATE): Date the entry was posted</span>
+<span class="sd">        - url (TEXT): Source URL from GradCafe</span>
+<span class="sd">        - status (TEXT): Application status (Accepted, Rejected, etc.)</span>
+<span class="sd">        - term (TEXT): Start term (e.g., &#39;Fall 2026&#39;)</span>
+<span class="sd">        - us_or_international (TEXT): Citizenship status</span>
+<span class="sd">        - gpa (REAL): Grade Point Average</span>
+<span class="sd">        - gre (REAL): GRE total score</span>
+<span class="sd">        - gre_v (REAL): GRE verbal score</span>
+<span class="sd">        - gre_aw (REAL): GRE analytical writing score</span>
+<span class="sd">        - degree (TEXT): Degree type (PhD, Masters)</span>
+<span class="sd">        - llm_generated_program (TEXT): LLM-standardized program name</span>
+<span class="sd">        - llm_generated_university (TEXT): LLM-standardized university name</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        conn (psycopg.Connection): Active database connection</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        None</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        This function is idempotent - it can be called multiple times safely.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">create_table_query</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">    CREATE TABLE IF NOT EXISTS applicants (</span>
@@ -229,8 +361,33 @@
 <div class="viewcode-block" id="load_json_data">
 <a class="viewcode-back" href="../api.html#load_data.load_json_data">[docs]</a>
 <span class="k">def</span> <span class="nf">load_json_data</span><span class="p">(</span><span class="n">json_file_path</span><span class="p">,</span> <span class="n">conn</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Load data from JSON Lines file into the applicants table.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Load applicant data from a JSON Lines file into the database.</span>
+
+<span class="sd">    Reads a JSON Lines file where each line is a JSON object representing</span>
+<span class="sd">    one applicant entry. Data is cleaned, parsed, and inserted in batches</span>
+<span class="sd">    for efficiency. Duplicate entries (based on p_id) are automatically skipped.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        json_file_path (str): Path to the JSON Lines file</span>
+<span class="sd">        conn (psycopg.Connection): Active database connection</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        int: Total number of records successfully processed</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        FileNotFoundError: If the JSON file doesn&#39;t exist</span>
+<span class="sd">        json.JSONDecodeError: If the file contains invalid JSON</span>
+<span class="sd">        psycopg.Error: If database insertion fails</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        - Data is committed in batches of 1000 records for efficiency</span>
+<span class="sd">        - Duplicate p_id values are silently skipped (ON CONFLICT DO NOTHING)</span>
+<span class="sd">        - Invalid entries are logged and skipped rather than causing failure</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; conn = psycopg.connect(host=&#39;localhost&#39;, dbname=&#39;mydb&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; records_loaded = load_json_data(&#39;applicants.json&#39;, conn)</span>
+<span class="sd">        &gt;&gt;&gt; print(f&quot;Loaded {records_loaded} records&quot;)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">cursor</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
 
@@ -317,8 +474,21 @@
 <div class="viewcode-block" id="verify_data">
 <a class="viewcode-back" href="../api.html#load_data.verify_data">[docs]</a>
 <span class="k">def</span> <span class="nf">verify_data</span><span class="p">(</span><span class="n">conn</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Verify the loaded data by showing some statistics.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Verify loaded data by displaying database statistics.</span>
+
+<span class="sd">    Prints summary statistics including:</span>
+<span class="sd">        - Total record count</span>
+<span class="sd">        - Sample records</span>
+<span class="sd">        - Distribution of application statuses</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        conn (psycopg.Connection): Active database connection</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        None</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        This function only prints to stdout and doesn&#39;t modify the database.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">cursor</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
 
@@ -352,16 +522,32 @@
 <div class="viewcode-block" id="main">
 <a class="viewcode-back" href="../api.html#load_data.main">[docs]</a>
 <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Main function to create table and load data.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Main entry point for data loading script.</span>
 
-<span class="sd">    Uses DATABASE_URL environment variable if set (format: postgresql://user:password@host:port/database)</span>
-<span class="sd">    Otherwise uses individual environment variables or defaults:</span>
-<span class="sd">    - DB_HOST (default: localhost)</span>
-<span class="sd">    - DB_PORT (default: 5432)</span>
-<span class="sd">    - DB_NAME (default: bradleyballinger)</span>
-<span class="sd">    - DB_USER (default: bradleyballinger)</span>
-<span class="sd">    - DB_PASSWORD (default: empty)</span>
+<span class="sd">    Connects to the database, creates the schema if needed, loads data from</span>
+<span class="sd">    a JSON file, and displays verification statistics.</span>
+
+<span class="sd">    Environment Variables:</span>
+<span class="sd">        Either use DATABASE_URL (recommended)::</span>
+
+<span class="sd">            DATABASE_URL=postgresql://user:password@host:port/database</span>
+
+<span class="sd">        Or use individual variables::</span>
+
+<span class="sd">            DB_HOST (default: localhost)</span>
+<span class="sd">            DB_PORT (default: 5432)</span>
+<span class="sd">            DB_NAME (default: bradleyballinger)</span>
+<span class="sd">            DB_USER (default: bradleyballinger)</span>
+<span class="sd">            DB_PASSWORD (default: empty string)</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        psycopg.Error: If database connection or operations fail</span>
+<span class="sd">        FileNotFoundError: If the data file cannot be found</span>
+<span class="sd">        Exception: For other unexpected errors</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        The data file is expected at: ../llm_extend_applicant_data.json</span>
+<span class="sd">        relative to this script&#39;s location.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">database_url</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;DATABASE_URL&#39;</span><span class="p">)</span>
 

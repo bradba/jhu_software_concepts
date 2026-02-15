@@ -1,4 +1,40 @@
-"""Flask application for displaying applicant database analytics."""
+"""Flask web application for graduate school applicant analytics.
+
+This module implements a Flask-based web dashboard that displays analytical
+insights from the GradCafe applicant database. It provides both a visual
+interface for viewing query results and REST API endpoints for data operations.
+
+The application features:
+    - Dashboard with 11 analytical queries
+    - Live data scraping from GradCafe
+    - LLM-powered data analysis updates
+    - Concurrent operation management with busy-state locking
+
+Routes:
+    - GET /: Main dashboard displaying all analytics
+    - POST /pull-data: Scrape new data from GradCafe and load into database
+    - POST /update-analysis: Trigger LLM analysis of applicant data
+
+Example:
+    Run the application::
+
+        python app.py
+
+    Or with Flask CLI::
+
+        export FLASK_APP=app.py
+        flask run --port 5001
+
+Attributes:
+    app (Flask): The Flask application instance
+    _busy_lock (threading.Lock): Lock for managing concurrent operations
+    _is_busy (bool): Flag indicating if a background operation is running
+
+See Also:
+    - :mod:`query_data`: Database query functions used by the dashboard
+    - :mod:`scrape`: Web scraping functionality
+    - :mod:`load_data`: Data loading utilities
+"""
 
 from flask import Flask, render_template, jsonify
 import query_data
@@ -18,7 +54,17 @@ _is_busy = False
 
 
 def is_busy():
-    """Check if the system is currently busy with an operation."""
+    """Check if the system is currently processing an operation.
+
+    Thread-safe check for whether a background operation (scraping or
+    LLM analysis) is currently running.
+
+    Returns:
+        bool: True if an operation is in progress, False otherwise
+
+    Note:
+        This is used to prevent concurrent operations that could conflict.
+    """
     global _is_busy
     with _busy_lock:
         return _is_busy
@@ -26,7 +72,22 @@ def is_busy():
 
 @contextmanager
 def busy_state():
-    """Context manager to set/unset busy state."""
+    """Context manager for managing busy state during operations.
+
+    Acquires the busy state at entry and releases it on exit. Prevents
+    concurrent operations from interfering with each other.
+
+    Yields:
+        None
+
+    Raises:
+        RuntimeError: If system is already busy with another operation
+
+    Example:
+        >>> with busy_state():
+        ...     # Perform exclusive operation
+        ...     scrape_data()
+    """
     global _is_busy
 
     # Try to acquire busy state
@@ -45,7 +106,18 @@ def busy_state():
 
 @app.route('/')
 def index():
-    """Main page displaying all query results."""
+    """Render the main analytics dashboard.
+
+    Executes all 11 analytical queries and displays results in a formatted
+    web interface with JHU branding.
+
+    Returns:
+        str: Rendered HTML template with query results
+
+    Note:
+        Creates a new database connection for each request. The connection
+        is properly closed after all queries complete.
+    """
 
     # Connect to database
     conn = query_data.get_connection()
@@ -94,9 +166,29 @@ def index():
 
 @app.route('/pull-data', methods=['POST'])
 def pull_data():
-    """
-    Scrape new data from GradCafe and add it to the database.
-    Returns JSON with status and message.
+    """Scrape new applicant data from GradCafe and load into database.
+
+    This endpoint orchestrates a multi-step process:
+        1. Runs the web scraper to fetch recent GradCafe posts
+        2. Parses and cleans the scraped data
+        3. Inserts new entries into the database (skipping duplicates)
+        4. Returns statistics about inserted/skipped records
+
+    Returns:
+        tuple: JSON response and HTTP status code
+            - Success (200): {"status": "success", "inserted": N, "skipped": M}
+            - Busy (409): {"status": "busy", "message": "..."}
+            - Error (500): {"status": "error", "message": "..."}
+
+    Raises:
+        subprocess.TimeoutExpired: If scraping takes longer than 5 minutes
+        RuntimeError: If system is already busy with another operation
+
+    Note:
+        - Limits scraping to 50 most recent posts by default
+        - Uses ON CONFLICT to skip duplicate entries
+        - Automatically cleans up temporary files
+        - Thread-safe with busy-state management
     """
     # Check if system is busy
     if is_busy():
@@ -246,9 +338,24 @@ def pull_data():
 
 @app.route('/update-analysis', methods=['POST'])
 def update_analysis():
-    """
-    Update LLM-generated analysis for applicants in the database.
-    Returns JSON with status and message.
+    """Trigger LLM-powered analysis of applicant data.
+
+    Uses a language model to standardize university and program names,
+    improving data quality for analytical queries.
+
+    Returns:
+        tuple: JSON response and HTTP status code
+            - Success (200): {"status": "success", "message": "..."}
+            - Busy (409): {"status": "busy", "message": "..."}
+            - Error (500): {"status": "error", "message": "..."}
+
+    Raises:
+        subprocess.TimeoutExpired: If analysis takes longer than 5 minutes
+        RuntimeError: If system is already busy with another operation
+
+    Note:
+        This is currently a placeholder implementation. Full LLM integration
+        should be added via scripts/update_llm.py when available.
     """
     # Check if system is busy
     if is_busy():

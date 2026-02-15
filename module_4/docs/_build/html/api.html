@@ -44,6 +44,9 @@
               <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">API Reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#module-app">Flask Application</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#app.app"><code class="docutils literal notranslate"><span class="pre">app</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#app._busy_lock"><code class="docutils literal notranslate"><span class="pre">_busy_lock</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#app._is_busy"><code class="docutils literal notranslate"><span class="pre">_is_busy</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#app.is_busy"><code class="docutils literal notranslate"><span class="pre">is_busy()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#app.busy_state"><code class="docutils literal notranslate"><span class="pre">busy_state()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#app.index"><code class="docutils literal notranslate"><span class="pre">index()</span></code></a></li>
@@ -52,17 +55,22 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#module-scrape">Web Scraping</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#scrape.USER_AGENT"><code class="docutils literal notranslate"><span class="pre">USER_AGENT</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#scrape.DEFAULT_BASE"><code class="docutils literal notranslate"><span class="pre">DEFAULT_BASE</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#scrape.JSON_OUTPUT"><code class="docutils literal notranslate"><span class="pre">JSON_OUTPUT</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#scrape.scrape_data"><code class="docutils literal notranslate"><span class="pre">scrape_data()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#scrape.save_data"><code class="docutils literal notranslate"><span class="pre">save_data()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#module-clean">Data Cleaning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#clean.DEFAULT_LLM_API_URL"><code class="docutils literal notranslate"><span class="pre">DEFAULT_LLM_API_URL</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#clean.load_data"><code class="docutils literal notranslate"><span class="pre">load_data()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#clean.clean_data"><code class="docutils literal notranslate"><span class="pre">clean_data()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#clean.save_data"><code class="docutils literal notranslate"><span class="pre">save_data()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#module-load_data">Data Loading</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#load_data.None"><code class="docutils literal notranslate"><span class="pre">None</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#load_data.parse_gpa"><code class="docutils literal notranslate"><span class="pre">parse_gpa()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#load_data.parse_gre_score"><code class="docutils literal notranslate"><span class="pre">parse_gre_score()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#load_data.parse_date"><code class="docutils literal notranslate"><span class="pre">parse_date()</span></code></a></li>
@@ -75,6 +83,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#module-query_data">Database Queries</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#query_data.None"><code class="docutils literal notranslate"><span class="pre">None</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#query_data.get_connection"><code class="docutils literal notranslate"><span class="pre">get_connection()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#query_data.question_1"><code class="docutils literal notranslate"><span class="pre">question_1()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#query_data.question_2"><code class="docutils literal notranslate"><span class="pre">question_2()</span></code></a></li>
@@ -123,153 +132,845 @@
 <p>This section provides complete API documentation for all modules, automatically generated from docstrings.</p>
 <section id="module-app">
 <span id="flask-application"></span><h2>Flask Application<a class="headerlink" href="#module-app" title="Link to this heading"></a></h2>
-<p>Flask application for displaying applicant database analytics.</p>
+<p>Flask web application for graduate school applicant analytics.</p>
+<p>This module implements a Flask-based web dashboard that displays analytical
+insights from the GradCafe applicant database. It provides both a visual
+interface for viewing query results and REST API endpoints for data operations.</p>
+<dl class="simple">
+<dt>The application features:</dt><dd><ul class="simple">
+<li><p>Dashboard with 11 analytical queries</p></li>
+<li><p>Live data scraping from GradCafe</p></li>
+<li><p>LLM-powered data analysis updates</p></li>
+<li><p>Concurrent operation management with busy-state locking</p></li>
+</ul>
+</dd>
+<dt>Routes:</dt><dd><ul class="simple">
+<li><p>GET /: Main dashboard displaying all analytics</p></li>
+<li><p>POST /pull-data: Scrape new data from GradCafe and load into database</p></li>
+<li><p>POST /update-analysis: Trigger LLM analysis of applicant data</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>Run the application:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">app</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+<p>Or with Flask CLI:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">export</span> <span class="n">FLASK_APP</span><span class="o">=</span><span class="n">app</span><span class="o">.</span><span class="n">py</span>
+<span class="n">flask</span> <span class="n">run</span> <span class="o">--</span><span class="n">port</span> <span class="mi">5001</span>
+</pre></div>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.app">
+<span class="sig-prename descclassname"><span class="pre">app.</span></span><span class="sig-name descname"><span class="pre">app</span></span><a class="headerlink" href="#app.app" title="Link to this definition"></a></dt>
+<dd><p>The Flask application instance</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Flask</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app._busy_lock">
+<span class="sig-prename descclassname"><span class="pre">app.</span></span><span class="sig-name descname"><span class="pre">_busy_lock</span></span><a class="headerlink" href="#app._busy_lock" title="Link to this definition"></a></dt>
+<dd><p>Lock for managing concurrent operations</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/threading.html#threading.Lock" title="(in Python v3.14)">threading.Lock</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app._is_busy">
+<span class="sig-prename descclassname"><span class="pre">app.</span></span><span class="sig-name descname"><span class="pre">_is_busy</span></span><a class="headerlink" href="#app._is_busy" title="Link to this definition"></a></dt>
+<dd><p>Flag indicating if a background operation is running</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)">bool</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#module-query_data" title="query_data"><code class="xref py py-mod docutils literal notranslate"><span class="pre">query_data</span></code></a>: Database query functions used by the dashboard</p></li>
+<li><p><a class="reference internal" href="#module-scrape" title="scrape"><code class="xref py py-mod docutils literal notranslate"><span class="pre">scrape</span></code></a>: Web scraping functionality</p></li>
+<li><p><a class="reference internal" href="#module-load_data" title="load_data"><code class="xref py py-mod docutils literal notranslate"><span class="pre">load_data</span></code></a>: Data loading utilities</p></li>
+</ul>
+</div>
 <dl class="py function">
 <dt class="sig sig-object py" id="app.is_busy">
 <span class="sig-prename descclassname"><span class="pre">app.</span></span><span class="sig-name descname"><span class="pre">is_busy</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app.html#is_busy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.is_busy" title="Link to this definition"></a></dt>
-<dd><p>Check if the system is currently busy with an operation.</p>
+<dd><p>Check if the system is currently processing an operation.</p>
+<p>Thread-safe check for whether a background operation (scraping or
+LLM analysis) is currently running.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>True if an operation is in progress, False otherwise</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)">bool</a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is used to prevent concurrent operations that could conflict.</p>
+</div>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="app.busy_state">
 <span class="sig-prename descclassname"><span class="pre">app.</span></span><span class="sig-name descname"><span class="pre">busy_state</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app.html#busy_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.busy_state" title="Link to this definition"></a></dt>
-<dd><p>Context manager to set/unset busy state.</p>
+<dd><p>Context manager for managing busy state during operations.</p>
+<p>Acquires the busy state at entry and releases it on exit. Prevents
+concurrent operations from interfering with each other.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Yields<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.14)"><strong>RuntimeError</strong></a> – If system is already busy with another operation</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">busy_state</span><span class="p">():</span>
+<span class="gp">... </span>    <span class="c1"># Perform exclusive operation</span>
+<span class="gp">... </span>    <span class="n">scrape_data</span><span class="p">()</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="app.index">
 <span class="sig-prename descclassname"><span class="pre">app.</span></span><span class="sig-name descname"><span class="pre">index</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app.html#index"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.index" title="Link to this definition"></a></dt>
-<dd><p>Main page displaying all query results.</p>
+<dd><p>Render the main analytics dashboard.</p>
+<p>Executes all 11 analytical queries and displays results in a formatted
+web interface with JHU branding.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Rendered HTML template with query results</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Creates a new database connection for each request. The connection
+is properly closed after all queries complete.</p>
+</div>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="app.pull_data">
 <span class="sig-prename descclassname"><span class="pre">app.</span></span><span class="sig-name descname"><span class="pre">pull_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app.html#pull_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.pull_data" title="Link to this definition"></a></dt>
-<dd><p>Scrape new data from GradCafe and add it to the database.
-Returns JSON with status and message.</p>
+<dd><p>Scrape new applicant data from GradCafe and load into database.</p>
+<dl class="simple">
+<dt>This endpoint orchestrates a multi-step process:</dt><dd><ol class="arabic simple">
+<li><p>Runs the web scraper to fetch recent GradCafe posts</p></li>
+<li><p>Parses and cleans the scraped data</p></li>
+<li><p>Inserts new entries into the database (skipping duplicates)</p></li>
+<li><p>Returns statistics about inserted/skipped records</p></li>
+</ol>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>JSON response and HTTP status code</dt><dd><ul class="simple">
+<li><p>Success (200): {“status”: “success”, “inserted”: N, “skipped”: M}</p></li>
+<li><p>Busy (409): {“status”: “busy”, “message”: “…”}</p></li>
+<li><p>Error (500): {“status”: “error”, “message”: “…”}</p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)">tuple</a></p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/subprocess.html#subprocess.TimeoutExpired" title="(in Python v3.14)"><strong>subprocess.TimeoutExpired</strong></a> – If scraping takes longer than 5 minutes</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.14)"><strong>RuntimeError</strong></a> – If system is already busy with another operation</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>Limits scraping to 50 most recent posts by default</p></li>
+<li><p>Uses ON CONFLICT to skip duplicate entries</p></li>
+<li><p>Automatically cleans up temporary files</p></li>
+<li><p>Thread-safe with busy-state management</p></li>
+</ul>
+</div>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="app.update_analysis">
 <span class="sig-prename descclassname"><span class="pre">app.</span></span><span class="sig-name descname"><span class="pre">update_analysis</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app.html#update_analysis"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.update_analysis" title="Link to this definition"></a></dt>
-<dd><p>Update LLM-generated analysis for applicants in the database.
-Returns JSON with status and message.</p>
+<dd><p>Trigger LLM-powered analysis of applicant data.</p>
+<p>Uses a language model to standardize university and program names,
+improving data quality for analytical queries.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p><dl class="simple">
+<dt>JSON response and HTTP status code</dt><dd><ul class="simple">
+<li><p>Success (200): {“status”: “success”, “message”: “…”}</p></li>
+<li><p>Busy (409): {“status”: “busy”, “message”: “…”}</p></li>
+<li><p>Error (500): {“status”: “error”, “message”: “…”}</p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)">tuple</a></p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/subprocess.html#subprocess.TimeoutExpired" title="(in Python v3.14)"><strong>subprocess.TimeoutExpired</strong></a> – If analysis takes longer than 5 minutes</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.14)"><strong>RuntimeError</strong></a> – If system is already busy with another operation</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This is currently a placeholder implementation. Full LLM integration
+should be added via scripts/update_llm.py when available.</p>
+</div>
 </dd></dl>
 
 </section>
 <section id="module-scrape">
 <span id="web-scraping"></span><h2>Web Scraping<a class="headerlink" href="#module-scrape" title="Link to this heading"></a></h2>
-<p>This script fetches applicant posts from The Grad Cafe.
-It extracts relevant fields from each post and saves the data in JSON format.</p>
+<p>Web scraper for The GradCafe graduate school application results.</p>
+<p>This module implements a web scraper that extracts graduate school application
+data from The GradCafe website (thegradcafe.com). It parses HTML tables to
+extract structured information about application outcomes, test scores, and
+applicant demographics.</p>
+<dl class="simple">
+<dt>The scraper:</dt><dd><ul class="simple">
+<li><p>Respects rate limits with configurable delays</p></li>
+<li><p>Handles pagination automatically</p></li>
+<li><p>Extracts detailed information from both list and detail pages</p></li>
+<li><p>Exports data in JSON format for further processing</p></li>
+</ul>
+</dd>
+<dt>Extracted Data Fields:</dt><dd><ul class="simple">
+<li><p>university: Name of the institution</p></li>
+<li><p>program_name: Graduate program name</p></li>
+<li><p>degree: Type of degree (PhD, Masters, etc.)</p></li>
+<li><p>applicant_status: Decision outcome (Accepted, Rejected, etc.)</p></li>
+<li><p>date_posted: When the result was posted</p></li>
+<li><p>start_term: Intended start term (e.g., “Fall 2026”)</p></li>
+<li><p>citizenship: International or American</p></li>
+<li><p>gpa: Grade Point Average</p></li>
+<li><p>gre_score: GRE total score</p></li>
+<li><p>gre_v: GRE verbal score</p></li>
+<li><p>gre_aw: GRE analytical writing score</p></li>
+<li><p>comments: Additional applicant notes</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>Scrape 100 most recent entries:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">scrape</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">limit</span> <span class="mi">100</span> <span class="o">--</span><span class="n">out</span> <span class="n">results</span><span class="o">.</span><span class="n">json</span>
+</pre></div>
+</div>
+<p>Programmatic usage:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">scrape</span> <span class="kn">import</span> <span class="n">scrape_data</span><span class="p">,</span> <span class="n">save_data</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="n">scrape_data</span><span class="p">(</span><span class="n">limit</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+<span class="n">save_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="s1">&#39;output.json&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrape.USER_AGENT">
+<span class="sig-prename descclassname"><span class="pre">scrape.</span></span><span class="sig-name descname"><span class="pre">USER_AGENT</span></span><a class="headerlink" href="#scrape.USER_AGENT" title="Link to this definition"></a></dt>
+<dd><p>User agent string for HTTP requests</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrape.DEFAULT_BASE">
+<span class="sig-prename descclassname"><span class="pre">scrape.</span></span><span class="sig-name descname"><span class="pre">DEFAULT_BASE</span></span><a class="headerlink" href="#scrape.DEFAULT_BASE" title="Link to this definition"></a></dt>
+<dd><p>Base URL for The GradCafe</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="scrape.JSON_OUTPUT">
+<span class="sig-prename descclassname"><span class="pre">scrape.</span></span><span class="sig-name descname"><span class="pre">JSON_OUTPUT</span></span><a class="headerlink" href="#scrape.JSON_OUTPUT" title="Link to this definition"></a></dt>
+<dd><p>Default output filename</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#module-clean" title="clean"><code class="xref py py-mod docutils literal notranslate"><span class="pre">clean</span></code></a>: For cleaning scraped data</p></li>
+<li><p><a class="reference internal" href="#module-load_data" title="load_data"><code class="xref py py-mod docutils literal notranslate"><span class="pre">load_data</span></code></a>: For loading scraped data into database</p></li>
+</ul>
+</div>
 <dl class="py function">
 <dt class="sig sig-object py" id="scrape.scrape_data">
-<span class="sig-prename descclassname"><span class="pre">scrape.</span></span><span class="sig-name descname"><span class="pre">scrape_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">base_url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'https://www.thegradcafe.com/'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">50</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/scrape.html#scrape_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scrape.scrape_data" title="Link to this definition"></a></dt>
-<dd><p>Fetch entries by iterating through paginated survey pages (?page=1, ?page=2, etc.).</p>
+<span class="sig-prename descclassname"><span class="pre">scrape.</span></span><span class="sig-name descname"><span class="pre">scrape_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">base_url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'https://www.thegradcafe.com/'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">limit</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">50</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#load_data.None" title="load_data.None"><span class="pre">None</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/scrape.html#scrape_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scrape.scrape_data" title="Link to this definition"></a></dt>
+<dd><p>Scrape application results from The GradCafe.</p>
+<p>Iterates through paginated results pages, extracting entries until
+the limit is reached or no more pages are available.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>base_url</strong> – Base URL of The GradCafe (default: <a class="reference external" href="https://www.thegradcafe.com/">https://www.thegradcafe.com/</a>)</p></li>
+<li><p><strong>limit</strong> – Maximum number of entries to scrape (default: 50)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of dictionaries containing application result data</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>Respects rate limits with delays between requests</p></li>
+<li><p>Stops early if a page returns no entries</p></li>
+<li><p>Logs progress to stdout</p></li>
+</ul>
+</div>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">results</span> <span class="o">=</span> <span class="n">scrape_data</span><span class="p">(</span><span class="n">limit</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Scraped </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">results</span><span class="p">)</span><span class="si">}</span><span class="s2"> entries&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="scrape.save_data">
-<span class="sig-prename descclassname"><span class="pre">scrape.</span></span><span class="sig-name descname"><span class="pre">save_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'applicant_data.json'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="reference internal" href="_modules/scrape.html#save_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scrape.save_data" title="Link to this definition"></a></dt>
-<dd><p>Save data (list of dicts) to JSON file.</p>
+<span class="sig-prename descclassname"><span class="pre">scrape.</span></span><span class="sig-name descname"><span class="pre">save_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#load_data.None" title="load_data.None"><span class="pre">None</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'applicant_data.json'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#load_data.None" title="load_data.None"><span class="pre">None</span></a></span></span><a class="reference internal" href="_modules/scrape.html#save_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#scrape.save_data" title="Link to this definition"></a></dt>
+<dd><p>Save scraped data to JSON file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – List of entry dictionaries to save</p></li>
+<li><p><strong>output_path</strong> – Path to output JSON file (default: applicant_data.json)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Output is formatted with 2-space indentation and UTF-8 encoding
+for readability and international character support.</p>
+</div>
 </dd></dl>
 
 </section>
 <section id="module-clean">
 <span id="data-cleaning"></span><h2>Data Cleaning<a class="headerlink" href="#module-clean" title="Link to this heading"></a></h2>
-<p>Utilities for loading, cleaning, and saving GradCafe application data.</p>
+<p>Data cleaning and standardization utilities for GradCafe applicant data.</p>
+<p>This module provides comprehensive data cleaning and standardization functions
+for graduate school applicant data scraped from The GradCafe. It handles:</p>
+<ul class="simple">
+<li><p>HTML tag removal and text normalization</p></li>
+<li><p>Missing value standardization</p></li>
+<li><p>Comment text cleanup (removing badges and boilerplate)</p></li>
+<li><p>LLM-powered university and program name standardization</p></li>
+</ul>
+<p>The cleaning pipeline prepares raw scraped data for database insertion by
+removing noise, standardizing formats, and optionally enriching data using
+a language model API.</p>
+<p class="rubric">Example</p>
+<p>Basic cleaning workflow:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">clean</span> <span class="kn">import</span> <span class="n">load_data</span><span class="p">,</span> <span class="n">clean_data</span><span class="p">,</span> <span class="n">save_data</span>
+
+<span class="c1"># Load raw scraped data</span>
+<span class="n">raw_data</span> <span class="o">=</span> <span class="n">load_data</span><span class="p">(</span><span class="s1">&#39;applicant_data.json&#39;</span><span class="p">)</span>
+
+<span class="c1"># Clean and normalize</span>
+<span class="n">cleaned</span> <span class="o">=</span> <span class="n">clean_data</span><span class="p">(</span><span class="n">raw_data</span><span class="p">)</span>
+
+<span class="c1"># Save cleaned data</span>
+<span class="n">save_data</span><span class="p">(</span><span class="n">cleaned</span><span class="p">,</span> <span class="s1">&#39;applicant_data_clean.json&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>With LLM standardization:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">clean</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="nb">input</span> <span class="n">raw</span><span class="o">.</span><span class="n">json</span> <span class="o">--</span><span class="n">output</span> <span class="n">clean</span><span class="o">.</span><span class="n">json</span> <span class="o">--</span><span class="n">standardize</span>
+</pre></div>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="clean.DEFAULT_LLM_API_URL">
+<span class="sig-prename descclassname"><span class="pre">clean.</span></span><span class="sig-name descname"><span class="pre">DEFAULT_LLM_API_URL</span></span><a class="headerlink" href="#clean.DEFAULT_LLM_API_URL" title="Link to this definition"></a></dt>
+<dd><p>Default LLM API endpoint from environment</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="simple">
+<dt>Functions:</dt><dd><dl class="simple">
+<dt>Public:</dt><dd><ul class="simple">
+<li><p>load_data: Load JSON data from file</p></li>
+<li><p>clean_data: Clean and normalize data records</p></li>
+<li><p>save_data: Save data to JSON file</p></li>
+</ul>
+</dd>
+<dt>Private:</dt><dd><ul class="simple">
+<li><p>_strip_html: Remove HTML tags and normalize whitespace</p></li>
+<li><p>_normalize_value: Handle missing values consistently</p></li>
+<li><p>_clean_record: Clean a single data record</p></li>
+<li><p>_clean_comment_text: Remove badges from comments</p></li>
+<li><p>_standardize_with_llm: Use LLM to standardize names</p></li>
+</ul>
+</dd>
+</dl>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#module-scrape" title="scrape"><code class="xref py py-mod docutils literal notranslate"><span class="pre">scrape</span></code></a>: For generating raw data to clean</p></li>
+<li><p><a class="reference internal" href="#module-load_data" title="load_data"><code class="xref py py-mod docutils literal notranslate"><span class="pre">load_data</span></code></a>: For loading cleaned data into database</p></li>
+</ul>
+</div>
 <dl class="py function">
 <dt class="sig sig-object py" id="clean.load_data">
 <span class="sig-prename descclassname"><span class="pre">clean.</span></span><span class="sig-name descname"><span class="pre">load_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/clean.html#load_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#clean.load_data" title="Link to this definition"></a></dt>
-<dd><p>Load application data from a JSON file.</p>
+<dd><p>Load application data from JSON file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>path</strong> – Path to JSON file</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of data records (dictionaries)</p>
+</dd>
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#FileNotFoundError" title="(in Python v3.14)"><strong>FileNotFoundError</strong></a> – If file doesn’t exist</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/json.html#json.JSONDecodeError" title="(in Python v3.14)"><strong>json.JSONDecodeError</strong></a> – If file contains invalid JSON</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.14)"><strong>ValueError</strong></a> – If JSON root is not a list</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="clean.clean_data">
-<span class="sig-prename descclassname"><span class="pre">clean.</span></span><span class="sig-name descname"><span class="pre">clean_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.14)"><span class="pre">Iterable</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">missing_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/clean.html#clean_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#clean.clean_data" title="Link to this definition"></a></dt>
-<dd><p>Convert data into a structured, cleaned format.</p>
-<ul class="simple">
-<li><p>Strips HTML from all string fields.</p></li>
-<li><p>Normalizes missing/empty values to a consistent format (default: None).</p></li>
+<span class="sig-prename descclassname"><span class="pre">clean.</span></span><span class="sig-name descname"><span class="pre">clean_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Iterable" title="(in Python v3.14)"><span class="pre">Iterable</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">missing_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference internal" href="#load_data.None" title="load_data.None"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/clean.html#clean_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#clean.clean_data" title="Link to this definition"></a></dt>
+<dd><p>Clean and normalize applicant data records.</p>
+<dl class="simple">
+<dt>Performs comprehensive cleaning:</dt><dd><ul class="simple">
+<li><p>Strips HTML from all string fields</p></li>
+<li><p>Normalizes missing/empty values to consistent format</p></li>
+<li><p>Removes extra whitespace</p></li>
 </ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – Iterable of data records (dictionaries)</p></li>
+<li><p><strong>missing_value</strong> – Value to use for missing/empty fields (default: None)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>List of cleaned data records</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">raw</span> <span class="o">=</span> <span class="p">[{</span><span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;&lt;p&gt;MIT&lt;/p&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;gpa&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">clean_data</span><span class="p">(</span><span class="n">raw</span><span class="p">)</span>
+<span class="go">[{&#39;name&#39;: &#39;MIT&#39;, &#39;gpa&#39;: None}]</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="clean.save_data">
-<span class="sig-prename descclassname"><span class="pre">clean.</span></span><span class="sig-name descname"><span class="pre">save_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.14)"><span class="pre">None</span></a></span></span><a class="reference internal" href="_modules/clean.html#save_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#clean.save_data" title="Link to this definition"></a></dt>
-<dd><p>Save cleaned data into a JSON file.</p>
+<span class="sig-prename descclassname"><span class="pre">clean.</span></span><span class="sig-name descname"><span class="pre">save_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.14)"><span class="pre">List</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.14)"><span class="pre">Dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.14)"><span class="pre">Any</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#load_data.None" title="load_data.None"><span class="pre">None</span></a></span></span><a class="reference internal" href="_modules/clean.html#save_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#clean.save_data" title="Link to this definition"></a></dt>
+<dd><p>Save cleaned data to JSON file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> – List of data records to save</p></li>
+<li><p><strong>path</strong> – Output file path</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Output is UTF-8 encoded with 2-space indentation.</p>
+</div>
 </dd></dl>
 
 </section>
 <section id="module-load_data">
 <span id="data-loading"></span><h2>Data Loading<a class="headerlink" href="#module-load_data" title="Link to this heading"></a></h2>
+<p>Database loading module for GradCafe applicant data.</p>
+<p>This module provides utilities for loading, parsing, and inserting applicant data
+into a PostgreSQL database. It handles data cleaning, type conversion, and
+database schema creation.</p>
+<p>The module supports both batch loading from JSON files and individual record insertion.
+It automatically handles duplicate entries using PostgreSQL’s ON CONFLICT clause.</p>
+<p class="rubric">Example</p>
+<p>Load data from a JSON file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">load_data</span> <span class="kn">import</span> <span class="n">create_applicants_table</span><span class="p">,</span> <span class="n">load_json_data</span>
+<span class="kn">import</span> <span class="nn">psycopg</span>
+
+<span class="n">conn</span> <span class="o">=</span> <span class="n">psycopg</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s1">&#39;localhost&#39;</span><span class="p">,</span> <span class="n">dbname</span><span class="o">=</span><span class="s1">&#39;mydb&#39;</span><span class="p">)</span>
+<span class="n">create_applicants_table</span><span class="p">(</span><span class="n">conn</span><span class="p">)</span>
+<span class="n">load_json_data</span><span class="p">(</span><span class="s1">&#39;applicant_data.json&#39;</span><span class="p">,</span> <span class="n">conn</span><span class="p">)</span>
+<span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="load_data.None">
+<span class="sig-prename descclassname"><span class="pre">load_data.</span></span><span class="sig-name descname"><span class="pre">None</span></span><a class="headerlink" href="#load_data.None" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#module-query_data" title="query_data"><code class="xref py py-mod docutils literal notranslate"><span class="pre">query_data</span></code></a>: For querying the loaded data</p></li>
+<li><p><a class="reference internal" href="#module-clean" title="clean"><code class="xref py py-mod docutils literal notranslate"><span class="pre">clean</span></code></a>: For data cleaning utilities</p></li>
+<li><p><a class="reference internal" href="#module-scrape" title="scrape"><code class="xref py py-mod docutils literal notranslate"><span class="pre">scrape</span></code></a>: For web scraping applicant data</p></li>
+</ul>
+</div>
 <dl class="py function">
 <dt class="sig sig-object py" id="load_data.parse_gpa">
 <span class="sig-prename descclassname"><span class="pre">load_data.</span></span><span class="sig-name descname"><span class="pre">parse_gpa</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gpa_str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/load_data.html#parse_gpa"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#load_data.parse_gpa" title="Link to this definition"></a></dt>
-<dd><p>Extract numeric GPA value from string like ‘GPA 3.89’.</p>
+<dd><p>Extract numeric GPA value from string.</p>
+<p>Parses strings like ‘GPA 3.89’ or ‘3.89’ and extracts the numeric value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>gpa_str</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – String containing GPA information</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Extracted GPA value, or None if parsing fails</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)">float</a></p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">parse_gpa</span><span class="p">(</span><span class="s1">&#39;GPA 3.89&#39;</span><span class="p">)</span>
+<span class="go">3.89</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">parse_gpa</span><span class="p">(</span><span class="s1">&#39;3.5&#39;</span><span class="p">)</span>
+<span class="go">3.5</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">parse_gpa</span><span class="p">(</span><span class="s1">&#39;invalid&#39;</span><span class="p">)</span>
+<span class="go">None</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="load_data.parse_gre_score">
 <span class="sig-prename descclassname"><span class="pre">load_data.</span></span><span class="sig-name descname"><span class="pre">parse_gre_score</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gre_str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/load_data.html#parse_gre_score"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#load_data.parse_gre_score" title="Link to this definition"></a></dt>
-<dd><p>Extract numeric GRE score from strings like:
-- ‘GRE 327’ (total)
-- ‘GRE V 157’ (verbal)
-- ‘GRE AW 3.50’ (analytical writing)</p>
+<dd><p>Extract numeric GRE score from various string formats.</p>
+<p>Supports parsing of different GRE score formats including total scores,
+verbal scores, and analytical writing scores.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>gre_str</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – String containing GRE score information</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Extracted GRE score, or None if parsing fails</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)">float</a></p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">parse_gre_score</span><span class="p">(</span><span class="s1">&#39;GRE 327&#39;</span><span class="p">)</span>
+<span class="go">327.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">parse_gre_score</span><span class="p">(</span><span class="s1">&#39;GRE V 157&#39;</span><span class="p">)</span>
+<span class="go">157.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">parse_gre_score</span><span class="p">(</span><span class="s1">&#39;GRE AW 3.50&#39;</span><span class="p">)</span>
+<span class="go">3.5</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="load_data.parse_date">
 <span class="sig-prename descclassname"><span class="pre">load_data.</span></span><span class="sig-name descname"><span class="pre">parse_date</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">date_str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/load_data.html#parse_date"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#load_data.parse_date" title="Link to this definition"></a></dt>
-<dd><p>Parse date string like ‘January 31, 2026’ to date object.
-Returns None if parsing fails.</p>
+<dd><p>Parse date string into date object.</p>
+<p>Converts date strings in the format ‘Month DD, YYYY’ to Python date objects.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>date_str</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Date string in format ‘January 31, 2026’</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Parsed date object, or None if parsing fails</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.date" title="(in Python v3.14)">datetime.date</a></p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">parse_date</span><span class="p">(</span><span class="s1">&#39;January 31, 2026&#39;</span><span class="p">)</span>
+<span class="go">datetime.date(2026, 1, 31)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">parse_date</span><span class="p">(</span><span class="s1">&#39;invalid&#39;</span><span class="p">)</span>
+<span class="go">None</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="load_data.extract_p_id_from_url">
 <span class="sig-prename descclassname"><span class="pre">load_data.</span></span><span class="sig-name descname"><span class="pre">extract_p_id_from_url</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/load_data.html#extract_p_id_from_url"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#load_data.extract_p_id_from_url" title="Link to this definition"></a></dt>
-<dd><p>Extract the ID from the GradCafe URL.</p>
+<dd><p>Extract the post ID from a GradCafe result URL.</p>
+<p>Parses GradCafe URLs to extract the unique post identifier (p_id).
+URLs typically follow the pattern: <a class="reference external" href="https://www.thegradcafe.com/survey/result/123456">https://www.thegradcafe.com/survey/result/123456</a></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – GradCafe result URL</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Extracted post ID, or None if URL doesn’t match expected format</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)">int</a></p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">extract_p_id_from_url</span><span class="p">(</span><span class="s1">&#39;https://www.thegradcafe.com/survey/result/123456&#39;</span><span class="p">)</span>
+<span class="go">123456</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="load_data.clean_string">
 <span class="sig-prename descclassname"><span class="pre">load_data.</span></span><span class="sig-name descname"><span class="pre">clean_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/load_data.html#clean_string"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#load_data.clean_string" title="Link to this definition"></a></dt>
-<dd><p>Remove NUL characters and other problematic characters from strings.</p>
+<dd><p>Remove problematic characters from strings for PostgreSQL compatibility.</p>
+<p>Removes NUL characters (0x00) which PostgreSQL doesn’t accept in text fields.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>s</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – String to clean</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Cleaned string with NUL characters removed, or None if input is None</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)">str</a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>PostgreSQL will reject any string containing NUL bytes, so this function
+must be called on all user-provided text before insertion.</p>
+</div>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="load_data.create_applicants_table">
 <span class="sig-prename descclassname"><span class="pre">load_data.</span></span><span class="sig-name descname"><span class="pre">create_applicants_table</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/load_data.html#create_applicants_table"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#load_data.create_applicants_table" title="Link to this definition"></a></dt>
-<dd><p>Create the applicants table if it doesn’t exist.</p>
+<dd><p>Create the applicants table in the database if it doesn’t exist.</p>
+<dl class="simple">
+<dt>Creates a table with the following schema:</dt><dd><ul class="simple">
+<li><p>p_id (INTEGER PRIMARY KEY): Unique post identifier</p></li>
+<li><p>program (TEXT): Program name</p></li>
+<li><p>comments (TEXT): Applicant comments</p></li>
+<li><p>date_added (DATE): Date the entry was posted</p></li>
+<li><p>url (TEXT): Source URL from GradCafe</p></li>
+<li><p>status (TEXT): Application status (Accepted, Rejected, etc.)</p></li>
+<li><p>term (TEXT): Start term (e.g., ‘Fall 2026’)</p></li>
+<li><p>us_or_international (TEXT): Citizenship status</p></li>
+<li><p>gpa (REAL): Grade Point Average</p></li>
+<li><p>gre (REAL): GRE total score</p></li>
+<li><p>gre_v (REAL): GRE verbal score</p></li>
+<li><p>gre_aw (REAL): GRE analytical writing score</p></li>
+<li><p>degree (TEXT): Degree type (PhD, Masters)</p></li>
+<li><p>llm_generated_program (TEXT): LLM-standardized program name</p></li>
+<li><p>llm_generated_university (TEXT): LLM-standardized university name</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>conn</strong> (<em>psycopg.Connection</em>) – Active database connection</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function is idempotent - it can be called multiple times safely.</p>
+</div>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="load_data.load_json_data">
 <span class="sig-prename descclassname"><span class="pre">load_data.</span></span><span class="sig-name descname"><span class="pre">load_json_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">json_file_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">conn</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/load_data.html#load_json_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#load_data.load_json_data" title="Link to this definition"></a></dt>
-<dd><p>Load data from JSON Lines file into the applicants table.</p>
+<dd><p>Load applicant data from a JSON Lines file into the database.</p>
+<p>Reads a JSON Lines file where each line is a JSON object representing
+one applicant entry. Data is cleaned, parsed, and inserted in batches
+for efficiency. Duplicate entries (based on p_id) are automatically skipped.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>json_file_path</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Path to the JSON Lines file</p></li>
+<li><p><strong>conn</strong> (<em>psycopg.Connection</em>) – Active database connection</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Total number of records successfully processed</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)">int</a></p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#FileNotFoundError" title="(in Python v3.14)"><strong>FileNotFoundError</strong></a> – If the JSON file doesn’t exist</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/json.html#json.JSONDecodeError" title="(in Python v3.14)"><strong>json.JSONDecodeError</strong></a> – If the file contains invalid JSON</p></li>
+<li><p><strong>psycopg.Error</strong> – If database insertion fails</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>Data is committed in batches of 1000 records for efficiency</p></li>
+<li><p>Duplicate p_id values are silently skipped (ON CONFLICT DO NOTHING)</p></li>
+<li><p>Invalid entries are logged and skipped rather than causing failure</p></li>
+</ul>
+</div>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">conn</span> <span class="o">=</span> <span class="n">psycopg</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="s1">&#39;localhost&#39;</span><span class="p">,</span> <span class="n">dbname</span><span class="o">=</span><span class="s1">&#39;mydb&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">records_loaded</span> <span class="o">=</span> <span class="n">load_json_data</span><span class="p">(</span><span class="s1">&#39;applicants.json&#39;</span><span class="p">,</span> <span class="n">conn</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Loaded </span><span class="si">{</span><span class="n">records_loaded</span><span class="si">}</span><span class="s2"> records&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="load_data.verify_data">
 <span class="sig-prename descclassname"><span class="pre">load_data.</span></span><span class="sig-name descname"><span class="pre">verify_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/load_data.html#verify_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#load_data.verify_data" title="Link to this definition"></a></dt>
-<dd><p>Verify the loaded data by showing some statistics.</p>
+<dd><p>Verify loaded data by displaying database statistics.</p>
+<dl class="simple">
+<dt>Prints summary statistics including:</dt><dd><ul class="simple">
+<li><p>Total record count</p></li>
+<li><p>Sample records</p></li>
+<li><p>Distribution of application statuses</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>conn</strong> (<em>psycopg.Connection</em>) – Active database connection</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This function only prints to stdout and doesn’t modify the database.</p>
+</div>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="load_data.main">
 <span class="sig-prename descclassname"><span class="pre">load_data.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/load_data.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#load_data.main" title="Link to this definition"></a></dt>
-<dd><p>Main function to create table and load data.</p>
-<p>Uses DATABASE_URL environment variable if set (format: postgresql://user:password&#64;host:port/database)
-Otherwise uses individual environment variables or defaults:
-- DB_HOST (default: localhost)
-- DB_PORT (default: 5432)
-- DB_NAME (default: bradleyballinger)
-- DB_USER (default: bradleyballinger)
-- DB_PASSWORD (default: empty)</p>
+<dd><p>Main entry point for data loading script.</p>
+<p>Connects to the database, creates the schema if needed, loads data from
+a JSON file, and displays verification statistics.</p>
+<dl>
+<dt>Environment Variables:</dt><dd><p>Either use DATABASE_URL (recommended):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">DATABASE_URL</span><span class="o">=</span><span class="n">postgresql</span><span class="p">:</span><span class="o">//</span><span class="n">user</span><span class="p">:</span><span class="n">password</span><span class="nd">@host</span><span class="p">:</span><span class="n">port</span><span class="o">/</span><span class="n">database</span>
+</pre></div>
+</div>
+<p>Or use individual variables:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">DB_HOST</span> <span class="p">(</span><span class="n">default</span><span class="p">:</span> <span class="n">localhost</span><span class="p">)</span>
+<span class="n">DB_PORT</span> <span class="p">(</span><span class="n">default</span><span class="p">:</span> <span class="mi">5432</span><span class="p">)</span>
+<span class="n">DB_NAME</span> <span class="p">(</span><span class="n">default</span><span class="p">:</span> <span class="n">bradleyballinger</span><span class="p">)</span>
+<span class="n">DB_USER</span> <span class="p">(</span><span class="n">default</span><span class="p">:</span> <span class="n">bradleyballinger</span><span class="p">)</span>
+<span class="n">DB_PASSWORD</span> <span class="p">(</span><span class="n">default</span><span class="p">:</span> <span class="n">empty</span> <span class="n">string</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>psycopg.Error</strong> – If database connection or operations fail</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#FileNotFoundError" title="(in Python v3.14)"><strong>FileNotFoundError</strong></a> – If the data file cannot be found</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#Exception" title="(in Python v3.14)"><strong>Exception</strong></a> – For other unexpected errors</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The data file is expected at: ../llm_extend_applicant_data.json
+relative to this script’s location.</p>
+</div>
 </dd></dl>
 
 </section>
 <section id="module-query_data">
 <span id="database-queries"></span><h2>Database Queries<a class="headerlink" href="#module-query_data" title="Link to this heading"></a></h2>
+<p>Database query module for analyzing graduate school applicant data.</p>
+<p>This module provides a comprehensive set of analytical queries for the applicant
+database. It includes utilities for connecting to PostgreSQL and executing
+various statistical and analytical queries on the graduate school application data.</p>
+<dl class="simple">
+<dt>The module is designed to answer key questions about:</dt><dd><ul class="simple">
+<li><p>Application volumes and trends</p></li>
+<li><p>Demographic distributions</p></li>
+<li><p>Acceptance rates and selectivity</p></li>
+<li><p>Academic metrics (GPA, GRE scores)</p></li>
+<li><p>Program-specific statistics</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>Basic usage:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">query_data</span>
+
+<span class="n">conn</span> <span class="o">=</span> <span class="n">query_data</span><span class="o">.</span><span class="n">get_connection</span><span class="p">()</span>
+<span class="n">fall_2026_count</span> <span class="o">=</span> <span class="n">query_data</span><span class="o">.</span><span class="n">question_1</span><span class="p">(</span><span class="n">conn</span><span class="p">)</span>
+<span class="n">international_pct</span> <span class="o">=</span> <span class="n">query_data</span><span class="o">.</span><span class="n">question_2</span><span class="p">(</span><span class="n">conn</span><span class="p">)</span>
+<span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="query_data.None">
+<span class="sig-prename descclassname"><span class="pre">query_data.</span></span><span class="sig-name descname"><span class="pre">None</span></span><a class="headerlink" href="#query_data.None" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#module-load_data" title="load_data"><code class="xref py py-mod docutils literal notranslate"><span class="pre">load_data</span></code></a>: For loading data into the database</p></li>
+<li><p><a class="reference internal" href="#module-app" title="app"><code class="xref py py-mod docutils literal notranslate"><span class="pre">app</span></code></a>: For the Flask web interface</p></li>
+</ul>
+</div>
 <dl class="py function">
 <dt class="sig sig-object py" id="query_data.get_connection">
 <span class="sig-prename descclassname"><span class="pre">query_data.</span></span><span class="sig-name descname"><span class="pre">get_connection</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/query_data.html#get_connection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#query_data.get_connection" title="Link to this definition"></a></dt>
@@ -286,25 +987,125 @@ Otherwise uses individual environment variables or defaults:
 <dl class="py function">
 <dt class="sig sig-object py" id="query_data.question_1">
 <span class="sig-prename descclassname"><span class="pre">query_data.</span></span><span class="sig-name descname"><span class="pre">question_1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/query_data.html#question_1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#query_data.question_1" title="Link to this definition"></a></dt>
-<dd><p>How many entries do you have in your database who have applied for Fall 2026?</p>
+<dd><p>Count entries for Fall 2026 applications.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>conn</strong> (<em>psycopg.Connection</em>) – Active database connection</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Number of Fall 2026 application entries</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)">int</a></p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">conn</span> <span class="o">=</span> <span class="n">get_connection</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">count</span> <span class="o">=</span> <span class="n">question_1</span><span class="p">(</span><span class="n">conn</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Fall 2026 applications: </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="query_data.question_2">
 <span class="sig-prename descclassname"><span class="pre">query_data.</span></span><span class="sig-name descname"><span class="pre">question_2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/query_data.html#question_2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#query_data.question_2" title="Link to this definition"></a></dt>
-<dd><p>What percentage of entries are from international students (not American or Other)?</p>
+<dd><p>Calculate percentage of international student applications.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>conn</strong> (<em>psycopg.Connection</em>) – Active database connection</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Percentage of entries from international students (0-100)</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)">float</a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Only counts entries where citizenship status is explicitly ‘International’,
+excluding American and other categories.</p>
+</div>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">conn</span> <span class="o">=</span> <span class="n">get_connection</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pct</span> <span class="o">=</span> <span class="n">question_2</span><span class="p">(</span><span class="n">conn</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;International students: </span><span class="si">{</span><span class="n">pct</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">%&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="query_data.question_3">
 <span class="sig-prename descclassname"><span class="pre">query_data.</span></span><span class="sig-name descname"><span class="pre">question_3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/query_data.html#question_3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#query_data.question_3" title="Link to this definition"></a></dt>
-<dd><p>What is the average GPA, GRE, GRE V, GRE AW of applicants who provide these metrics?</p>
+<dd><p>Calculate average academic metrics across all applicants.</p>
+<p>Computes mean values for GPA and GRE scores among applicants who
+provided these metrics.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>conn</strong> (<em>psycopg.Connection</em>) – Active database connection</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>Dictionary containing:</dt><dd><ul class="simple">
+<li><p>avg_gpa (float): Average GPA</p></li>
+<li><p>avg_gre (float): Average total GRE score</p></li>
+<li><p>avg_gre_v (float): Average GRE verbal score</p></li>
+<li><p>avg_gre_aw (float): Average GRE analytical writing score</p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)">dict</a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Only includes non-null values in the averages. The number of
+entries contributing to each average may differ.</p>
+</div>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">conn</span> <span class="o">=</span> <span class="n">get_connection</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">metrics</span> <span class="o">=</span> <span class="n">question_3</span><span class="p">(</span><span class="n">conn</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Average GPA: </span><span class="si">{</span><span class="n">metrics</span><span class="p">[</span><span class="s1">&#39;avg_gpa&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="query_data.question_4">
 <span class="sig-prename descclassname"><span class="pre">query_data.</span></span><span class="sig-name descname"><span class="pre">question_4</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/query_data.html#question_4"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#query_data.question_4" title="Link to this definition"></a></dt>
-<dd><p>What is the average GPA of American students in Fall 2026?</p>
+<dd><p>Calculate average GPA for American students applying to Fall 2026.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>conn</strong> (<em>psycopg.Connection</em>) – Active database connection</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Average GPA of American students for Fall 2026</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)">float</a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<dl class="simple">
+<dt>Only includes entries with:</dt><dd><ul class="simple">
+<li><p>term = ‘Fall 2026’</p></li>
+<li><p>us_or_international = ‘American’</p></li>
+<li><p>Non-null GPA value</p></li>
+</ul>
+</dd>
+</dl>
+</div>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">conn</span> <span class="o">=</span> <span class="n">get_connection</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">avg_gpa</span> <span class="o">=</span> <span class="n">question_4</span><span class="p">(</span><span class="n">conn</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;American students avg GPA: </span><span class="si">{</span><span class="n">avg_gpa</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py function">
@@ -340,7 +1141,41 @@ Otherwise uses individual environment variables or defaults:
 <dl class="py function">
 <dt class="sig sig-object py" id="query_data.question_10">
 <span class="sig-prename descclassname"><span class="pre">query_data.</span></span><span class="sig-name descname"><span class="pre">question_10</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">conn</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/query_data.html#question_10"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#query_data.question_10" title="Link to this definition"></a></dt>
-<dd><p>What are the top 10 most applied-to programs for Fall 2026?</p>
+<dd><p>Find the top 10 most popular programs for Fall 2026.</p>
+<p>Ranks programs by application volume and calculates acceptance rates.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>conn</strong> (<em>psycopg.Connection</em>) – Active database connection</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>Each tuple contains:</dt><dd><ul class="simple">
+<li><p>university (str): Standardized university name</p></li>
+<li><p>program (str): Standardized program name</p></li>
+<li><p>total_applications (int): Number of applications</p></li>
+<li><p>acceptances (int): Number of acceptances</p></li>
+<li><p>acceptance_rate (float): Percentage accepted (0-100)</p></li>
+</ul>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.14)">list</a> of <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)">tuple</a></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Uses LLM-generated standardized university and program names for
+better aggregation of similar programs.</p>
+</div>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">conn</span> <span class="o">=</span> <span class="n">get_connection</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">top_programs</span> <span class="o">=</span> <span class="n">question_10</span><span class="p">(</span><span class="n">conn</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">uni</span><span class="p">,</span> <span class="n">prog</span><span class="p">,</span> <span class="n">apps</span><span class="p">,</span> <span class="n">acc</span><span class="p">,</span> <span class="n">rate</span> <span class="ow">in</span> <span class="n">top_programs</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">uni</span><span class="si">}</span><span class="s2"> - </span><span class="si">{</span><span class="n">prog</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">apps</span><span class="si">}</span><span class="s2"> applications&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="py function">
@@ -352,7 +1187,30 @@ Otherwise uses individual environment variables or defaults:
 <dl class="py function">
 <dt class="sig sig-object py" id="query_data.main">
 <span class="sig-prename descclassname"><span class="pre">query_data.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/query_data.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#query_data.main" title="Link to this definition"></a></dt>
-<dd><p>Run all queries and display results.</p>
+<dd><p>Execute all analytical queries and display results.</p>
+<p>Runs all 11 analytical queries in sequence and prints formatted results
+to stdout. Handles database connection setup and teardown.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>psycopg.Error</strong> – If database connection or query execution fails</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#Exception" title="(in Python v3.14)"><strong>Exception</strong></a> – For other unexpected errors</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>Run from command line:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python</span> <span class="n">query_data</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Database connection parameters are read from environment variables.
+See <a class="reference internal" href="#query_data.get_connection" title="query_data.get_connection"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_connection()</span></code></a> for details.</p>
+</div>
 </dd></dl>
 
 </section>

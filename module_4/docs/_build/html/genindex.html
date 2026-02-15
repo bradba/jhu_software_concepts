@@ -42,6 +42,9 @@
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="api.html#module-app">Flask Application</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api.html#app.app"><code class="docutils literal notranslate"><span class="pre">app</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#app._busy_lock"><code class="docutils literal notranslate"><span class="pre">_busy_lock</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#app._is_busy"><code class="docutils literal notranslate"><span class="pre">_is_busy</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="api.html#app.is_busy"><code class="docutils literal notranslate"><span class="pre">is_busy()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="api.html#app.busy_state"><code class="docutils literal notranslate"><span class="pre">busy_state()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="api.html#app.index"><code class="docutils literal notranslate"><span class="pre">index()</span></code></a></li>
@@ -50,17 +53,22 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="api.html#module-scrape">Web Scraping</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api.html#scrape.USER_AGENT"><code class="docutils literal notranslate"><span class="pre">USER_AGENT</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#scrape.DEFAULT_BASE"><code class="docutils literal notranslate"><span class="pre">DEFAULT_BASE</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#scrape.JSON_OUTPUT"><code class="docutils literal notranslate"><span class="pre">JSON_OUTPUT</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="api.html#scrape.scrape_data"><code class="docutils literal notranslate"><span class="pre">scrape_data()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="api.html#scrape.save_data"><code class="docutils literal notranslate"><span class="pre">save_data()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="api.html#module-clean">Data Cleaning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api.html#clean.DEFAULT_LLM_API_URL"><code class="docutils literal notranslate"><span class="pre">DEFAULT_LLM_API_URL</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="api.html#clean.load_data"><code class="docutils literal notranslate"><span class="pre">load_data()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="api.html#clean.clean_data"><code class="docutils literal notranslate"><span class="pre">clean_data()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="api.html#clean.save_data"><code class="docutils literal notranslate"><span class="pre">save_data()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="api.html#module-load_data">Data Loading</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api.html#load_data.None"><code class="docutils literal notranslate"><span class="pre">None</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="api.html#load_data.parse_gpa"><code class="docutils literal notranslate"><span class="pre">parse_gpa()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="api.html#load_data.parse_gre_score"><code class="docutils literal notranslate"><span class="pre">parse_gre_score()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="api.html#load_data.parse_date"><code class="docutils literal notranslate"><span class="pre">parse_date()</span></code></a></li>
@@ -73,6 +81,7 @@
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="api.html#module-query_data">Database Queries</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api.html#query_data.None"><code class="docutils literal notranslate"><span class="pre">None</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="api.html#query_data.get_connection"><code class="docutils literal notranslate"><span class="pre">get_connection()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="api.html#query_data.question_1"><code class="docutils literal notranslate"><span class="pre">question_1()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="api.html#query_data.question_2"><code class="docutils literal notranslate"><span class="pre">question_2()</span></code></a></li>
@@ -119,14 +128,18 @@
 <h1 id="index">Index</h1>
 
 <div class="genindex-jumpbox">
- <a href="#A"><strong>A</strong></a>
+ <a href="#_"><strong>_</strong></a>
+ | <a href="#A"><strong>A</strong></a>
  | <a href="#B"><strong>B</strong></a>
  | <a href="#C"><strong>C</strong></a>
+ | <a href="#D"><strong>D</strong></a>
  | <a href="#E"><strong>E</strong></a>
  | <a href="#G"><strong>G</strong></a>
  | <a href="#I"><strong>I</strong></a>
+ | <a href="#J"><strong>J</strong></a>
  | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
+ | <a href="#N"><strong>N</strong></a>
  | <a href="#P"><strong>P</strong></a>
  | <a href="#Q"><strong>Q</strong></a>
  | <a href="#S"><strong>S</strong></a>
@@ -134,6 +147,18 @@
  | <a href="#V"><strong>V</strong></a>
  
 </div>
+<h2 id="_">_</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api.html#app._busy_lock">_busy_lock (in module app)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api.html#app._is_busy">_is_busy (in module app)</a>
+</li>
+  </ul></td>
+</tr></table>
+
 <h2 id="A">A</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -144,6 +169,10 @@
         <li><a href="api.html#module-app">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api.html#app.app">app (in module app)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -176,6 +205,18 @@
   </ul></td>
 </tr></table>
 
+<h2 id="D">D</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api.html#scrape.DEFAULT_BASE">DEFAULT_BASE (in module scrape)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api.html#clean.DEFAULT_LLM_API_URL">DEFAULT_LLM_API_URL (in module clean)</a>
+</li>
+  </ul></td>
+</tr></table>
+
 <h2 id="E">E</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -200,6 +241,14 @@
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api.html#app.is_busy">is_busy() (in module app)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="J">J</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api.html#scrape.JSON_OUTPUT">JSON_OUTPUT (in module scrape)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -245,6 +294,18 @@
         <li><a href="api.html#module-query_data">query_data</a>
 </li>
         <li><a href="api.html#module-scrape">scrape</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="N">N</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api.html#load_data.None">None (in module load_data)</a>
+
+      <ul>
+        <li><a href="api.html#query_data.None">(in module query_data)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -330,6 +391,10 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api.html#app.update_analysis">update_analysis() (in module app)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api.html#scrape.USER_AGENT">USER_AGENT (in module scrape)</a>
 </li>
   </ul></td>
 </tr></table>

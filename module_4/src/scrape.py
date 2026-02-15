@@ -1,7 +1,51 @@
 #!/usr/bin/env python3
-"""
-This script fetches applicant posts from The Grad Cafe.
-It extracts relevant fields from each post and saves the data in JSON format.
+"""Web scraper for The GradCafe graduate school application results.
+
+This module implements a web scraper that extracts graduate school application
+data from The GradCafe website (thegradcafe.com). It parses HTML tables to
+extract structured information about application outcomes, test scores, and
+applicant demographics.
+
+The scraper:
+    - Respects rate limits with configurable delays
+    - Handles pagination automatically
+    - Extracts detailed information from both list and detail pages
+    - Exports data in JSON format for further processing
+
+Extracted Data Fields:
+    - university: Name of the institution
+    - program_name: Graduate program name
+    - degree: Type of degree (PhD, Masters, etc.)
+    - applicant_status: Decision outcome (Accepted, Rejected, etc.)
+    - date_posted: When the result was posted
+    - start_term: Intended start term (e.g., "Fall 2026")
+    - citizenship: International or American
+    - gpa: Grade Point Average
+    - gre_score: GRE total score
+    - gre_v: GRE verbal score
+    - gre_aw: GRE analytical writing score
+    - comments: Additional applicant notes
+
+Example:
+    Scrape 100 most recent entries::
+
+        python scrape.py --limit 100 --out results.json
+
+    Programmatic usage::
+
+        from scrape import scrape_data, save_data
+
+        data = scrape_data(limit=50)
+        save_data(data, 'output.json')
+
+Attributes:
+    USER_AGENT (str): User agent string for HTTP requests
+    DEFAULT_BASE (str): Base URL for The GradCafe
+    JSON_OUTPUT (str): Default output filename
+
+See Also:
+    - :mod:`clean`: For cleaning scraped data
+    - :mod:`load_data`: For loading scraped data into database
 """
 
 from __future__ import annotations
@@ -26,7 +70,19 @@ _http = urllib3.PoolManager()
 
 
 def _fetch_url(url: str, sleep: float = 0.1) -> Optional[str]:
-    """Fetch a URL. Returns HTML text or None."""
+    """Fetch URL content with rate limiting.
+
+    Args:
+        url: URL to fetch
+        sleep: Delay in seconds after request (default: 0.1)
+
+    Returns:
+        HTML content as string, or None if request fails
+
+    Note:
+        Automatically adds User-Agent header to requests.
+        Logs non-200 status codes to stdout.
+    """
     resp = _http.request("GET", url, headers={"User-Agent": USER_AGENT})
     time.sleep(sleep)
     if resp.status != 200:
@@ -36,7 +92,21 @@ def _fetch_url(url: str, sleep: float = 0.1) -> Optional[str]:
 
 
 def _extract_comments_from_result_page(result_url: str) -> Optional[str]:
-    """Fetch a result page and extract the Notes/Comments field if present."""
+    """Extract detailed comments from individual result page.
+
+    Fetches an individual result page and extracts the Notes/Comments field,
+    which often contains richer information than the summary view.
+
+    Args:
+        result_url: URL to individual result page
+
+    Returns:
+        Comment text if found, None otherwise
+
+    Note:
+        This makes an additional HTTP request per entry, so use judiciously
+        based on rate limit and scraping volume requirements.
+    """
     html = _fetch_url(result_url)
     if not html:
         return None
@@ -55,14 +125,22 @@ def _extract_comments_from_result_page(result_url: str) -> Optional[str]:
 
 
 def _extract_entries_from_page(html: str, source_url: str) -> List[Dict[str, Optional[str]]]:
-    """
-    Extract individual entries from a results page by parsing the HTML table.
-    The GradCafe results are displayed in a table where each entry uses 2 rows:
-    - Row 1: University, Program (with degree), Added On date, Decision, Actions
-    - Row 2: Additional details (term, citizenship, GPA, GRE, etc.) and optional comments
+    """Parse HTML table to extract application result entries.
+
+    The GradCafe results table uses a 2-row format per entry:
+        - Row 1: University, Program (with degree), Date posted, Decision
+        - Row 2: Details (term, citizenship, GPA, GRE scores, comments)
+
+    Args:
+        html: HTML content of the results page
+        source_url: URL of the page (for relative link resolution)
 
     Returns:
-        List of entry dictionaries
+        List of dictionaries, each containing fields for one application result
+
+    Note:
+        Uses regular expressions to parse semi-structured data from badges
+        and text labels. May need updates if GradCafe changes their HTML format.
     """
     soup = BeautifulSoup(html, 'html.parser')
     table = soup.find('table')
@@ -196,7 +274,27 @@ def _extract_entries_from_page(html: str, source_url: str) -> List[Dict[str, Opt
     return entries
 
 def scrape_data(base_url: str = DEFAULT_BASE, limit: int = 50) -> List[Dict[str, Optional[str]]]:
-    """Fetch entries by iterating through paginated survey pages (?page=1, ?page=2, etc.)."""
+    """Scrape application results from The GradCafe.
+
+    Iterates through paginated results pages, extracting entries until
+    the limit is reached or no more pages are available.
+
+    Args:
+        base_url: Base URL of The GradCafe (default: https://www.thegradcafe.com/)
+        limit: Maximum number of entries to scrape (default: 50)
+
+    Returns:
+        List of dictionaries containing application result data
+
+    Note:
+        - Respects rate limits with delays between requests
+        - Stops early if a page returns no entries
+        - Logs progress to stdout
+
+    Example:
+        >>> results = scrape_data(limit=100)
+        >>> print(f"Scraped {len(results)} entries")
+    """
     results = []
     pages_processed = 0
     page_num = 1
@@ -234,7 +332,19 @@ def scrape_data(base_url: str = DEFAULT_BASE, limit: int = 50) -> List[Dict[str,
 
 
 def save_data(data: List[Dict[str, Optional[str]]], output_path: str = JSON_OUTPUT) -> None:
-    """Save data (list of dicts) to JSON file."""
+    """Save scraped data to JSON file.
+
+    Args:
+        data: List of entry dictionaries to save
+        output_path: Path to output JSON file (default: applicant_data.json)
+
+    Returns:
+        None
+
+    Note:
+        Output is formatted with 2-space indentation and UTF-8 encoding
+        for readability and international character support.
+    """
     with open(output_path, "w", encoding="utf-8") as fh:
         json.dump(data, fh, indent=2, ensure_ascii=False)
     print(f"[save] wrote {len(data)} entries to {output_path}")
