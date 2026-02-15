@@ -54,21 +54,8 @@
 <li class="toctree-l3"><a class="reference internal" href="api.html#app.update_analysis"><code class="docutils literal notranslate"><span class="pre">update_analysis()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="api.html#module-scrape">Web Scraping</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="api.html#scrape.USER_AGENT"><code class="docutils literal notranslate"><span class="pre">USER_AGENT</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="api.html#scrape.DEFAULT_BASE"><code class="docutils literal notranslate"><span class="pre">DEFAULT_BASE</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="api.html#scrape.JSON_OUTPUT"><code class="docutils literal notranslate"><span class="pre">JSON_OUTPUT</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="api.html#scrape.scrape_data"><code class="docutils literal notranslate"><span class="pre">scrape_data()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="api.html#scrape.save_data"><code class="docutils literal notranslate"><span class="pre">save_data()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="api.html#module-clean">Data Cleaning</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="api.html#clean.DEFAULT_LLM_API_URL"><code class="docutils literal notranslate"><span class="pre">DEFAULT_LLM_API_URL</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="api.html#clean.load_data"><code class="docutils literal notranslate"><span class="pre">load_data()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="api.html#clean.clean_data"><code class="docutils literal notranslate"><span class="pre">clean_data()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="api.html#clean.save_data"><code class="docutils literal notranslate"><span class="pre">save_data()</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#web-scraping">Web Scraping</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#data-cleaning">Data Cleaning</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api.html#module-load_data">Data Loading</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="api.html#load_data.None"><code class="docutils literal notranslate"><span class="pre">None</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="api.html#load_data.parse_gpa"><code class="docutils literal notranslate"><span class="pre">parse_gpa()</span></code></a></li>
@@ -145,8 +132,8 @@
 <h2>Project Overview<a class="headerlink" href="#project-overview" title="Link to this heading"></a></h2>
 <p>This project (Module 4) implements a complete data pipeline for analyzing graduate school application results:</p>
 <ol class="arabic simple">
-<li><p><strong>Web Scraping</strong> (<a class="reference internal" href="api.html#module-scrape" title="scrape"><code class="xref py py-mod docutils literal notranslate"><span class="pre">scrape</span></code></a>) - Extracts data from The GradCafe</p></li>
-<li><p><strong>Data Cleaning</strong> (<a class="reference internal" href="api.html#module-clean" title="clean"><code class="xref py py-mod docutils literal notranslate"><span class="pre">clean</span></code></a>) - Normalizes and standardizes the data</p></li>
+<li><p><strong>Web Scraping</strong> (<code class="xref py py-mod docutils literal notranslate"><span class="pre">scrape</span></code>) - Extracts data from The GradCafe</p></li>
+<li><p><strong>Data Cleaning</strong> (<code class="xref py py-mod docutils literal notranslate"><span class="pre">clean</span></code>) - Normalizes and standardizes the data</p></li>
 <li><p><strong>Database Loading</strong> (<a class="reference internal" href="api.html#module-load_data" title="load_data"><code class="xref py py-mod docutils literal notranslate"><span class="pre">load_data</span></code></a>) - Loads data into PostgreSQL</p></li>
 <li><p><strong>Analytical Queries</strong> (<a class="reference internal" href="api.html#module-query_data" title="query_data"><code class="xref py py-mod docutils literal notranslate"><span class="pre">query_data</span></code></a>) - Executes statistical analyses</p></li>
 <li><p><strong>Web Interface</strong> (<a class="reference internal" href="api.html#module-app" title="app"><code class="xref py py-mod docutils literal notranslate"><span class="pre">app</span></code></a>) - Displays results via Flask dashboard</p></li>
@@ -158,8 +145,8 @@
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="api.html#module-app">Flask Application</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api.html#module-scrape">Web Scraping</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api.html#module-clean">Data Cleaning</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#web-scraping">Web Scraping</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#data-cleaning">Data Cleaning</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api.html#module-load_data">Data Loading</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api.html#module-query_data">Database Queries</a></li>
 </ul>

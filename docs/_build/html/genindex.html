@@ -52,21 +52,8 @@
 <li class="toctree-l3"><a class="reference internal" href="api.html#app.update_analysis"><code class="docutils literal notranslate"><span class="pre">update_analysis()</span></code></a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="api.html#module-scrape">Web Scraping</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="api.html#scrape.USER_AGENT"><code class="docutils literal notranslate"><span class="pre">USER_AGENT</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="api.html#scrape.DEFAULT_BASE"><code class="docutils literal notranslate"><span class="pre">DEFAULT_BASE</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="api.html#scrape.JSON_OUTPUT"><code class="docutils literal notranslate"><span class="pre">JSON_OUTPUT</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="api.html#scrape.scrape_data"><code class="docutils literal notranslate"><span class="pre">scrape_data()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="api.html#scrape.save_data"><code class="docutils literal notranslate"><span class="pre">save_data()</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="api.html#module-clean">Data Cleaning</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="api.html#clean.DEFAULT_LLM_API_URL"><code class="docutils literal notranslate"><span class="pre">DEFAULT_LLM_API_URL</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="api.html#clean.load_data"><code class="docutils literal notranslate"><span class="pre">load_data()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="api.html#clean.clean_data"><code class="docutils literal notranslate"><span class="pre">clean_data()</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="api.html#clean.save_data"><code class="docutils literal notranslate"><span class="pre">save_data()</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#web-scraping">Web Scraping</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#data-cleaning">Data Cleaning</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api.html#module-load_data">Data Loading</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="api.html#load_data.None"><code class="docutils literal notranslate"><span class="pre">None</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="api.html#load_data.parse_gpa"><code class="docutils literal notranslate"><span class="pre">parse_gpa()</span></code></a></li>
@@ -132,17 +119,14 @@
  | <a href="#A"><strong>A</strong></a>
  | <a href="#B"><strong>B</strong></a>
  | <a href="#C"><strong>C</strong></a>
- | <a href="#D"><strong>D</strong></a>
  | <a href="#E"><strong>E</strong></a>
  | <a href="#G"><strong>G</strong></a>
  | <a href="#I"><strong>I</strong></a>
- | <a href="#J"><strong>J</strong></a>
  | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
  | <a href="#N"><strong>N</strong></a>
  | <a href="#P"><strong>P</strong></a>
  | <a href="#Q"><strong>Q</strong></a>
- | <a href="#S"><strong>S</strong></a>
  | <a href="#U"><strong>U</strong></a>
  | <a href="#V"><strong>V</strong></a>
  
@@ -187,32 +171,11 @@
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li>
-    clean
-
-      <ul>
-        <li><a href="api.html#module-clean">module</a>
-</li>
-      </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#clean.clean_data">clean_data() (in module clean)</a>
-</li>
       <li><a href="api.html#load_data.clean_string">clean_string() (in module load_data)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api.html#load_data.create_applicants_table">create_applicants_table() (in module load_data)</a>
-</li>
-  </ul></td>
-</tr></table>
-
-<h2 id="D">D</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#scrape.DEFAULT_BASE">DEFAULT_BASE (in module scrape)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#clean.DEFAULT_LLM_API_URL">DEFAULT_LLM_API_URL (in module clean)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -245,14 +208,6 @@
   </ul></td>
 </tr></table>
 
-<h2 id="J">J</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#scrape.JSON_OUTPUT">JSON_OUTPUT (in module scrape)</a>
-</li>
-  </ul></td>
-</tr></table>
-
 <h2 id="L">L</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
@@ -265,8 +220,6 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#clean.load_data">load_data() (in module clean)</a>
-</li>
       <li><a href="api.html#load_data.load_json_data">load_json_data() (in module load_data)</a>
 </li>
   </ul></td>
@@ -287,13 +240,9 @@
       <ul>
         <li><a href="api.html#module-app">app</a>
 </li>
-        <li><a href="api.html#module-clean">clean</a>
-</li>
         <li><a href="api.html#module-load_data">load_data</a>
 </li>
         <li><a href="api.html#module-query_data">query_data</a>
-</li>
-        <li><a href="api.html#module-scrape">scrape</a>
 </li>
       </ul></li>
   </ul></td>
@@ -364,37 +313,10 @@
   </ul></td>
 </tr></table>
 
-<h2 id="S">S</h2>
-<table style="width: 100%" class="indextable genindextable"><tr>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#clean.save_data">save_data() (in module clean)</a>
-
-      <ul>
-        <li><a href="api.html#scrape.save_data">(in module scrape)</a>
-</li>
-      </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li>
-    scrape
-
-      <ul>
-        <li><a href="api.html#module-scrape">module</a>
-</li>
-      </ul></li>
-      <li><a href="api.html#scrape.scrape_data">scrape_data() (in module scrape)</a>
-</li>
-  </ul></td>
-</tr></table>
-
 <h2 id="U">U</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api.html#app.update_analysis">update_analysis() (in module app)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api.html#scrape.USER_AGENT">USER_AGENT (in module scrape)</a>
 </li>
   </ul></td>
 </tr></table>

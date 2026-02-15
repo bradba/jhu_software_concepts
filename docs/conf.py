@@ -55,6 +55,16 @@ autodoc_default_options = {
     'exclude-members': '__weakref__'
 }
 
+# Mock imports for dependencies that aren't needed for documentation
+# This allows autodoc to extract docstrings without installing all dependencies
+autodoc_mock_imports = [
+    'flask',
+    'psycopg',
+    'urllib3',
+    'bs4',
+    'BeautifulSoup',
+]
+
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
