@@ -1,0 +1,357 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Overview: module code &mdash; Graduate School Applicant Database Analysis 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=8d563738"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Graduate School Applicant Database Analysis
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../setup.html">Setup &amp; Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../setup.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../setup.html#environment-variables">Environment Variables</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../setup.html#option-1-database-url-recommended">Option 1: DATABASE_URL (Recommended)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../setup.html#option-2-individual-variables">Option 2: Individual Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../setup.html#option-3-setup-script">Option 3: Setup Script</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../setup.html#quick-start">Quick Start</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../setup.html#using-convenience-scripts-recommended">Using Convenience Scripts (Recommended)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../setup.html#manual-setup">Manual Setup</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../setup.html#running-tests">Running Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../setup.html#docker-setup-optional">Docker Setup (Optional)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../setup.html#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../setup.html#common-issues">Common Issues</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../setup.html#next-steps">Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">System Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../architecture.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture.html#web-layer">Web Layer</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../architecture.html#key-components">Key Components</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture.html#etl-layer">ETL Layer</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../architecture.html#scraping-module-scrape-py">Scraping Module (scrape.py)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../architecture.html#cleaning-module-clean-py">Cleaning Module (clean.py)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../architecture.html#loading-module-load-data-py">Loading Module (load_data.py)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture.html#database-layer">Database Layer</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../architecture.html#database-queries">Database Queries</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../architecture.html#query-optimization">Query Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../architecture.html#connection-management">Connection Management</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture.html#data-flow">Data Flow</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../architecture.html#complete-data-flow-example">Complete Data Flow Example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture.html#error-handling">Error Handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture.html#security-considerations">Security Considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture.html#scalability">Scalability</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture.html#performance-metrics">Performance Metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture.html#next-steps">Next Steps</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#module-app">Web Application</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#app.is_busy"><code class="docutils literal notranslate"><span class="pre">is_busy()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#app.busy_state"><code class="docutils literal notranslate"><span class="pre">busy_state()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#app.index"><code class="docutils literal notranslate"><span class="pre">index()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#app.pull_data"><code class="docutils literal notranslate"><span class="pre">pull_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#app.update_analysis"><code class="docutils literal notranslate"><span class="pre">update_analysis()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id0"><code class="docutils literal notranslate"><span class="pre">index()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id1"><code class="docutils literal notranslate"><span class="pre">pull_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id2"><code class="docutils literal notranslate"><span class="pre">update_analysis()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#module-scrape">Data Scraping</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#scrape.scrape_data"><code class="docutils literal notranslate"><span class="pre">scrape_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#scrape.save_data"><code class="docutils literal notranslate"><span class="pre">save_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id3"><code class="docutils literal notranslate"><span class="pre">scrape_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id4"><code class="docutils literal notranslate"><span class="pre">save_data()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#module-clean">Data Cleaning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#clean.load_data"><code class="docutils literal notranslate"><span class="pre">load_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#clean.clean_data"><code class="docutils literal notranslate"><span class="pre">clean_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#clean.save_data"><code class="docutils literal notranslate"><span class="pre">save_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id5"><code class="docutils literal notranslate"><span class="pre">load_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id6"><code class="docutils literal notranslate"><span class="pre">clean_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id7"><code class="docutils literal notranslate"><span class="pre">save_data()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#module-load_data">Data Loading</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#load_data.parse_gpa"><code class="docutils literal notranslate"><span class="pre">parse_gpa()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#load_data.parse_gre_score"><code class="docutils literal notranslate"><span class="pre">parse_gre_score()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#load_data.parse_date"><code class="docutils literal notranslate"><span class="pre">parse_date()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#load_data.extract_p_id_from_url"><code class="docutils literal notranslate"><span class="pre">extract_p_id_from_url()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#load_data.clean_string"><code class="docutils literal notranslate"><span class="pre">clean_string()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#load_data.create_applicants_table"><code class="docutils literal notranslate"><span class="pre">create_applicants_table()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#load_data.load_json_data"><code class="docutils literal notranslate"><span class="pre">load_json_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#load_data.verify_data"><code class="docutils literal notranslate"><span class="pre">verify_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#load_data.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id8"><code class="docutils literal notranslate"><span class="pre">parse_gpa()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id9"><code class="docutils literal notranslate"><span class="pre">parse_gre_score()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id10"><code class="docutils literal notranslate"><span class="pre">parse_date()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id11"><code class="docutils literal notranslate"><span class="pre">extract_p_id_from_url()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id12"><code class="docutils literal notranslate"><span class="pre">clean_string()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id13"><code class="docutils literal notranslate"><span class="pre">create_applicants_table()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id14"><code class="docutils literal notranslate"><span class="pre">load_json_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id15"><code class="docutils literal notranslate"><span class="pre">verify_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id16"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#module-query_data">Database Queries</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#query_data.get_connection"><code class="docutils literal notranslate"><span class="pre">get_connection()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#query_data.question_1"><code class="docutils literal notranslate"><span class="pre">question_1()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#query_data.question_2"><code class="docutils literal notranslate"><span class="pre">question_2()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#query_data.question_3"><code class="docutils literal notranslate"><span class="pre">question_3()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#query_data.question_4"><code class="docutils literal notranslate"><span class="pre">question_4()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#query_data.question_5"><code class="docutils literal notranslate"><span class="pre">question_5()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#query_data.question_6"><code class="docutils literal notranslate"><span class="pre">question_6()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#query_data.question_7"><code class="docutils literal notranslate"><span class="pre">question_7()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#query_data.question_8"><code class="docutils literal notranslate"><span class="pre">question_8()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#query_data.question_9"><code class="docutils literal notranslate"><span class="pre">question_9()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#query_data.question_10"><code class="docutils literal notranslate"><span class="pre">question_10()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#query_data.question_11"><code class="docutils literal notranslate"><span class="pre">question_11()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#query_data.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id17"><code class="docutils literal notranslate"><span class="pre">get_connection()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id18"><code class="docutils literal notranslate"><span class="pre">question_1()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id19"><code class="docutils literal notranslate"><span class="pre">question_2()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id20"><code class="docutils literal notranslate"><span class="pre">question_3()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id21"><code class="docutils literal notranslate"><span class="pre">question_4()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id22"><code class="docutils literal notranslate"><span class="pre">question_5()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id23"><code class="docutils literal notranslate"><span class="pre">question_6()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id24"><code class="docutils literal notranslate"><span class="pre">question_7()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id25"><code class="docutils literal notranslate"><span class="pre">question_8()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id26"><code class="docutils literal notranslate"><span class="pre">question_9()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id27"><code class="docutils literal notranslate"><span class="pre">question_10()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id28"><code class="docutils literal notranslate"><span class="pre">question_11()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id29"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#data-types">Data Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#error-handling">Error Handling</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Operations Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../operational.html">Operational Notes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../operational.html#busy-state-policy">Busy-State Policy</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#implementation">Implementation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#concurrent-request-handling">Concurrent Request Handling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#best-practices">Best Practices</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../operational.html#idempotency-strategy">Idempotency Strategy</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#id1">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#database-operations">Database Operations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#scraping-operations">Scraping Operations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#file-operations">File Operations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#retry-strategy">Retry Strategy</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../operational.html#uniqueness-keys">Uniqueness Keys</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#primary-keys">Primary Keys</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#extraction">Extraction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#composite-uniqueness">Composite Uniqueness</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#index-strategy">Index Strategy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#data-integrity-checks">Data Integrity Checks</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../operational.html#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#common-local-issues">Common Local Issues</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#common-ci-cd-issues">Common CI/CD Issues</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#performance-issues">Performance Issues</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#memory-issues">Memory Issues</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../operational.html#health-checks">Health Checks</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#application-health">Application Health</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#database-health">Database Health</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../operational.html#monitoring">Monitoring</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#key-metrics">Key Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#logging">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#alerting">Alerting</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../operational.html#id2">Best Practices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#development">Development</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#staging">Staging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#production">Production</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../operational.html#backup-and-recovery">Backup and Recovery</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#database-backups">Database Backups</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#disaster-recovery">Disaster Recovery</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../testing.html">Testing Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../testing.html#test-suite-overview">Test Suite Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../testing.html#running-tests">Running Tests</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../testing.html#using-test-script-recommended">Using Test Script (Recommended)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../testing.html#using-pytest-directly">Using pytest Directly</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../testing.html#test-markers">Test Markers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../testing.html#available-markers">Available Markers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../testing.html#combining-markers">Combining Markers</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../testing.html#test-fixtures">Test Fixtures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../testing.html#database-fixtures">Database Fixtures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../testing.html#flask-application-fixtures">Flask Application Fixtures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../testing.html#test-data-fixtures">Test Data Fixtures</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../testing.html#test-doubles-and-mocking">Test Doubles and Mocking</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../testing.html#monkeypatch-for-environment-variables">Monkeypatch for Environment Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../testing.html#mock-external-dependencies">Mock External Dependencies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../testing.html#patching-database-connections">Patching Database Connections</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../testing.html#test-organization">Test Organization</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../testing.html#test-file-structure">Test File Structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../testing.html#test-naming-conventions">Test Naming Conventions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../testing.html#running-specific-test-categories">Running Specific Test Categories</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../testing.html#by-module">By Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../testing.html#by-functionality">By Functionality</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../testing.html#test-configuration">Test Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../testing.html#database-configuration-for-tests">Database Configuration for Tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../testing.html#coverage-configuration">Coverage Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../testing.html#expected-test-output">Expected Test Output</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../testing.html#successful-test-run">Successful Test Run</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../testing.html#failed-test-example">Failed Test Example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../testing.html#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../testing.html#common-issues">Common Issues</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../testing.html#best-practices">Best Practices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../testing.html#writing-new-tests">Writing New Tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../testing.html#continuous-integration">Continuous Integration</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../testing.html#additional-resources">Additional Resources</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Graduate School Applicant Database Analysis</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Overview: module code</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>All modules for which code is available</h1>
+<ul><li><a href="app.html">app</a></li>
+<li><a href="clean.html">clean</a></li>
+<li><a href="load_data.html">load_data</a></li>
+<li><a href="query_data.html">query_data</a></li>
+<li><a href="scrape.html">scrape</a></li>
+</ul>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Brad Ballinger.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

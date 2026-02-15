@@ -1,0 +1,680 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>app &mdash; Graduate School Applicant Database Analysis 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=8d563738"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Graduate School Applicant Database Analysis
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../setup.html">Setup &amp; Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../setup.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../setup.html#environment-variables">Environment Variables</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../setup.html#option-1-database-url-recommended">Option 1: DATABASE_URL (Recommended)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../setup.html#option-2-individual-variables">Option 2: Individual Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../setup.html#option-3-setup-script">Option 3: Setup Script</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../setup.html#quick-start">Quick Start</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../setup.html#using-convenience-scripts-recommended">Using Convenience Scripts (Recommended)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../setup.html#manual-setup">Manual Setup</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../setup.html#running-tests">Running Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../setup.html#docker-setup-optional">Docker Setup (Optional)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../setup.html#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../setup.html#common-issues">Common Issues</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../setup.html#next-steps">Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">System Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../architecture.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture.html#web-layer">Web Layer</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../architecture.html#key-components">Key Components</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture.html#etl-layer">ETL Layer</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../architecture.html#scraping-module-scrape-py">Scraping Module (scrape.py)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../architecture.html#cleaning-module-clean-py">Cleaning Module (clean.py)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../architecture.html#loading-module-load-data-py">Loading Module (load_data.py)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture.html#database-layer">Database Layer</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../architecture.html#database-queries">Database Queries</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../architecture.html#query-optimization">Query Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../architecture.html#connection-management">Connection Management</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture.html#data-flow">Data Flow</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../architecture.html#complete-data-flow-example">Complete Data Flow Example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture.html#error-handling">Error Handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture.html#security-considerations">Security Considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture.html#scalability">Scalability</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture.html#performance-metrics">Performance Metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture.html#next-steps">Next Steps</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#module-app">Web Application</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#app.is_busy"><code class="docutils literal notranslate"><span class="pre">is_busy()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#app.busy_state"><code class="docutils literal notranslate"><span class="pre">busy_state()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#app.index"><code class="docutils literal notranslate"><span class="pre">index()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#app.pull_data"><code class="docutils literal notranslate"><span class="pre">pull_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#app.update_analysis"><code class="docutils literal notranslate"><span class="pre">update_analysis()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id0"><code class="docutils literal notranslate"><span class="pre">index()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id1"><code class="docutils literal notranslate"><span class="pre">pull_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id2"><code class="docutils literal notranslate"><span class="pre">update_analysis()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#module-scrape">Data Scraping</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#scrape.scrape_data"><code class="docutils literal notranslate"><span class="pre">scrape_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#scrape.save_data"><code class="docutils literal notranslate"><span class="pre">save_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id3"><code class="docutils literal notranslate"><span class="pre">scrape_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id4"><code class="docutils literal notranslate"><span class="pre">save_data()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#module-clean">Data Cleaning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#clean.load_data"><code class="docutils literal notranslate"><span class="pre">load_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#clean.clean_data"><code class="docutils literal notranslate"><span class="pre">clean_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#clean.save_data"><code class="docutils literal notranslate"><span class="pre">save_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id5"><code class="docutils literal notranslate"><span class="pre">load_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id6"><code class="docutils literal notranslate"><span class="pre">clean_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id7"><code class="docutils literal notranslate"><span class="pre">save_data()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#module-load_data">Data Loading</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#load_data.parse_gpa"><code class="docutils literal notranslate"><span class="pre">parse_gpa()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#load_data.parse_gre_score"><code class="docutils literal notranslate"><span class="pre">parse_gre_score()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#load_data.parse_date"><code class="docutils literal notranslate"><span class="pre">parse_date()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#load_data.extract_p_id_from_url"><code class="docutils literal notranslate"><span class="pre">extract_p_id_from_url()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#load_data.clean_string"><code class="docutils literal notranslate"><span class="pre">clean_string()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#load_data.create_applicants_table"><code class="docutils literal notranslate"><span class="pre">create_applicants_table()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#load_data.load_json_data"><code class="docutils literal notranslate"><span class="pre">load_json_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#load_data.verify_data"><code class="docutils literal notranslate"><span class="pre">verify_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#load_data.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id8"><code class="docutils literal notranslate"><span class="pre">parse_gpa()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id9"><code class="docutils literal notranslate"><span class="pre">parse_gre_score()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id10"><code class="docutils literal notranslate"><span class="pre">parse_date()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id11"><code class="docutils literal notranslate"><span class="pre">extract_p_id_from_url()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id12"><code class="docutils literal notranslate"><span class="pre">clean_string()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id13"><code class="docutils literal notranslate"><span class="pre">create_applicants_table()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id14"><code class="docutils literal notranslate"><span class="pre">load_json_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id15"><code class="docutils literal notranslate"><span class="pre">verify_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id16"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#module-query_data">Database Queries</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#query_data.get_connection"><code class="docutils literal notranslate"><span class="pre">get_connection()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#query_data.question_1"><code class="docutils literal notranslate"><span class="pre">question_1()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#query_data.question_2"><code class="docutils literal notranslate"><span class="pre">question_2()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#query_data.question_3"><code class="docutils literal notranslate"><span class="pre">question_3()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#query_data.question_4"><code class="docutils literal notranslate"><span class="pre">question_4()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#query_data.question_5"><code class="docutils literal notranslate"><span class="pre">question_5()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#query_data.question_6"><code class="docutils literal notranslate"><span class="pre">question_6()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#query_data.question_7"><code class="docutils literal notranslate"><span class="pre">question_7()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#query_data.question_8"><code class="docutils literal notranslate"><span class="pre">question_8()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#query_data.question_9"><code class="docutils literal notranslate"><span class="pre">question_9()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#query_data.question_10"><code class="docutils literal notranslate"><span class="pre">question_10()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#query_data.question_11"><code class="docutils literal notranslate"><span class="pre">question_11()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#query_data.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id17"><code class="docutils literal notranslate"><span class="pre">get_connection()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id18"><code class="docutils literal notranslate"><span class="pre">question_1()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id19"><code class="docutils literal notranslate"><span class="pre">question_2()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id20"><code class="docutils literal notranslate"><span class="pre">question_3()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id21"><code class="docutils literal notranslate"><span class="pre">question_4()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id22"><code class="docutils literal notranslate"><span class="pre">question_5()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id23"><code class="docutils literal notranslate"><span class="pre">question_6()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id24"><code class="docutils literal notranslate"><span class="pre">question_7()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id25"><code class="docutils literal notranslate"><span class="pre">question_8()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id26"><code class="docutils literal notranslate"><span class="pre">question_9()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id27"><code class="docutils literal notranslate"><span class="pre">question_10()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id28"><code class="docutils literal notranslate"><span class="pre">question_11()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id29"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#data-types">Data Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#error-handling">Error Handling</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Operations Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../operational.html">Operational Notes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../operational.html#busy-state-policy">Busy-State Policy</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#implementation">Implementation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#concurrent-request-handling">Concurrent Request Handling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#best-practices">Best Practices</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../operational.html#idempotency-strategy">Idempotency Strategy</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#id1">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#database-operations">Database Operations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#scraping-operations">Scraping Operations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#file-operations">File Operations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#retry-strategy">Retry Strategy</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../operational.html#uniqueness-keys">Uniqueness Keys</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#primary-keys">Primary Keys</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#extraction">Extraction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#composite-uniqueness">Composite Uniqueness</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#index-strategy">Index Strategy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#data-integrity-checks">Data Integrity Checks</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../operational.html#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#common-local-issues">Common Local Issues</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#common-ci-cd-issues">Common CI/CD Issues</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#performance-issues">Performance Issues</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#memory-issues">Memory Issues</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../operational.html#health-checks">Health Checks</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#application-health">Application Health</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#database-health">Database Health</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../operational.html#monitoring">Monitoring</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#key-metrics">Key Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#logging">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#alerting">Alerting</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../operational.html#id2">Best Practices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#development">Development</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#staging">Staging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#production">Production</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../operational.html#backup-and-recovery">Backup and Recovery</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#database-backups">Database Backups</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#disaster-recovery">Disaster Recovery</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../testing.html">Testing Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../testing.html#test-suite-overview">Test Suite Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../testing.html#running-tests">Running Tests</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../testing.html#using-test-script-recommended">Using Test Script (Recommended)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../testing.html#using-pytest-directly">Using pytest Directly</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../testing.html#test-markers">Test Markers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../testing.html#available-markers">Available Markers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../testing.html#combining-markers">Combining Markers</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../testing.html#test-fixtures">Test Fixtures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../testing.html#database-fixtures">Database Fixtures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../testing.html#flask-application-fixtures">Flask Application Fixtures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../testing.html#test-data-fixtures">Test Data Fixtures</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../testing.html#test-doubles-and-mocking">Test Doubles and Mocking</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../testing.html#monkeypatch-for-environment-variables">Monkeypatch for Environment Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../testing.html#mock-external-dependencies">Mock External Dependencies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../testing.html#patching-database-connections">Patching Database Connections</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../testing.html#test-organization">Test Organization</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../testing.html#test-file-structure">Test File Structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../testing.html#test-naming-conventions">Test Naming Conventions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../testing.html#running-specific-test-categories">Running Specific Test Categories</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../testing.html#by-module">By Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../testing.html#by-functionality">By Functionality</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../testing.html#test-configuration">Test Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../testing.html#database-configuration-for-tests">Database Configuration for Tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../testing.html#coverage-configuration">Coverage Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../testing.html#expected-test-output">Expected Test Output</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../testing.html#successful-test-run">Successful Test Run</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../testing.html#failed-test-example">Failed Test Example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../testing.html#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../testing.html#common-issues">Common Issues</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../testing.html#best-practices">Best Practices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../testing.html#writing-new-tests">Writing New Tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../testing.html#continuous-integration">Continuous Integration</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../testing.html#additional-resources">Additional Resources</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Graduate School Applicant Database Analysis</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Module code</a></li>
+      <li class="breadcrumb-item active">app</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for app</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Flask application for displaying applicant database analytics.&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span><span class="p">,</span> <span class="n">render_template</span><span class="p">,</span> <span class="n">jsonify</span>
+<span class="kn">import</span> <span class="nn">query_data</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">import</span> <span class="nn">threading</span>
+<span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">contextmanager</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="c1"># Busy-state management</span>
+<span class="n">_busy_lock</span> <span class="o">=</span> <span class="n">threading</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
+<span class="n">_is_busy</span> <span class="o">=</span> <span class="kc">False</span>
+
+
+<div class="viewcode-block" id="is_busy">
+<a class="viewcode-back" href="../api.html#app.is_busy">[docs]</a>
+<span class="k">def</span> <span class="nf">is_busy</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Check if the system is currently busy with an operation.&quot;&quot;&quot;</span>
+    <span class="k">global</span> <span class="n">_is_busy</span>
+    <span class="k">with</span> <span class="n">_busy_lock</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_is_busy</span></div>
+
+
+
+<div class="viewcode-block" id="busy_state">
+<a class="viewcode-back" href="../api.html#app.busy_state">[docs]</a>
+<span class="nd">@contextmanager</span>
+<span class="k">def</span> <span class="nf">busy_state</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Context manager to set/unset busy state.&quot;&quot;&quot;</span>
+    <span class="k">global</span> <span class="n">_is_busy</span>
+
+    <span class="c1"># Try to acquire busy state</span>
+    <span class="k">with</span> <span class="n">_busy_lock</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">_is_busy</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s2">&quot;System is already busy&quot;</span><span class="p">)</span>
+        <span class="n">_is_busy</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">yield</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="c1"># Release busy state</span>
+        <span class="k">with</span> <span class="n">_busy_lock</span><span class="p">:</span>
+            <span class="n">_is_busy</span> <span class="o">=</span> <span class="kc">False</span></div>
+
+
+
+<div class="viewcode-block" id="index">
+<a class="viewcode-back" href="../api.html#app.index">[docs]</a>
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">index</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Main page displaying all query results.&quot;&quot;&quot;</span>
+
+    <span class="c1"># Connect to database</span>
+    <span class="n">conn</span> <span class="o">=</span> <span class="n">query_data</span><span class="o">.</span><span class="n">get_connection</span><span class="p">()</span>
+
+    <span class="c1"># Run all queries and collect results</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="c1"># Query 1</span>
+    <span class="n">results</span><span class="p">[</span><span class="s1">&#39;q1_count&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">query_data</span><span class="o">.</span><span class="n">question_1</span><span class="p">(</span><span class="n">conn</span><span class="p">)</span>
+
+    <span class="c1"># Query 2</span>
+    <span class="n">results</span><span class="p">[</span><span class="s1">&#39;q2_percentage&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">query_data</span><span class="o">.</span><span class="n">question_2</span><span class="p">(</span><span class="n">conn</span><span class="p">)</span>
+
+    <span class="c1"># Query 3</span>
+    <span class="n">results</span><span class="p">[</span><span class="s1">&#39;q3_averages&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">query_data</span><span class="o">.</span><span class="n">question_3</span><span class="p">(</span><span class="n">conn</span><span class="p">)</span>
+
+    <span class="c1"># Query 4</span>
+    <span class="n">results</span><span class="p">[</span><span class="s1">&#39;q4_avg_gpa&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">query_data</span><span class="o">.</span><span class="n">question_4</span><span class="p">(</span><span class="n">conn</span><span class="p">)</span>
+
+    <span class="c1"># Query 5</span>
+    <span class="n">results</span><span class="p">[</span><span class="s1">&#39;q5_percentage&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">query_data</span><span class="o">.</span><span class="n">question_5</span><span class="p">(</span><span class="n">conn</span><span class="p">)</span>
+
+    <span class="c1"># Query 6</span>
+    <span class="n">results</span><span class="p">[</span><span class="s1">&#39;q6_avg_gpa&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">query_data</span><span class="o">.</span><span class="n">question_6</span><span class="p">(</span><span class="n">conn</span><span class="p">)</span>
+
+    <span class="c1"># Query 7</span>
+    <span class="n">results</span><span class="p">[</span><span class="s1">&#39;q7_count&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">query_data</span><span class="o">.</span><span class="n">question_7</span><span class="p">(</span><span class="n">conn</span><span class="p">)</span>
+
+    <span class="c1"># Query 8</span>
+    <span class="n">results</span><span class="p">[</span><span class="s1">&#39;q8_count&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">query_data</span><span class="o">.</span><span class="n">question_8</span><span class="p">(</span><span class="n">conn</span><span class="p">)</span>
+
+    <span class="c1"># Query 9</span>
+    <span class="n">results</span><span class="p">[</span><span class="s1">&#39;q9_counts&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">query_data</span><span class="o">.</span><span class="n">question_9</span><span class="p">(</span><span class="n">conn</span><span class="p">)</span>
+
+    <span class="c1"># Query 10</span>
+    <span class="n">results</span><span class="p">[</span><span class="s1">&#39;q10_top_programs&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">query_data</span><span class="o">.</span><span class="n">question_10</span><span class="p">(</span><span class="n">conn</span><span class="p">)</span>
+
+    <span class="c1"># Query 11</span>
+    <span class="n">results</span><span class="p">[</span><span class="s1">&#39;q11_comparison&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">query_data</span><span class="o">.</span><span class="n">question_11</span><span class="p">(</span><span class="n">conn</span><span class="p">)</span>
+
+    <span class="c1"># Close connection</span>
+    <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s1">&#39;index.html&#39;</span><span class="p">,</span> <span class="n">results</span><span class="o">=</span><span class="n">results</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="pull_data">
+<a class="viewcode-back" href="../api.html#app.pull_data">[docs]</a>
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/pull-data&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;POST&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">pull_data</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Scrape new data from GradCafe and add it to the database.</span>
+<span class="sd">    Returns JSON with status and message.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Check if system is busy</span>
+    <span class="k">if</span> <span class="n">is_busy</span><span class="p">():</span>
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span>
+            <span class="s1">&#39;status&#39;</span><span class="p">:</span> <span class="s1">&#39;busy&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;message&#39;</span><span class="p">:</span> <span class="s1">&#39;Another operation is already in progress. Please wait.&#39;</span>
+        <span class="p">}),</span> <span class="mi">409</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Set busy state</span>
+        <span class="k">with</span> <span class="n">busy_state</span><span class="p">():</span>
+            <span class="c1"># Step 1: Run the scraper</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[pull-data] Starting scraper...&quot;</span><span class="p">)</span>
+            <span class="n">script_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">),</span> <span class="s1">&#39;scrape.py&#39;</span><span class="p">)</span>
+            <span class="n">output_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">),</span> <span class="s1">&#39;..&#39;</span><span class="p">,</span> <span class="s1">&#39;new_applicant_data.json&#39;</span><span class="p">)</span>
+            <span class="n">scrape_result</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+                <span class="p">[</span><span class="n">sys</span><span class="o">.</span><span class="n">executable</span><span class="p">,</span> <span class="n">script_path</span><span class="p">,</span> <span class="s1">&#39;--limit&#39;</span><span class="p">,</span> <span class="s1">&#39;50&#39;</span><span class="p">,</span> <span class="s1">&#39;--out&#39;</span><span class="p">,</span> <span class="n">output_path</span><span class="p">],</span>
+                <span class="n">capture_output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">text</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">timeout</span><span class="o">=</span><span class="mi">300</span>  <span class="c1"># 5 minute timeout</span>
+            <span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">scrape_result</span><span class="o">.</span><span class="n">returncode</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span>
+                    <span class="s1">&#39;status&#39;</span><span class="p">:</span> <span class="s1">&#39;error&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;message&#39;</span><span class="p">:</span> <span class="sa">f</span><span class="s1">&#39;Scraping failed: </span><span class="si">{</span><span class="n">scrape_result</span><span class="o">.</span><span class="n">stderr</span><span class="si">}</span><span class="s1">&#39;</span>
+                <span class="p">}),</span> <span class="mi">500</span>
+
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[pull-data] Scraping completed&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Step 2: Check if new data file exists</span>
+            <span class="n">new_data_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">),</span> <span class="s1">&#39;..&#39;</span><span class="p">,</span> <span class="s1">&#39;new_applicant_data.json&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">new_data_path</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span>
+                    <span class="s1">&#39;status&#39;</span><span class="p">:</span> <span class="s1">&#39;error&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;message&#39;</span><span class="p">:</span> <span class="s1">&#39;No data file created by scraper&#39;</span>
+                <span class="p">}),</span> <span class="mi">500</span>
+
+            <span class="c1"># Step 3: Load scraped data and convert to database format</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[pull-data] Loading new data into database...&quot;</span><span class="p">)</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">new_data_path</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="n">scraped_data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">scraped_data</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span>
+                    <span class="s1">&#39;status&#39;</span><span class="p">:</span> <span class="s1">&#39;warning&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;message&#39;</span><span class="p">:</span> <span class="s1">&#39;No new entries found on GradCafe&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;count&#39;</span><span class="p">:</span> <span class="mi">0</span>
+                <span class="p">})</span>
+
+            <span class="c1"># Step 4: Insert into database using load_data functions</span>
+            <span class="kn">import</span> <span class="nn">load_data</span>
+            <span class="n">conn</span> <span class="o">=</span> <span class="n">query_data</span><span class="o">.</span><span class="n">get_connection</span><span class="p">()</span>
+
+            <span class="c1"># Convert scraped format to database format and insert</span>
+            <span class="n">inserted</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">skipped</span> <span class="o">=</span> <span class="mi">0</span>
+
+            <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">scraped_data</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="c1"># Extract p_id from URL</span>
+                    <span class="n">p_id</span> <span class="o">=</span> <span class="n">load_data</span><span class="o">.</span><span class="n">extract_p_id_from_url</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;url&#39;</span><span class="p">))</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">p_id</span><span class="p">:</span>
+                        <span class="n">skipped</span> <span class="o">+=</span> <span class="mi">1</span>
+                        <span class="k">continue</span>
+
+                    <span class="c1"># Parse and clean data</span>
+                    <span class="n">record</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="n">p_id</span><span class="p">,</span>
+                        <span class="n">load_data</span><span class="o">.</span><span class="n">clean_string</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;university&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;, &#39;</span> <span class="o">+</span> <span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;program_name&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)),</span>
+                        <span class="n">load_data</span><span class="o">.</span><span class="n">clean_string</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;comments&#39;</span><span class="p">)),</span>
+                        <span class="n">load_data</span><span class="o">.</span><span class="n">parse_date</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;date_posted&#39;</span><span class="p">)),</span>
+                        <span class="n">load_data</span><span class="o">.</span><span class="n">clean_string</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;url&#39;</span><span class="p">)),</span>
+                        <span class="n">load_data</span><span class="o">.</span><span class="n">clean_string</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;applicant_status&#39;</span><span class="p">)),</span>
+                        <span class="n">load_data</span><span class="o">.</span><span class="n">clean_string</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;start_term&#39;</span><span class="p">)),</span>
+                        <span class="n">load_data</span><span class="o">.</span><span class="n">clean_string</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;citizenship&#39;</span><span class="p">)),</span>
+                        <span class="nb">float</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;gpa&#39;</span><span class="p">))</span> <span class="k">if</span> <span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;gpa&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="nb">float</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;gre_score&#39;</span><span class="p">))</span> <span class="k">if</span> <span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;gre_score&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="nb">float</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;gre_v&#39;</span><span class="p">))</span> <span class="k">if</span> <span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;gre_v&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="nb">float</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;gre_aw&#39;</span><span class="p">))</span> <span class="k">if</span> <span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;gre_aw&#39;</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span><span class="p">,</span>
+                        <span class="n">load_data</span><span class="o">.</span><span class="n">clean_string</span><span class="p">(</span><span class="n">entry</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;degree&#39;</span><span class="p">)),</span>
+                        <span class="kc">None</span><span class="p">,</span>  <span class="c1"># llm_generated_program</span>
+                        <span class="kc">None</span>   <span class="c1"># llm_generated_university</span>
+                    <span class="p">)</span>
+
+                    <span class="c1"># Insert into database</span>
+                    <span class="n">cursor</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+                    <span class="n">insert_query</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">                        INSERT INTO applicants (</span>
+<span class="s2">                            p_id, program, comments, date_added, url, status, term,</span>
+<span class="s2">                            us_or_international, gpa, gre, gre_v, gre_aw, degree,</span>
+<span class="s2">                            llm_generated_program, llm_generated_university</span>
+<span class="s2">                        ) VALUES (</span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">)</span>
+<span class="s2">                        ON CONFLICT (p_id) DO NOTHING;</span>
+<span class="s2">                    &quot;&quot;&quot;</span>
+                    <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">insert_query</span><span class="p">,</span> <span class="n">record</span><span class="p">)</span>
+
+                    <span class="k">if</span> <span class="n">cursor</span><span class="o">.</span><span class="n">rowcount</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                        <span class="n">inserted</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">skipped</span> <span class="o">+=</span> <span class="mi">1</span>
+
+                    <span class="n">cursor</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[pull-data] Error processing entry: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="n">skipped</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="k">continue</span>
+
+            <span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+            <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+            <span class="c1"># Clean up temporary file</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">new_data_path</span><span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[pull-data] Completed: </span><span class="si">{</span><span class="n">inserted</span><span class="si">}</span><span class="s2"> inserted, </span><span class="si">{</span><span class="n">skipped</span><span class="si">}</span><span class="s2"> skipped&quot;</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span>
+                <span class="s1">&#39;status&#39;</span><span class="p">:</span> <span class="s1">&#39;success&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;message&#39;</span><span class="p">:</span> <span class="sa">f</span><span class="s1">&#39;Successfully added </span><span class="si">{</span><span class="n">inserted</span><span class="si">}</span><span class="s1"> new entries to database&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;inserted&#39;</span><span class="p">:</span> <span class="n">inserted</span><span class="p">,</span>
+                <span class="s1">&#39;skipped&#39;</span><span class="p">:</span> <span class="n">skipped</span><span class="p">,</span>
+                <span class="s1">&#39;timestamp&#39;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
+            <span class="p">})</span>
+
+    <span class="k">except</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">TimeoutExpired</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span>
+            <span class="s1">&#39;status&#39;</span><span class="p">:</span> <span class="s1">&#39;error&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;message&#39;</span><span class="p">:</span> <span class="s1">&#39;Scraping timed out after 5 minutes&#39;</span>
+        <span class="p">}),</span> <span class="mi">500</span>
+    <span class="k">except</span> <span class="ne">RuntimeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="c1"># Busy state error</span>
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span>
+            <span class="s1">&#39;status&#39;</span><span class="p">:</span> <span class="s1">&#39;busy&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;message&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+        <span class="p">}),</span> <span class="mi">409</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[pull-data] Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span>
+            <span class="s1">&#39;status&#39;</span><span class="p">:</span> <span class="s1">&#39;error&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;message&#39;</span><span class="p">:</span> <span class="sa">f</span><span class="s1">&#39;Error pulling data: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span>
+        <span class="p">}),</span> <span class="mi">500</span></div>
+
+
+
+<div class="viewcode-block" id="update_analysis">
+<a class="viewcode-back" href="../api.html#app.update_analysis">[docs]</a>
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/update-analysis&#39;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;POST&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">update_analysis</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Update LLM-generated analysis for applicants in the database.</span>
+<span class="sd">    Returns JSON with status and message.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Check if system is busy</span>
+    <span class="k">if</span> <span class="n">is_busy</span><span class="p">():</span>
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span>
+            <span class="s1">&#39;status&#39;</span><span class="p">:</span> <span class="s1">&#39;busy&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;message&#39;</span><span class="p">:</span> <span class="s1">&#39;Another operation is already in progress. Please wait.&#39;</span>
+        <span class="p">}),</span> <span class="mi">409</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Set busy state</span>
+        <span class="k">with</span> <span class="n">busy_state</span><span class="p">():</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[update-analysis] Starting LLM analysis update...&quot;</span><span class="p">)</span>
+
+            <span class="c1"># TODO: Call LLM processing script when available</span>
+            <span class="c1"># For now, return success with placeholder message</span>
+            <span class="c1"># Future implementation:</span>
+            <span class="c1"># script_path = os.path.join(os.path.dirname(__file__), &#39;scripts&#39;, &#39;update_llm.py&#39;)</span>
+            <span class="c1"># result = subprocess.run([sys.executable, script_path], ...)</span>
+
+            <span class="n">result</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+                <span class="p">[</span><span class="n">sys</span><span class="o">.</span><span class="n">executable</span><span class="p">,</span> <span class="s1">&#39;-c&#39;</span><span class="p">,</span> <span class="s1">&#39;print(&quot;LLM analysis update placeholder&quot;)&#39;</span><span class="p">],</span>
+                <span class="n">capture_output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">text</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">timeout</span><span class="o">=</span><span class="mi">300</span>
+            <span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">returncode</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span>
+                    <span class="s1">&#39;status&#39;</span><span class="p">:</span> <span class="s1">&#39;error&#39;</span><span class="p">,</span>
+                    <span class="s1">&#39;message&#39;</span><span class="p">:</span> <span class="sa">f</span><span class="s1">&#39;LLM analysis update failed: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">stderr</span><span class="si">}</span><span class="s1">&#39;</span>
+                <span class="p">}),</span> <span class="mi">500</span>
+
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[update-analysis] LLM analysis update completed&quot;</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span>
+                <span class="s1">&#39;status&#39;</span><span class="p">:</span> <span class="s1">&#39;success&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;message&#39;</span><span class="p">:</span> <span class="s1">&#39;Successfully updated LLM analysis&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;timestamp&#39;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
+            <span class="p">})</span>
+
+    <span class="k">except</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">TimeoutExpired</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span>
+            <span class="s1">&#39;status&#39;</span><span class="p">:</span> <span class="s1">&#39;error&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;message&#39;</span><span class="p">:</span> <span class="s1">&#39;LLM analysis update timed out after 5 minutes&#39;</span>
+        <span class="p">}),</span> <span class="mi">500</span>
+    <span class="k">except</span> <span class="ne">RuntimeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="c1"># Busy state error</span>
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span>
+            <span class="s1">&#39;status&#39;</span><span class="p">:</span> <span class="s1">&#39;busy&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;message&#39;</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+        <span class="p">}),</span> <span class="mi">409</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[update-analysis] Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span>
+            <span class="s1">&#39;status&#39;</span><span class="p">:</span> <span class="s1">&#39;error&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;message&#39;</span><span class="p">:</span> <span class="sa">f</span><span class="s1">&#39;Error updating analysis: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span>
+        <span class="p">}),</span> <span class="mi">500</span></div>
+
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">debug</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">5001</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Brad Ballinger.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

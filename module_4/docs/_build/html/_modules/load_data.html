@@ -1,0 +1,657 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>load_data &mdash; Graduate School Applicant Database Analysis 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=8d563738"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Graduate School Applicant Database Analysis
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../setup.html">Setup &amp; Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../setup.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../setup.html#environment-variables">Environment Variables</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../setup.html#option-1-database-url-recommended">Option 1: DATABASE_URL (Recommended)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../setup.html#option-2-individual-variables">Option 2: Individual Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../setup.html#option-3-setup-script">Option 3: Setup Script</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../setup.html#quick-start">Quick Start</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../setup.html#using-convenience-scripts-recommended">Using Convenience Scripts (Recommended)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../setup.html#manual-setup">Manual Setup</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../setup.html#running-tests">Running Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../setup.html#docker-setup-optional">Docker Setup (Optional)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../setup.html#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../setup.html#common-issues">Common Issues</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../setup.html#next-steps">Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture.html">System Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../architecture.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture.html#web-layer">Web Layer</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../architecture.html#key-components">Key Components</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture.html#etl-layer">ETL Layer</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../architecture.html#scraping-module-scrape-py">Scraping Module (scrape.py)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../architecture.html#cleaning-module-clean-py">Cleaning Module (clean.py)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../architecture.html#loading-module-load-data-py">Loading Module (load_data.py)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture.html#database-layer">Database Layer</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../architecture.html#database-queries">Database Queries</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../architecture.html#query-optimization">Query Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../architecture.html#connection-management">Connection Management</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture.html#data-flow">Data Flow</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../architecture.html#complete-data-flow-example">Complete Data Flow Example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture.html#error-handling">Error Handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture.html#security-considerations">Security Considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture.html#scalability">Scalability</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture.html#performance-metrics">Performance Metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../architecture.html#next-steps">Next Steps</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../api.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#module-app">Web Application</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#app.is_busy"><code class="docutils literal notranslate"><span class="pre">is_busy()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#app.busy_state"><code class="docutils literal notranslate"><span class="pre">busy_state()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#app.index"><code class="docutils literal notranslate"><span class="pre">index()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#app.pull_data"><code class="docutils literal notranslate"><span class="pre">pull_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#app.update_analysis"><code class="docutils literal notranslate"><span class="pre">update_analysis()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id0"><code class="docutils literal notranslate"><span class="pre">index()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id1"><code class="docutils literal notranslate"><span class="pre">pull_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id2"><code class="docutils literal notranslate"><span class="pre">update_analysis()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#module-scrape">Data Scraping</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#scrape.scrape_data"><code class="docutils literal notranslate"><span class="pre">scrape_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#scrape.save_data"><code class="docutils literal notranslate"><span class="pre">save_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id3"><code class="docutils literal notranslate"><span class="pre">scrape_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id4"><code class="docutils literal notranslate"><span class="pre">save_data()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#module-clean">Data Cleaning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#clean.load_data"><code class="docutils literal notranslate"><span class="pre">load_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#clean.clean_data"><code class="docutils literal notranslate"><span class="pre">clean_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#clean.save_data"><code class="docutils literal notranslate"><span class="pre">save_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id5"><code class="docutils literal notranslate"><span class="pre">load_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id6"><code class="docutils literal notranslate"><span class="pre">clean_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id7"><code class="docutils literal notranslate"><span class="pre">save_data()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#module-load_data">Data Loading</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#load_data.parse_gpa"><code class="docutils literal notranslate"><span class="pre">parse_gpa()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#load_data.parse_gre_score"><code class="docutils literal notranslate"><span class="pre">parse_gre_score()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#load_data.parse_date"><code class="docutils literal notranslate"><span class="pre">parse_date()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#load_data.extract_p_id_from_url"><code class="docutils literal notranslate"><span class="pre">extract_p_id_from_url()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#load_data.clean_string"><code class="docutils literal notranslate"><span class="pre">clean_string()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#load_data.create_applicants_table"><code class="docutils literal notranslate"><span class="pre">create_applicants_table()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#load_data.load_json_data"><code class="docutils literal notranslate"><span class="pre">load_json_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#load_data.verify_data"><code class="docutils literal notranslate"><span class="pre">verify_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#load_data.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id8"><code class="docutils literal notranslate"><span class="pre">parse_gpa()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id9"><code class="docutils literal notranslate"><span class="pre">parse_gre_score()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id10"><code class="docutils literal notranslate"><span class="pre">parse_date()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id11"><code class="docutils literal notranslate"><span class="pre">extract_p_id_from_url()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id12"><code class="docutils literal notranslate"><span class="pre">clean_string()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id13"><code class="docutils literal notranslate"><span class="pre">create_applicants_table()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id14"><code class="docutils literal notranslate"><span class="pre">load_json_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id15"><code class="docutils literal notranslate"><span class="pre">verify_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id16"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#module-query_data">Database Queries</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#query_data.get_connection"><code class="docutils literal notranslate"><span class="pre">get_connection()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#query_data.question_1"><code class="docutils literal notranslate"><span class="pre">question_1()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#query_data.question_2"><code class="docutils literal notranslate"><span class="pre">question_2()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#query_data.question_3"><code class="docutils literal notranslate"><span class="pre">question_3()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#query_data.question_4"><code class="docutils literal notranslate"><span class="pre">question_4()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#query_data.question_5"><code class="docutils literal notranslate"><span class="pre">question_5()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#query_data.question_6"><code class="docutils literal notranslate"><span class="pre">question_6()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#query_data.question_7"><code class="docutils literal notranslate"><span class="pre">question_7()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#query_data.question_8"><code class="docutils literal notranslate"><span class="pre">question_8()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#query_data.question_9"><code class="docutils literal notranslate"><span class="pre">question_9()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#query_data.question_10"><code class="docutils literal notranslate"><span class="pre">question_10()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#query_data.question_11"><code class="docutils literal notranslate"><span class="pre">question_11()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#query_data.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id17"><code class="docutils literal notranslate"><span class="pre">get_connection()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id18"><code class="docutils literal notranslate"><span class="pre">question_1()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id19"><code class="docutils literal notranslate"><span class="pre">question_2()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id20"><code class="docutils literal notranslate"><span class="pre">question_3()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id21"><code class="docutils literal notranslate"><span class="pre">question_4()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id22"><code class="docutils literal notranslate"><span class="pre">question_5()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id23"><code class="docutils literal notranslate"><span class="pre">question_6()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id24"><code class="docutils literal notranslate"><span class="pre">question_7()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id25"><code class="docutils literal notranslate"><span class="pre">question_8()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id26"><code class="docutils literal notranslate"><span class="pre">question_9()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id27"><code class="docutils literal notranslate"><span class="pre">question_10()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id28"><code class="docutils literal notranslate"><span class="pre">question_11()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../api.html#id29"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#data-types">Data Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api.html#error-handling">Error Handling</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Operations Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../operational.html">Operational Notes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../operational.html#busy-state-policy">Busy-State Policy</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#implementation">Implementation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#concurrent-request-handling">Concurrent Request Handling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#best-practices">Best Practices</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../operational.html#idempotency-strategy">Idempotency Strategy</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#id1">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#database-operations">Database Operations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#scraping-operations">Scraping Operations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#file-operations">File Operations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#retry-strategy">Retry Strategy</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../operational.html#uniqueness-keys">Uniqueness Keys</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#primary-keys">Primary Keys</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#extraction">Extraction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#composite-uniqueness">Composite Uniqueness</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#index-strategy">Index Strategy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#data-integrity-checks">Data Integrity Checks</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../operational.html#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#common-local-issues">Common Local Issues</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#common-ci-cd-issues">Common CI/CD Issues</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#performance-issues">Performance Issues</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#memory-issues">Memory Issues</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../operational.html#health-checks">Health Checks</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#application-health">Application Health</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#database-health">Database Health</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../operational.html#monitoring">Monitoring</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#key-metrics">Key Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#logging">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#alerting">Alerting</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../operational.html#id2">Best Practices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#development">Development</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#staging">Staging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#production">Production</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../operational.html#backup-and-recovery">Backup and Recovery</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#database-backups">Database Backups</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../operational.html#disaster-recovery">Disaster Recovery</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../testing.html">Testing Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../testing.html#test-suite-overview">Test Suite Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../testing.html#running-tests">Running Tests</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../testing.html#using-test-script-recommended">Using Test Script (Recommended)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../testing.html#using-pytest-directly">Using pytest Directly</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../testing.html#test-markers">Test Markers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../testing.html#available-markers">Available Markers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../testing.html#combining-markers">Combining Markers</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../testing.html#test-fixtures">Test Fixtures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../testing.html#database-fixtures">Database Fixtures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../testing.html#flask-application-fixtures">Flask Application Fixtures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../testing.html#test-data-fixtures">Test Data Fixtures</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../testing.html#test-doubles-and-mocking">Test Doubles and Mocking</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../testing.html#monkeypatch-for-environment-variables">Monkeypatch for Environment Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../testing.html#mock-external-dependencies">Mock External Dependencies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../testing.html#patching-database-connections">Patching Database Connections</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../testing.html#test-organization">Test Organization</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../testing.html#test-file-structure">Test File Structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../testing.html#test-naming-conventions">Test Naming Conventions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../testing.html#running-specific-test-categories">Running Specific Test Categories</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../testing.html#by-module">By Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../testing.html#by-functionality">By Functionality</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../testing.html#test-configuration">Test Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../testing.html#database-configuration-for-tests">Database Configuration for Tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../testing.html#coverage-configuration">Coverage Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../testing.html#expected-test-output">Expected Test Output</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../testing.html#successful-test-run">Successful Test Run</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../testing.html#failed-test-example">Failed Test Example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../testing.html#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../testing.html#common-issues">Common Issues</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../testing.html#best-practices">Best Practices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../testing.html#writing-new-tests">Writing New Tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../testing.html#continuous-integration">Continuous Integration</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../testing.html#additional-resources">Additional Resources</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Graduate School Applicant Database Analysis</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Module code</a></li>
+      <li class="breadcrumb-item active">load_data</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for load_data</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">psycopg</span>
+<span class="kn">from</span> <span class="nn">psycopg</span> <span class="kn">import</span> <span class="n">sql</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">urllib.parse</span> <span class="kn">import</span> <span class="n">urlparse</span>
+
+
+<div class="viewcode-block" id="parse_gpa">
+<a class="viewcode-back" href="../api.html#load_data.parse_gpa">[docs]</a>
+<span class="k">def</span> <span class="nf">parse_gpa</span><span class="p">(</span><span class="n">gpa_str</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extract numeric GPA value from string like &#39;GPA 3.89&#39;.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">gpa_str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;(\d+\.?\d*)&#39;</span><span class="p">,</span> <span class="n">gpa_str</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span> <span class="k">if</span> <span class="n">match</span> <span class="k">else</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="parse_gre_score">
+<a class="viewcode-back" href="../api.html#load_data.parse_gre_score">[docs]</a>
+<span class="k">def</span> <span class="nf">parse_gre_score</span><span class="p">(</span><span class="n">gre_str</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Extract numeric GRE score from strings like:</span>
+<span class="sd">    - &#39;GRE 327&#39; (total)</span>
+<span class="sd">    - &#39;GRE V 157&#39; (verbal)</span>
+<span class="sd">    - &#39;GRE AW 3.50&#39; (analytical writing)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">gre_str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;(\d+\.?\d*)&#39;</span><span class="p">,</span> <span class="n">gre_str</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span> <span class="k">if</span> <span class="n">match</span> <span class="k">else</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="parse_date">
+<a class="viewcode-back" href="../api.html#load_data.parse_date">[docs]</a>
+<span class="k">def</span> <span class="nf">parse_date</span><span class="p">(</span><span class="n">date_str</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Parse date string like &#39;January 31, 2026&#39; to date object.</span>
+<span class="sd">    Returns None if parsing fails.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">date_str</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">date_str</span><span class="p">,</span> <span class="s1">&#39;%B </span><span class="si">%d</span><span class="s1">, %Y&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">date</span><span class="p">()</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="extract_p_id_from_url">
+<a class="viewcode-back" href="../api.html#load_data.extract_p_id_from_url">[docs]</a>
+<span class="k">def</span> <span class="nf">extract_p_id_from_url</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extract the ID from the GradCafe URL.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">url</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;/result/(\d+)&#39;</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span> <span class="k">if</span> <span class="n">match</span> <span class="k">else</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="clean_string">
+<a class="viewcode-back" href="../api.html#load_data.clean_string">[docs]</a>
+<span class="k">def</span> <span class="nf">clean_string</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Remove NUL characters and other problematic characters from strings.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">s</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="c1"># Remove NUL characters (0x00) which PostgreSQL doesn&#39;t accept</span>
+    <span class="k">return</span> <span class="n">s</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\x00</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="create_applicants_table">
+<a class="viewcode-back" href="../api.html#load_data.create_applicants_table">[docs]</a>
+<span class="k">def</span> <span class="nf">create_applicants_table</span><span class="p">(</span><span class="n">conn</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create the applicants table if it doesn&#39;t exist.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">create_table_query</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">    CREATE TABLE IF NOT EXISTS applicants (</span>
+<span class="s2">        p_id INTEGER PRIMARY KEY,</span>
+<span class="s2">        program TEXT,</span>
+<span class="s2">        comments TEXT,</span>
+<span class="s2">        date_added DATE,</span>
+<span class="s2">        url TEXT,</span>
+<span class="s2">        status TEXT,</span>
+<span class="s2">        term TEXT,</span>
+<span class="s2">        us_or_international TEXT,</span>
+<span class="s2">        gpa REAL,</span>
+<span class="s2">        gre REAL,</span>
+<span class="s2">        gre_v REAL,</span>
+<span class="s2">        gre_aw REAL,</span>
+<span class="s2">        degree TEXT,</span>
+<span class="s2">        llm_generated_program TEXT,</span>
+<span class="s2">        llm_generated_university TEXT</span>
+<span class="s2">    );</span>
+<span class="s2">    &quot;&quot;&quot;</span>
+
+    <span class="n">cursor</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Creating applicants table if it doesn&#39;t exist...&quot;</span><span class="p">)</span>
+    <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">create_table_query</span><span class="p">)</span>
+    <span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+    <span class="n">cursor</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Table &#39;applicants&#39; is ready.&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="load_json_data">
+<a class="viewcode-back" href="../api.html#load_data.load_json_data">[docs]</a>
+<span class="k">def</span> <span class="nf">load_json_data</span><span class="p">(</span><span class="n">json_file_path</span><span class="p">,</span> <span class="n">conn</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Load data from JSON Lines file into the applicants table.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">cursor</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+
+    <span class="c1"># Prepare insert query</span>
+    <span class="n">insert_query</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">    INSERT INTO applicants (</span>
+<span class="s2">        p_id, program, comments, date_added, url, status, term,</span>
+<span class="s2">        us_or_international, gpa, gre, gre_v, gre_aw, degree,</span>
+<span class="s2">        llm_generated_program, llm_generated_university</span>
+<span class="s2">    ) VALUES (</span>
+<span class="s2">        </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span><span class="s2">, </span><span class="si">%s</span>
+<span class="s2">    )</span>
+<span class="s2">    ON CONFLICT (p_id) DO NOTHING;</span>
+<span class="s2">    &quot;&quot;&quot;</span>
+
+    <span class="n">records</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">skipped</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Reading data from </span><span class="si">{</span><span class="n">json_file_path</span><span class="si">}</span><span class="s2">...&quot;</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">json_file_path</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">line_num</span><span class="p">,</span> <span class="n">line</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
+
+                <span class="c1"># Extract p_id from URL</span>
+                <span class="n">p_id</span> <span class="o">=</span> <span class="n">extract_p_id_from_url</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;url&#39;</span><span class="p">))</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">p_id</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Warning: Could not extract p_id from line </span><span class="si">{</span><span class="n">line_num</span><span class="si">}</span><span class="s2">, skipping.&quot;</span><span class="p">)</span>
+                    <span class="n">skipped</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="k">continue</span>
+
+                <span class="c1"># Map JSON fields to database columns, cleaning strings</span>
+                <span class="n">record</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">p_id</span><span class="p">,</span>
+                    <span class="n">clean_string</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;program&#39;</span><span class="p">)),</span>
+                    <span class="n">clean_string</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;comments&#39;</span><span class="p">)),</span>
+                    <span class="n">parse_date</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;date_added&#39;</span><span class="p">)),</span>
+                    <span class="n">clean_string</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;url&#39;</span><span class="p">)),</span>
+                    <span class="n">clean_string</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;applicant_status&#39;</span><span class="p">)),</span>
+                    <span class="n">clean_string</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;semester_year_start&#39;</span><span class="p">)),</span>
+                    <span class="n">clean_string</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;citizenship&#39;</span><span class="p">)),</span>
+                    <span class="n">parse_gpa</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;gpa&#39;</span><span class="p">)),</span>
+                    <span class="n">parse_gre_score</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;gre&#39;</span><span class="p">)),</span>
+                    <span class="n">parse_gre_score</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;gre_v&#39;</span><span class="p">)),</span>
+                    <span class="n">parse_gre_score</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;gre_aw&#39;</span><span class="p">)),</span>
+                    <span class="n">clean_string</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;masters_or_phd&#39;</span><span class="p">)),</span>
+                    <span class="n">clean_string</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;llm-generated-program&#39;</span><span class="p">)),</span>
+                    <span class="n">clean_string</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;llm-generated-university&#39;</span><span class="p">))</span>
+                <span class="p">)</span>
+
+                <span class="n">records</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">record</span><span class="p">)</span>
+
+                <span class="c1"># Batch insert every 1000 records</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">records</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">1000</span><span class="p">:</span>
+                    <span class="n">cursor</span><span class="o">.</span><span class="n">executemany</span><span class="p">(</span><span class="n">insert_query</span><span class="p">,</span> <span class="n">records</span><span class="p">)</span>
+                    <span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Inserted </span><span class="si">{</span><span class="n">line_num</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">skipped</span><span class="si">}</span><span class="s2"> records...&quot;</span><span class="p">)</span>
+                    <span class="n">records</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="k">except</span> <span class="n">json</span><span class="o">.</span><span class="n">JSONDecodeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Warning: JSON decode error on line </span><span class="si">{</span><span class="n">line_num</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">skipped</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Warning: Error processing line </span><span class="si">{</span><span class="n">line_num</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">skipped</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="c1"># Insert remaining records</span>
+    <span class="k">if</span> <span class="n">records</span><span class="p">:</span>
+        <span class="n">cursor</span><span class="o">.</span><span class="n">executemany</span><span class="p">(</span><span class="n">insert_query</span><span class="p">,</span> <span class="n">records</span><span class="p">)</span>
+        <span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+    <span class="n">cursor</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+    <span class="n">total_records</span> <span class="o">=</span> <span class="n">line_num</span> <span class="o">-</span> <span class="n">skipped</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Data loading complete!&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Total records processed: </span><span class="si">{</span><span class="n">total_records</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Records skipped: </span><span class="si">{</span><span class="n">skipped</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">total_records</span></div>
+
+
+
+<div class="viewcode-block" id="verify_data">
+<a class="viewcode-back" href="../api.html#load_data.verify_data">[docs]</a>
+<span class="k">def</span> <span class="nf">verify_data</span><span class="p">(</span><span class="n">conn</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Verify the loaded data by showing some statistics.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">cursor</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+
+    <span class="c1"># Count total records</span>
+    <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT COUNT(*) FROM applicants;&quot;</span><span class="p">)</span>
+    <span class="n">total</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Total records in database: </span><span class="si">{</span><span class="n">total</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Show sample records</span>
+    <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT * FROM applicants LIMIT 5;&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Sample records:&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  p_id: </span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">, program: </span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="mi">1</span><span class="p">][:</span><span class="mi">50</span><span class="p">]</span><span class="si">}</span><span class="s2">...&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Show statistics by status</span>
+    <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        SELECT status, COUNT(*)</span>
+<span class="s2">        FROM applicants</span>
+<span class="s2">        WHERE status IS NOT NULL</span>
+<span class="s2">        GROUP BY status</span>
+<span class="s2">        ORDER BY COUNT(*) DESC;</span>
+<span class="s2">    &quot;&quot;&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Records by status:&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">status</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  </span><span class="si">{</span><span class="n">status</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">cursor</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="main">
+<a class="viewcode-back" href="../api.html#load_data.main">[docs]</a>
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Main function to create table and load data.</span>
+
+<span class="sd">    Uses DATABASE_URL environment variable if set (format: postgresql://user:password@host:port/database)</span>
+<span class="sd">    Otherwise uses individual environment variables or defaults:</span>
+<span class="sd">    - DB_HOST (default: localhost)</span>
+<span class="sd">    - DB_PORT (default: 5432)</span>
+<span class="sd">    - DB_NAME (default: bradleyballinger)</span>
+<span class="sd">    - DB_USER (default: bradleyballinger)</span>
+<span class="sd">    - DB_PASSWORD (default: empty)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">database_url</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;DATABASE_URL&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">database_url</span><span class="p">:</span>
+        <span class="c1"># Parse DATABASE_URL</span>
+        <span class="n">parsed</span> <span class="o">=</span> <span class="n">urlparse</span><span class="p">(</span><span class="n">database_url</span><span class="p">)</span>
+        <span class="n">conn_params</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;host&#39;</span><span class="p">:</span> <span class="n">parsed</span><span class="o">.</span><span class="n">hostname</span> <span class="ow">or</span> <span class="s1">&#39;localhost&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;port&#39;</span><span class="p">:</span> <span class="n">parsed</span><span class="o">.</span><span class="n">port</span> <span class="ow">or</span> <span class="mi">5432</span><span class="p">,</span>
+            <span class="s1">&#39;dbname&#39;</span><span class="p">:</span> <span class="n">parsed</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="n">parsed</span><span class="o">.</span><span class="n">path</span> <span class="k">else</span> <span class="s1">&#39;bradleyballinger&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;user&#39;</span><span class="p">:</span> <span class="n">parsed</span><span class="o">.</span><span class="n">username</span> <span class="ow">or</span> <span class="s1">&#39;bradleyballinger&#39;</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="n">parsed</span><span class="o">.</span><span class="n">password</span><span class="p">:</span>
+            <span class="n">conn_params</span><span class="p">[</span><span class="s1">&#39;password&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">parsed</span><span class="o">.</span><span class="n">password</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Use individual environment variables or defaults</span>
+        <span class="n">conn_params</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;host&#39;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;DB_HOST&#39;</span><span class="p">,</span> <span class="s1">&#39;localhost&#39;</span><span class="p">),</span>
+            <span class="s1">&#39;port&#39;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;DB_PORT&#39;</span><span class="p">,</span> <span class="s1">&#39;5432&#39;</span><span class="p">)),</span>
+            <span class="s1">&#39;dbname&#39;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;DB_NAME&#39;</span><span class="p">,</span> <span class="s1">&#39;bradleyballinger&#39;</span><span class="p">),</span>
+            <span class="s1">&#39;user&#39;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;DB_USER&#39;</span><span class="p">,</span> <span class="s1">&#39;bradleyballinger&#39;</span><span class="p">),</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;DB_PASSWORD&#39;</span><span class="p">):</span>
+            <span class="n">conn_params</span><span class="p">[</span><span class="s1">&#39;password&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;DB_PASSWORD&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Path to data file in parent directory</span>
+    <span class="n">json_file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">),</span> <span class="s1">&#39;..&#39;</span><span class="p">,</span> <span class="s1">&#39;llm_extend_applicant_data.json&#39;</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="c1"># Establish connection</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Connecting to database &#39;</span><span class="si">{</span><span class="n">conn_params</span><span class="p">[</span><span class="s1">&#39;dbname&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&#39; at </span><span class="si">{</span><span class="n">conn_params</span><span class="p">[</span><span class="s1">&#39;host&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">conn_params</span><span class="p">[</span><span class="s1">&#39;port&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">...&quot;</span><span class="p">)</span>
+        <span class="n">conn</span> <span class="o">=</span> <span class="n">psycopg</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="o">**</span><span class="n">conn_params</span><span class="p">)</span>
+
+        <span class="c1"># Create table</span>
+        <span class="n">create_applicants_table</span><span class="p">(</span><span class="n">conn</span><span class="p">)</span>
+
+        <span class="c1"># Load data</span>
+        <span class="n">load_json_data</span><span class="p">(</span><span class="n">json_file_path</span><span class="p">,</span> <span class="n">conn</span><span class="p">)</span>
+
+        <span class="c1"># Verify data</span>
+        <span class="n">verify_data</span><span class="p">(</span><span class="n">conn</span><span class="p">)</span>
+
+        <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Connection closed successfully.&quot;</span><span class="p">)</span>
+
+    <span class="k">except</span> <span class="n">psycopg</span><span class="o">.</span><span class="n">Error</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Database error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">raise</span>
+    <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error: Could not find file &#39;</span><span class="si">{</span><span class="n">json_file_path</span><span class="si">}</span><span class="s2">&#39;&quot;</span><span class="p">)</span>
+        <span class="k">raise</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">raise</span></div>
+
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Brad Ballinger.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

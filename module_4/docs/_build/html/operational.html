@@ -1,0 +1,1119 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Operational Notes &mdash; Graduate School Applicant Database Analysis 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=8d563738"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Testing Guide" href="testing.html" />
+    <link rel="prev" title="API Reference" href="api.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Graduate School Applicant Database Analysis
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">User Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="setup.html">Setup &amp; Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="setup.html#prerequisites">Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="setup.html#environment-variables">Environment Variables</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="setup.html#option-1-database-url-recommended">Option 1: DATABASE_URL (Recommended)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="setup.html#option-2-individual-variables">Option 2: Individual Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="setup.html#option-3-setup-script">Option 3: Setup Script</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="setup.html#quick-start">Quick Start</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="setup.html#using-convenience-scripts-recommended">Using Convenience Scripts (Recommended)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="setup.html#manual-setup">Manual Setup</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="setup.html#running-tests">Running Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="setup.html#docker-setup-optional">Docker Setup (Optional)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="setup.html#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="setup.html#common-issues">Common Issues</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="setup.html#next-steps">Next Steps</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="architecture.html">System Architecture</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#web-layer">Web Layer</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="architecture.html#key-components">Key Components</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#etl-layer">ETL Layer</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="architecture.html#scraping-module-scrape-py">Scraping Module (scrape.py)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="architecture.html#cleaning-module-clean-py">Cleaning Module (clean.py)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="architecture.html#loading-module-load-data-py">Loading Module (load_data.py)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#database-layer">Database Layer</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="architecture.html#database-queries">Database Queries</a></li>
+<li class="toctree-l3"><a class="reference internal" href="architecture.html#query-optimization">Query Optimization</a></li>
+<li class="toctree-l3"><a class="reference internal" href="architecture.html#connection-management">Connection Management</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#data-flow">Data Flow</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="architecture.html#complete-data-flow-example">Complete Data Flow Example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#error-handling">Error Handling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#security-considerations">Security Considerations</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#scalability">Scalability</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#performance-metrics">Performance Metrics</a></li>
+<li class="toctree-l2"><a class="reference internal" href="architecture.html#next-steps">Next Steps</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Reference</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api.html#module-app">Web Application</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api.html#app.is_busy"><code class="docutils literal notranslate"><span class="pre">is_busy()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#app.busy_state"><code class="docutils literal notranslate"><span class="pre">busy_state()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#app.index"><code class="docutils literal notranslate"><span class="pre">index()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#app.pull_data"><code class="docutils literal notranslate"><span class="pre">pull_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#app.update_analysis"><code class="docutils literal notranslate"><span class="pre">update_analysis()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#id0"><code class="docutils literal notranslate"><span class="pre">index()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#id1"><code class="docutils literal notranslate"><span class="pre">pull_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#id2"><code class="docutils literal notranslate"><span class="pre">update_analysis()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#module-scrape">Data Scraping</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api.html#scrape.scrape_data"><code class="docutils literal notranslate"><span class="pre">scrape_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#scrape.save_data"><code class="docutils literal notranslate"><span class="pre">save_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#id3"><code class="docutils literal notranslate"><span class="pre">scrape_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#id4"><code class="docutils literal notranslate"><span class="pre">save_data()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#module-clean">Data Cleaning</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api.html#clean.load_data"><code class="docutils literal notranslate"><span class="pre">load_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#clean.clean_data"><code class="docutils literal notranslate"><span class="pre">clean_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#clean.save_data"><code class="docutils literal notranslate"><span class="pre">save_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#id5"><code class="docutils literal notranslate"><span class="pre">load_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#id6"><code class="docutils literal notranslate"><span class="pre">clean_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#id7"><code class="docutils literal notranslate"><span class="pre">save_data()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#module-load_data">Data Loading</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api.html#load_data.parse_gpa"><code class="docutils literal notranslate"><span class="pre">parse_gpa()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#load_data.parse_gre_score"><code class="docutils literal notranslate"><span class="pre">parse_gre_score()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#load_data.parse_date"><code class="docutils literal notranslate"><span class="pre">parse_date()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#load_data.extract_p_id_from_url"><code class="docutils literal notranslate"><span class="pre">extract_p_id_from_url()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#load_data.clean_string"><code class="docutils literal notranslate"><span class="pre">clean_string()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#load_data.create_applicants_table"><code class="docutils literal notranslate"><span class="pre">create_applicants_table()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#load_data.load_json_data"><code class="docutils literal notranslate"><span class="pre">load_json_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#load_data.verify_data"><code class="docutils literal notranslate"><span class="pre">verify_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#load_data.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#id8"><code class="docutils literal notranslate"><span class="pre">parse_gpa()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#id9"><code class="docutils literal notranslate"><span class="pre">parse_gre_score()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#id10"><code class="docutils literal notranslate"><span class="pre">parse_date()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#id11"><code class="docutils literal notranslate"><span class="pre">extract_p_id_from_url()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#id12"><code class="docutils literal notranslate"><span class="pre">clean_string()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#id13"><code class="docutils literal notranslate"><span class="pre">create_applicants_table()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#id14"><code class="docutils literal notranslate"><span class="pre">load_json_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#id15"><code class="docutils literal notranslate"><span class="pre">verify_data()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#id16"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#module-query_data">Database Queries</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="api.html#query_data.get_connection"><code class="docutils literal notranslate"><span class="pre">get_connection()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#query_data.question_1"><code class="docutils literal notranslate"><span class="pre">question_1()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#query_data.question_2"><code class="docutils literal notranslate"><span class="pre">question_2()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#query_data.question_3"><code class="docutils literal notranslate"><span class="pre">question_3()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#query_data.question_4"><code class="docutils literal notranslate"><span class="pre">question_4()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#query_data.question_5"><code class="docutils literal notranslate"><span class="pre">question_5()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#query_data.question_6"><code class="docutils literal notranslate"><span class="pre">question_6()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#query_data.question_7"><code class="docutils literal notranslate"><span class="pre">question_7()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#query_data.question_8"><code class="docutils literal notranslate"><span class="pre">question_8()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#query_data.question_9"><code class="docutils literal notranslate"><span class="pre">question_9()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#query_data.question_10"><code class="docutils literal notranslate"><span class="pre">question_10()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#query_data.question_11"><code class="docutils literal notranslate"><span class="pre">question_11()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#query_data.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#id17"><code class="docutils literal notranslate"><span class="pre">get_connection()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#id18"><code class="docutils literal notranslate"><span class="pre">question_1()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#id19"><code class="docutils literal notranslate"><span class="pre">question_2()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#id20"><code class="docutils literal notranslate"><span class="pre">question_3()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#id21"><code class="docutils literal notranslate"><span class="pre">question_4()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#id22"><code class="docutils literal notranslate"><span class="pre">question_5()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#id23"><code class="docutils literal notranslate"><span class="pre">question_6()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#id24"><code class="docutils literal notranslate"><span class="pre">question_7()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#id25"><code class="docutils literal notranslate"><span class="pre">question_8()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#id26"><code class="docutils literal notranslate"><span class="pre">question_9()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#id27"><code class="docutils literal notranslate"><span class="pre">question_10()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#id28"><code class="docutils literal notranslate"><span class="pre">question_11()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="api.html#id29"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#data-types">Data Types</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api.html#error-handling">Error Handling</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Operations Guide</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Operational Notes</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#busy-state-policy">Busy-State Policy</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#implementation">Implementation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#concurrent-request-handling">Concurrent Request Handling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#best-practices">Best Practices</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#idempotency-strategy">Idempotency Strategy</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#database-operations">Database Operations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#scraping-operations">Scraping Operations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#file-operations">File Operations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#retry-strategy">Retry Strategy</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#uniqueness-keys">Uniqueness Keys</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#primary-keys">Primary Keys</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#extraction">Extraction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#composite-uniqueness">Composite Uniqueness</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#index-strategy">Index Strategy</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#data-integrity-checks">Data Integrity Checks</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#common-local-issues">Common Local Issues</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#common-ci-cd-issues">Common CI/CD Issues</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#performance-issues">Performance Issues</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#memory-issues">Memory Issues</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#health-checks">Health Checks</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#application-health">Application Health</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#database-health">Database Health</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#monitoring">Monitoring</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#key-metrics">Key Metrics</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#logging">Logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#alerting">Alerting</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">Best Practices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#development">Development</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#staging">Staging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#production">Production</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#backup-and-recovery">Backup and Recovery</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#database-backups">Database Backups</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#disaster-recovery">Disaster Recovery</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer Guide</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="testing.html">Testing Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="testing.html#test-suite-overview">Test Suite Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="testing.html#running-tests">Running Tests</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="testing.html#using-test-script-recommended">Using Test Script (Recommended)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="testing.html#using-pytest-directly">Using pytest Directly</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="testing.html#test-markers">Test Markers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="testing.html#available-markers">Available Markers</a></li>
+<li class="toctree-l3"><a class="reference internal" href="testing.html#combining-markers">Combining Markers</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="testing.html#test-fixtures">Test Fixtures</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="testing.html#database-fixtures">Database Fixtures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="testing.html#flask-application-fixtures">Flask Application Fixtures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="testing.html#test-data-fixtures">Test Data Fixtures</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="testing.html#test-doubles-and-mocking">Test Doubles and Mocking</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="testing.html#monkeypatch-for-environment-variables">Monkeypatch for Environment Variables</a></li>
+<li class="toctree-l3"><a class="reference internal" href="testing.html#mock-external-dependencies">Mock External Dependencies</a></li>
+<li class="toctree-l3"><a class="reference internal" href="testing.html#patching-database-connections">Patching Database Connections</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="testing.html#test-organization">Test Organization</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="testing.html#test-file-structure">Test File Structure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="testing.html#test-naming-conventions">Test Naming Conventions</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="testing.html#running-specific-test-categories">Running Specific Test Categories</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="testing.html#by-module">By Module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="testing.html#by-functionality">By Functionality</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="testing.html#test-configuration">Test Configuration</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="testing.html#database-configuration-for-tests">Database Configuration for Tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="testing.html#coverage-configuration">Coverage Configuration</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="testing.html#expected-test-output">Expected Test Output</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="testing.html#successful-test-run">Successful Test Run</a></li>
+<li class="toctree-l3"><a class="reference internal" href="testing.html#failed-test-example">Failed Test Example</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="testing.html#troubleshooting">Troubleshooting</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="testing.html#common-issues">Common Issues</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="testing.html#best-practices">Best Practices</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="testing.html#writing-new-tests">Writing New Tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="testing.html#continuous-integration">Continuous Integration</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="testing.html#additional-resources">Additional Resources</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Graduate School Applicant Database Analysis</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Operational Notes</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/operational.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="operational-notes">
+<h1>Operational Notes<a class="headerlink" href="#operational-notes" title="Link to this heading"></a></h1>
+<p>This section provides operational guidelines for running the application in development, production, and CI environments.</p>
+<section id="busy-state-policy">
+<h2>Busy-State Policy<a class="headerlink" href="#busy-state-policy" title="Link to this heading"></a></h2>
+<section id="overview">
+<h3>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h3>
+<p>The application implements a busy-state mechanism to prevent concurrent operations that could corrupt data or cause race conditions.</p>
+<p><strong>Protected Operations:</strong></p>
+<ul class="simple">
+<li><p>Data scraping and insertion (<code class="docutils literal notranslate"><span class="pre">/pull-data</span></code> endpoint)</p></li>
+<li><p>LLM-based data enrichment (<code class="docutils literal notranslate"><span class="pre">/update-analysis</span></code> endpoint)</p></li>
+</ul>
+</section>
+<section id="implementation">
+<h3>Implementation<a class="headerlink" href="#implementation" title="Link to this heading"></a></h3>
+<p>The busy state is managed using a global flag in the Flask application:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">app_state</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;is_busy&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="s1">&#39;current_operation&#39;</span><span class="p">:</span> <span class="kc">None</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>State Transitions:</strong></p>
+<ol class="arabic simple">
+<li><p><strong>Idle → Busy</strong>: When an endpoint starts processing</p></li>
+<li><p><strong>Busy → Idle</strong>: After successful completion or error</p></li>
+</ol>
+<p><strong>Error Handling:</strong></p>
+<p>If an operation fails, the busy state is automatically cleared in the <code class="docutils literal notranslate"><span class="pre">finally</span></code> block to prevent deadlock:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
+    <span class="n">app_state</span><span class="p">[</span><span class="s1">&#39;is_busy&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">app_state</span><span class="p">[</span><span class="s1">&#39;current_operation&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;pull_data&#39;</span>
+    <span class="c1"># ... perform operation</span>
+<span class="k">finally</span><span class="p">:</span>
+    <span class="n">app_state</span><span class="p">[</span><span class="s1">&#39;is_busy&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">app_state</span><span class="p">[</span><span class="s1">&#39;current_operation&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+</pre></div>
+</div>
+</section>
+<section id="concurrent-request-handling">
+<h3>Concurrent Request Handling<a class="headerlink" href="#concurrent-request-handling" title="Link to this heading"></a></h3>
+<p>When a request arrives while the system is busy:</p>
+<ul class="simple">
+<li><p><strong>HTTP Status</strong>: 409 Conflict</p></li>
+<li><p><strong>Response</strong>: JSON with status, message, and current operation</p></li>
+<li><p><strong>Client Behavior</strong>: Should retry after delay or notify user</p></li>
+</ul>
+<p>Example response:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;busy&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;System is currently busy with: pull_data&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;current_operation&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;pull_data&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;timestamp&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2026-02-14T15:30:45.123456&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="best-practices">
+<h3>Best Practices<a class="headerlink" href="#best-practices" title="Link to this heading"></a></h3>
+<p><strong>For Development:</strong></p>
+<ul class="simple">
+<li><p>Use the web interface buttons which handle busy state automatically</p></li>
+<li><p>Check <code class="docutils literal notranslate"><span class="pre">/</span></code> endpoint response for <code class="docutils literal notranslate"><span class="pre">is_busy</span></code> flag before scripting operations</p></li>
+</ul>
+<p><strong>For Production:</strong></p>
+<ul class="simple">
+<li><p>Implement exponential backoff for automated processes</p></li>
+<li><p>Monitor busy state duration to detect stuck operations</p></li>
+<li><p>Set up alerts for operations exceeding expected duration</p></li>
+</ul>
+<p><strong>For CI/CD:</strong></p>
+<ul class="simple">
+<li><p>Run operations sequentially in deployment scripts</p></li>
+<li><p>Add timeout checks to prevent indefinite waits</p></li>
+<li><p>Use health check endpoint to verify system is idle before deployment</p></li>
+</ul>
+</section>
+</section>
+<section id="idempotency-strategy">
+<h2>Idempotency Strategy<a class="headerlink" href="#idempotency-strategy" title="Link to this heading"></a></h2>
+<section id="id1">
+<h3>Overview<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
+<p>The application is designed to safely handle repeated operations without causing duplicate data or errors.</p>
+</section>
+<section id="database-operations">
+<h3>Database Operations<a class="headerlink" href="#database-operations" title="Link to this heading"></a></h3>
+<p><strong>INSERT Operations:</strong></p>
+<p>All database insertions use <code class="docutils literal notranslate"><span class="pre">ON</span> <span class="pre">CONFLICT</span> <span class="pre">DO</span> <span class="pre">NOTHING</span></code> to ensure idempotency:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">INSERT</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">applicants</span><span class="w"> </span><span class="p">(</span><span class="n">p_id</span><span class="p">,</span><span class="w"> </span><span class="n">program</span><span class="p">,</span><span class="w"> </span><span class="n">comments</span><span class="p">,</span><span class="w"> </span><span class="p">...)</span>
+<span class="k">VALUES</span><span class="w"> </span><span class="p">(</span><span class="o">%</span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="o">%</span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="o">%</span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="p">...)</span>
+<span class="k">ON</span><span class="w"> </span><span class="n">CONFLICT</span><span class="w"> </span><span class="p">(</span><span class="n">p_id</span><span class="p">)</span><span class="w"> </span><span class="k">DO</span><span class="w"> </span><span class="k">NOTHING</span><span class="p">;</span>
+</pre></div>
+</div>
+<p><strong>Benefits:</strong></p>
+<ul class="simple">
+<li><p>Safe to run data loading multiple times</p></li>
+<li><p>Prevents duplicate entries</p></li>
+<li><p>Returns count of actual insertions vs. skipped duplicates</p></li>
+</ul>
+<p><strong>Example Output:</strong></p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;success&quot;</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;inserted&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">42</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;skipped&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">158</span><span class="p">,</span>
+<span class="w">    </span><span class="nt">&quot;message&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Successfully added 42 new entries to database&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="scraping-operations">
+<h3>Scraping Operations<a class="headerlink" href="#scraping-operations" title="Link to this heading"></a></h3>
+<p>The scraper is designed to be idempotent:</p>
+<ol class="arabic simple">
+<li><p><strong>Fetches latest data</strong> from GradCafe</p></li>
+<li><p><strong>Extracts unique IDs</strong> from URLs</p></li>
+<li><p><strong>Database insertion</strong> automatically handles duplicates via primary key conflict</p></li>
+<li><p><strong>Reports results</strong> showing new vs. existing entries</p></li>
+</ol>
+<p><strong>Safe Behaviors:</strong></p>
+<ul class="simple">
+<li><p>Running scraper multiple times won’t create duplicates</p></li>
+<li><p>Overlapping scrape ranges are handled gracefully</p></li>
+<li><p>Network failures can be retried without data corruption</p></li>
+</ul>
+</section>
+<section id="file-operations">
+<h3>File Operations<a class="headerlink" href="#file-operations" title="Link to this heading"></a></h3>
+<p>When saving scraped data to JSON:</p>
+<ul class="simple">
+<li><p><strong>Overwrites existing files</strong> - last scrape wins</p></li>
+<li><p><strong>Temporary files</strong> used during LLM enrichment</p></li>
+<li><p><strong>Transaction-based loading</strong> - all-or-nothing for each batch</p></li>
+</ul>
+<p><strong>Recommendations:</strong></p>
+<ul class="simple">
+<li><p>Archive important scrape results before re-scraping</p></li>
+<li><p>Use version control for data files in development</p></li>
+<li><p>Implement backup strategy for production data</p></li>
+</ul>
+</section>
+<section id="retry-strategy">
+<h3>Retry Strategy<a class="headerlink" href="#retry-strategy" title="Link to this heading"></a></h3>
+<p>For transient failures:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Safe to retry these operations:</span>
+<span class="o">-</span> <span class="n">Database</span> <span class="n">connection</span> <span class="n">failures</span>
+<span class="o">-</span> <span class="n">Network</span> <span class="n">timeouts</span> <span class="n">during</span> <span class="n">scraping</span>
+<span class="o">-</span> <span class="n">LLM</span> <span class="n">API</span> <span class="n">timeouts</span>
+
+<span class="c1"># NOT safe to retry without cleanup:</span>
+<span class="o">-</span> <span class="n">Partial</span> <span class="n">batch</span> <span class="n">insertions</span> <span class="p">(</span><span class="n">use</span> <span class="n">transactions</span><span class="p">)</span>
+<span class="o">-</span> <span class="n">File</span> <span class="n">write</span> <span class="n">failures</span> <span class="p">(</span><span class="n">may</span> <span class="n">leave</span> <span class="n">corrupt</span> <span class="n">files</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="uniqueness-keys">
+<h2>Uniqueness Keys<a class="headerlink" href="#uniqueness-keys" title="Link to this heading"></a></h2>
+<section id="primary-keys">
+<h3>Primary Keys<a class="headerlink" href="#primary-keys" title="Link to this heading"></a></h3>
+<p><strong>applicants table:</strong></p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="n">p_id</span><span class="w"> </span><span class="nb">INTEGER</span><span class="w"> </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">p_id</span></code> is extracted from the GradCafe URL and serves as the natural primary key.</p>
+<p><strong>Properties:</strong></p>
+<ul class="simple">
+<li><p>Globally unique across GradCafe</p></li>
+<li><p>Immutable (never changes for a given entry)</p></li>
+<li><p>Sequential but not necessarily contiguous</p></li>
+<li><p>Used for deduplication during data loading</p></li>
+</ul>
+</section>
+<section id="extraction">
+<h3>Extraction<a class="headerlink" href="#extraction" title="Link to this heading"></a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">p_id</span></code> is extracted from URLs using regex:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">extract_p_id_from_url</span><span class="p">(</span><span class="n">url</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extract the ID from the GradCafe URL.&quot;&quot;&quot;</span>
+    <span class="c1"># Example: https://www.thegradcafe.com/survey/result/12345</span>
+    <span class="n">match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;/result/(\d+)&#39;</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span> <span class="k">if</span> <span class="n">match</span> <span class="k">else</span> <span class="kc">None</span>
+</pre></div>
+</div>
+<p><strong>Validation:</strong></p>
+<ul class="simple">
+<li><p>Records without extractable <code class="docutils literal notranslate"><span class="pre">p_id</span></code> are skipped</p></li>
+<li><p>Logged with warning message including line number</p></li>
+<li><p>Counted in <code class="docutils literal notranslate"><span class="pre">skipped</span></code> metric</p></li>
+</ul>
+</section>
+<section id="composite-uniqueness">
+<h3>Composite Uniqueness<a class="headerlink" href="#composite-uniqueness" title="Link to this heading"></a></h3>
+<p>While <code class="docutils literal notranslate"><span class="pre">p_id</span></code> is the primary key, data quality can be assessed using additional fields:</p>
+<p><strong>Quasi-unique combinations:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">(university,</span> <span class="pre">program,</span> <span class="pre">start_term,</span> <span class="pre">applicant_status,</span> <span class="pre">date_posted)</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">(p_id,</span> <span class="pre">date_posted)</span></code> - should always be 1:1</p></li>
+</ul>
+<p><strong>Use in queries:</strong></p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="c1">-- Count unique programs</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="k">DISTINCT</span><span class="w"> </span><span class="n">program</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">applicants</span><span class="p">;</span>
+
+<span class="c1">-- Count unique universities</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="k">DISTINCT</span><span class="w"> </span><span class="n">university</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">applicants</span><span class="p">;</span>
+
+<span class="c1">-- Find potential duplicates (should return 0)</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="n">p_id</span><span class="p">,</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span>
+<span class="k">FROM</span><span class="w"> </span><span class="n">applicants</span>
+<span class="k">GROUP</span><span class="w"> </span><span class="k">BY</span><span class="w"> </span><span class="n">p_id</span>
+<span class="k">HAVING</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span>
+</pre></div>
+</div>
+</section>
+<section id="index-strategy">
+<h3>Index Strategy<a class="headerlink" href="#index-strategy" title="Link to this heading"></a></h3>
+<p>For optimal query performance:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="c1">-- Primary key index (automatic)</span>
+<span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">applicants</span><span class="p">(</span><span class="n">p_id</span><span class="p">);</span>
+
+<span class="c1">-- Common query patterns (recommended for production)</span>
+<span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">applicants</span><span class="p">(</span><span class="n">start_term</span><span class="p">);</span>
+<span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">applicants</span><span class="p">(</span><span class="n">applicant_status</span><span class="p">);</span>
+<span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">applicants</span><span class="p">(</span><span class="n">us_or_international</span><span class="p">);</span>
+<span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">applicants</span><span class="p">(</span><span class="n">degree</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+<section id="data-integrity-checks">
+<h3>Data Integrity Checks<a class="headerlink" href="#data-integrity-checks" title="Link to this heading"></a></h3>
+<p>Verify uniqueness after loading:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Check for duplicate p_ids</span>
+<span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">    SELECT COUNT(*), COUNT(DISTINCT p_id)</span>
+<span class="s2">    FROM applicants</span>
+<span class="s2">&quot;&quot;&quot;</span><span class="p">)</span>
+<span class="n">total</span><span class="p">,</span> <span class="n">unique</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span>
+<span class="k">assert</span> <span class="n">total</span> <span class="o">==</span> <span class="n">unique</span><span class="p">,</span> <span class="s2">&quot;Duplicate p_ids detected!&quot;</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="troubleshooting">
+<h2>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Link to this heading"></a></h2>
+<section id="common-local-issues">
+<h3>Common Local Issues<a class="headerlink" href="#common-local-issues" title="Link to this heading"></a></h3>
+<p><strong>Issue: Database connection refused</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>psycopg.OperationalError: connection to server at &quot;localhost&quot; (127.0.0.1), port 5432 failed
+</pre></div>
+</div>
+<p><strong>Solutions:</strong></p>
+<ol class="arabic">
+<li><p>Check if PostgreSQL is running:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># macOS (Homebrew)</span>
+brew<span class="w"> </span>services<span class="w"> </span>list
+brew<span class="w"> </span>services<span class="w"> </span>start<span class="w"> </span>postgresql@14
+
+<span class="c1"># Linux (systemd)</span>
+sudo<span class="w"> </span>systemctl<span class="w"> </span>status<span class="w"> </span>postgresql
+sudo<span class="w"> </span>systemctl<span class="w"> </span>start<span class="w"> </span>postgresql
+
+<span class="c1"># Check port</span>
+lsof<span class="w"> </span>-i<span class="w"> </span>:5432
+</pre></div>
+</div>
+</li>
+<li><p>Verify connection parameters:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Test connection</span>
+psql<span class="w"> </span>-h<span class="w"> </span>localhost<span class="w"> </span>-p<span class="w"> </span><span class="m">5432</span><span class="w"> </span>-U<span class="w"> </span>bradleyballinger
+
+<span class="c1"># Set environment variables</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">DATABASE_URL</span><span class="o">=</span><span class="s2">&quot;postgresql://user:password@localhost:5432/dbname&quot;</span>
+</pre></div>
+</div>
+</li>
+<li><p>Check PostgreSQL logs:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># macOS (Homebrew)</span>
+tail<span class="w"> </span>-f<span class="w"> </span>/usr/local/var/log/postgresql@14.log
+
+<span class="c1"># Linux</span>
+sudo<span class="w"> </span>tail<span class="w"> </span>-f<span class="w"> </span>/var/log/postgresql/postgresql-14-main.log
+</pre></div>
+</div>
+</li>
+</ol>
+<p><strong>Issue: Permission denied on database</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>psycopg.ProgrammingError: permission denied for table applicants
+</pre></div>
+</div>
+<p><strong>Solutions:</strong></p>
+<ol class="arabic">
+<li><p>Grant necessary permissions:</p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">GRANT</span><span class="w"> </span><span class="k">ALL</span><span class="w"> </span><span class="k">PRIVILEGES</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">DATABASE</span><span class="w"> </span><span class="n">your_db</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="n">your_user</span><span class="p">;</span>
+<span class="k">GRANT</span><span class="w"> </span><span class="k">ALL</span><span class="w"> </span><span class="k">PRIVILEGES</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="k">ALL</span><span class="w"> </span><span class="n">TABLES</span><span class="w"> </span><span class="k">IN</span><span class="w"> </span><span class="k">SCHEMA</span><span class="w"> </span><span class="k">public</span><span class="w"> </span><span class="k">TO</span><span class="w"> </span><span class="n">your_user</span><span class="p">;</span>
+</pre></div>
+</div>
+</li>
+<li><p>Or use a superuser account for development:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">DB_USER</span><span class="o">=</span>postgres
+</pre></div>
+</div>
+</li>
+</ol>
+<p><strong>Issue: Module import errors</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>ModuleNotFoundError: No module named &#39;psycopg&#39;
+</pre></div>
+</div>
+<p><strong>Solutions:</strong></p>
+<ol class="arabic">
+<li><p>Install dependencies:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+</pre></div>
+</div>
+</li>
+<li><p>Verify Python environment:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>which<span class="w"> </span>python
+pip<span class="w"> </span>list<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>psycopg
+</pre></div>
+</div>
+</li>
+<li><p>Ensure correct virtual environment is activated:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span><span class="w"> </span>venv/bin/activate
+</pre></div>
+</div>
+</li>
+</ol>
+<p><strong>Issue: Tests failing with coverage errors</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Coverage failure: total of 94 is less than fail-under=100
+</pre></div>
+</div>
+<p><strong>Solutions:</strong></p>
+<ol class="arabic">
+<li><p>Run tests without coverage to see actual failures:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pytest<span class="w"> </span>tests/<span class="w"> </span>-v<span class="w"> </span>--no-cov
+</pre></div>
+</div>
+</li>
+<li><p>Check for new code paths not covered by tests</p></li>
+<li><p>Review <code class="docutils literal notranslate"><span class="pre">htmlcov/index.html</span></code> for line-by-line coverage:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pytest<span class="w"> </span>--cov<span class="o">=</span>src<span class="w"> </span>--cov-report<span class="o">=</span>html
+open<span class="w"> </span>htmlcov/index.html
+</pre></div>
+</div>
+</li>
+</ol>
+<p><strong>Issue: Flask app not starting</strong></p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Address already in use
+</pre></div>
+</div>
+<p><strong>Solutions:</strong></p>
+<ol class="arabic">
+<li><p>Find and kill process using port 5001:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Find process</span>
+lsof<span class="w"> </span>-i<span class="w"> </span>:5001
+
+<span class="c1"># Kill process</span>
+<span class="nb">kill</span><span class="w"> </span>-9<span class="w"> </span>&lt;PID&gt;
+</pre></div>
+</div>
+</li>
+<li><p>Use different port:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">FLASK_PORT</span><span class="o">=</span><span class="m">5002</span><span class="w"> </span>python<span class="w"> </span>src/app.py
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="common-ci-cd-issues">
+<h3>Common CI/CD Issues<a class="headerlink" href="#common-ci-cd-issues" title="Link to this heading"></a></h3>
+<p><strong>Issue: Tests pass locally but fail in CI</strong></p>
+<p><strong>Possible causes:</strong></p>
+<ol class="arabic">
+<li><p><strong>Different PostgreSQL versions</strong></p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># GitHub Actions example</span>
+<span class="nt">services</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">postgres</span><span class="p">:</span>
+<span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres:14</span>
+<span class="w">    </span><span class="nt">env</span><span class="p">:</span>
+<span class="w">      </span><span class="nt">POSTGRES_PASSWORD</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres</span>
+<span class="w">    </span><span class="nt">options</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">&gt;-</span>
+<span class="w">      </span><span class="no">--health-cmd pg_isready</span>
+<span class="w">      </span><span class="no">--health-interval 10s</span>
+<span class="w">      </span><span class="no">--health-timeout 5s</span>
+<span class="w">      </span><span class="no">--health-retries 5</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>Environment variables not set</strong></p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">env</span><span class="p">:</span>
+<span class="w">  </span><span class="nt">DATABASE_URL</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgresql://postgres:postgres@localhost:5432/test_db</span>
+<span class="w">  </span><span class="nt">DB_NAME</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">test_db</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>Missing dependencies in CI environment</strong></p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="p p-Indicator">-</span><span class="w"> </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Install dependencies</span>
+<span class="w">  </span><span class="nt">run</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+<span class="w">    </span><span class="no">pip install -r requirements.txt</span>
+<span class="w">    </span><span class="no">pip install psycopg[binary]</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<p><strong>Issue: Database tests timeout in CI</strong></p>
+<p><strong>Solutions:</strong></p>
+<ol class="arabic">
+<li><p>Increase test timeout:</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="c1"># pytest.ini</span>
+<span class="k">[pytest]</span>
+<span class="na">timeout</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">300</span>
+</pre></div>
+</div>
+</li>
+<li><p>Use faster test database:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Use in-memory or tmpfs for test DB</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">TEST_DATABASE_URL</span><span class="o">=</span><span class="s2">&quot;postgresql://localhost/test?options=-c%20fsync=off&quot;</span>
+</pre></div>
+</div>
+</li>
+<li><p>Run database tests in parallel with caution:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pytest<span class="w"> </span>tests/<span class="w"> </span>-n<span class="w"> </span><span class="m">4</span><span class="w"> </span>--dist<span class="w"> </span>loadscope
+</pre></div>
+</div>
+</li>
+</ol>
+<p><strong>Issue: Intermittent test failures</strong></p>
+<p><strong>Common causes:</strong></p>
+<ol class="arabic">
+<li><p><strong>Race conditions in busy-state tests</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Add small delays in tests</span>
+<span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>Database state not cleaned between tests</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nd">@pytest</span><span class="o">.</span><span class="n">fixture</span><span class="p">(</span><span class="n">autouse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">cleanup_database</span><span class="p">(</span><span class="n">test_db_connection</span><span class="p">):</span>
+    <span class="k">yield</span>
+    <span class="c1"># Cleanup after each test</span>
+    <span class="n">cursor</span> <span class="o">=</span> <span class="n">test_db_connection</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+    <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;TRUNCATE TABLE test_applicants CASCADE&quot;</span><span class="p">)</span>
+    <span class="n">test_db_connection</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>Non-deterministic test order</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Run tests in random order to detect issues</span>
+pytest<span class="w"> </span>--random-order
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="performance-issues">
+<h3>Performance Issues<a class="headerlink" href="#performance-issues" title="Link to this heading"></a></h3>
+<p><strong>Issue: Slow data loading</strong></p>
+<p><strong>Optimization strategies:</strong></p>
+<ol class="arabic">
+<li><p><strong>Batch size tuning:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Adjust batch size in load_data.py</span>
+<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">records</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">5000</span><span class="p">:</span>  <span class="c1"># Larger batches</span>
+    <span class="n">cursor</span><span class="o">.</span><span class="n">executemany</span><span class="p">(</span><span class="n">insert_query</span><span class="p">,</span> <span class="n">records</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>Disable autocommit during bulk loading:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">conn</span><span class="o">.</span><span class="n">autocommit</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="c1"># ... perform bulk operations</span>
+<span class="n">conn</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>Use COPY for large datasets:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># For millions of records</span>
+<span class="n">cursor</span><span class="o">.</span><span class="n">copy_from</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="s1">&#39;applicants&#39;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<p><strong>Issue: Slow queries</strong></p>
+<p><strong>Diagnostic steps:</strong></p>
+<ol class="arabic">
+<li><p><strong>Enable query logging:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>Use EXPLAIN ANALYZE:</strong></p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">EXPLAIN</span><span class="w"> </span><span class="k">ANALYZE</span>
+<span class="k">SELECT</span><span class="w"> </span><span class="k">COUNT</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">applicants</span><span class="w"> </span><span class="k">WHERE</span><span class="w"> </span><span class="n">start_term</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;Fall 2026&#39;</span><span class="p">;</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>Add indexes for common queries:</strong></p>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="n">idx_start_term</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">applicants</span><span class="p">(</span><span class="n">start_term</span><span class="p">);</span>
+<span class="k">CREATE</span><span class="w"> </span><span class="k">INDEX</span><span class="w"> </span><span class="n">idx_status</span><span class="w"> </span><span class="k">ON</span><span class="w"> </span><span class="n">applicants</span><span class="p">(</span><span class="n">applicant_status</span><span class="p">);</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="memory-issues">
+<h3>Memory Issues<a class="headerlink" href="#memory-issues" title="Link to this heading"></a></h3>
+<p><strong>Issue: Out of memory during data loading</strong></p>
+<p><strong>Solutions:</strong></p>
+<ol class="arabic">
+<li><p><strong>Use streaming instead of loading entire file:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Already implemented in load_data.py</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">json_file_path</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>  <span class="c1"># Processes one line at a time</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>Reduce batch size:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Commit more frequently</span>
+<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">records</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">500</span><span class="p">:</span>  <span class="c1"># Smaller batches</span>
+    <span class="n">cursor</span><span class="o">.</span><span class="n">executemany</span><span class="p">(</span><span class="n">insert_query</span><span class="p">,</span> <span class="n">records</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><p><strong>Monitor memory usage:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># During execution</span>
+watch<span class="w"> </span>-n<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="s1">&#39;ps aux | grep python | grep -v grep&#39;</span>
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+</section>
+<section id="health-checks">
+<h2>Health Checks<a class="headerlink" href="#health-checks" title="Link to this heading"></a></h2>
+<section id="application-health">
+<h3>Application Health<a class="headerlink" href="#application-health" title="Link to this heading"></a></h3>
+<p><strong>Endpoint:</strong> <code class="docutils literal notranslate"><span class="pre">GET</span> <span class="pre">/</span></code></p>
+<p><strong>Response includes:</strong></p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">    </span><span class="s2">&quot;is_busy&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;current_operation&quot;</span><span class="o">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="w">    </span><span class="s2">&quot;query_results&quot;</span><span class="o">:</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="cm">/* ... query data ... */</span><span class="w"> </span><span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>Health check script:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="c1"># check_health.sh</span>
+
+<span class="nv">RESPONSE</span><span class="o">=</span><span class="k">$(</span>curl<span class="w"> </span>-s<span class="w"> </span>http://localhost:5001/<span class="k">)</span>
+<span class="nv">IS_BUSY</span><span class="o">=</span><span class="k">$(</span><span class="nb">echo</span><span class="w"> </span><span class="nv">$RESPONSE</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-r<span class="w"> </span><span class="s1">&#39;.is_busy // true&#39;</span><span class="k">)</span>
+
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$IS_BUSY</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;false&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Application healthy and idle&quot;</span>
+<span class="w">    </span><span class="nb">exit</span><span class="w"> </span><span class="m">0</span>
+<span class="k">else</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Application busy or unhealthy&quot;</span>
+<span class="w">    </span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span>
+<span class="k">fi</span>
+</pre></div>
+</div>
+</section>
+<section id="database-health">
+<h3>Database Health<a class="headerlink" href="#database-health" title="Link to this heading"></a></h3>
+<p><strong>Check connection:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="c1"># check_db.sh</span>
+
+psql<span class="w"> </span><span class="nv">$DATABASE_URL</span><span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;SELECT 1&quot;</span><span class="w"> </span>&gt;<span class="w"> </span>/dev/null<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span>
+<span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span><span class="nv">$?</span><span class="w"> </span>-eq<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Database healthy&quot;</span>
+<span class="w">    </span><span class="nb">exit</span><span class="w"> </span><span class="m">0</span>
+<span class="k">else</span>
+<span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Database connection failed&quot;</span>
+<span class="w">    </span><span class="nb">exit</span><span class="w"> </span><span class="m">1</span>
+<span class="k">fi</span>
+</pre></div>
+</div>
+<p><strong>Check data integrity:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">check_database_health</span><span class="p">(</span><span class="n">conn</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Verify database health and data integrity.&quot;&quot;&quot;</span>
+    <span class="n">cursor</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+
+    <span class="c1"># Check table exists</span>
+    <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        SELECT COUNT(*) FROM information_schema.tables</span>
+<span class="s2">        WHERE table_name = &#39;applicants&#39;</span>
+<span class="s2">    &quot;&quot;&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">cursor</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;Table &#39;applicants&#39; not found&quot;</span>
+
+    <span class="c1"># Check for data</span>
+    <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT COUNT(*) FROM applicants&quot;</span><span class="p">)</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;No data in applicants table&quot;</span>
+
+    <span class="c1"># Check for duplicates</span>
+    <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">        SELECT COUNT(*) FROM (</span>
+<span class="s2">            SELECT p_id FROM applicants</span>
+<span class="s2">            GROUP BY p_id HAVING COUNT(*) &gt; 1</span>
+<span class="s2">        ) AS duplicates</span>
+<span class="s2">    &quot;&quot;&quot;</span><span class="p">)</span>
+    <span class="n">duplicates</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">duplicates</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Found </span><span class="si">{</span><span class="n">duplicates</span><span class="si">}</span><span class="s2"> duplicate p_ids&quot;</span>
+
+    <span class="k">return</span> <span class="kc">True</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;Healthy: </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2"> records, no duplicates&quot;</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="monitoring">
+<h2>Monitoring<a class="headerlink" href="#monitoring" title="Link to this heading"></a></h2>
+<section id="key-metrics">
+<h3>Key Metrics<a class="headerlink" href="#key-metrics" title="Link to this heading"></a></h3>
+<p><strong>Application metrics:</strong></p>
+<ul class="simple">
+<li><p>Request rate (requests/minute)</p></li>
+<li><p>Busy state duration (seconds)</p></li>
+<li><p>Error rate (errors/requests)</p></li>
+<li><p>Response time (milliseconds)</p></li>
+</ul>
+<p><strong>Database metrics:</strong></p>
+<ul class="simple">
+<li><p>Connection pool usage</p></li>
+<li><p>Query execution time</p></li>
+<li><p>Insert rate (records/second)</p></li>
+<li><p>Duplicate rate (duplicates/inserts)</p></li>
+</ul>
+<p><strong>Scraper metrics:</strong></p>
+<ul class="simple">
+<li><p>Scrape duration (seconds)</p></li>
+<li><p>Records fetched per scrape</p></li>
+<li><p>Network error rate</p></li>
+<li><p>LLM API call duration</p></li>
+</ul>
+</section>
+<section id="logging">
+<h3>Logging<a class="headerlink" href="#logging" title="Link to this heading"></a></h3>
+<p><strong>Application logs:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span>
+    <span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span><span class="p">,</span>
+    <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">%(asctime)s</span><span class="s1"> - </span><span class="si">%(name)s</span><span class="s1"> - </span><span class="si">%(levelname)s</span><span class="s1"> - </span><span class="si">%(message)s</span><span class="s1">&#39;</span><span class="p">,</span>
+    <span class="n">handlers</span><span class="o">=</span><span class="p">[</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">FileHandler</span><span class="p">(</span><span class="s1">&#39;app.log&#39;</span><span class="p">),</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">StreamHandler</span><span class="p">()</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Key events to log:</strong></p>
+<ul class="simple">
+<li><p>Application startup/shutdown</p></li>
+<li><p>Database connections/disconnections</p></li>
+<li><p>Scraping operations start/complete</p></li>
+<li><p>Busy state changes</p></li>
+<li><p>Errors and exceptions</p></li>
+<li><p>Performance warnings (slow queries, etc.)</p></li>
+</ul>
+</section>
+<section id="alerting">
+<h3>Alerting<a class="headerlink" href="#alerting" title="Link to this heading"></a></h3>
+<p><strong>Recommended alerts:</strong></p>
+<ol class="arabic simple">
+<li><p><strong>Busy state stuck</strong> - operation running &gt; 10 minutes</p></li>
+<li><p><strong>High error rate</strong> - &gt; 5% of requests failing</p></li>
+<li><p><strong>Database connection failures</strong> - any connection errors</p></li>
+<li><p><strong>Low disk space</strong> - &lt; 10% free space</p></li>
+<li><p><strong>High memory usage</strong> - &gt; 80% memory used</p></li>
+</ol>
+</section>
+</section>
+<section id="id2">
+<h2>Best Practices<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<section id="development">
+<h3>Development<a class="headerlink" href="#development" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Use local PostgreSQL for development</p></li>
+<li><p>Keep test data small (&lt;1000 records)</p></li>
+<li><p>Run tests before committing code</p></li>
+<li><p>Use environment variables for all configuration</p></li>
+<li><p>Never commit <code class="docutils literal notranslate"><span class="pre">.env</span></code> or <code class="docutils literal notranslate"><span class="pre">setup_env.sh</span></code> files</p></li>
+</ul>
+</section>
+<section id="staging">
+<h3>Staging<a class="headerlink" href="#staging" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Use separate database from production</p></li>
+<li><p>Test with production-like data volume</p></li>
+<li><p>Monitor performance metrics</p></li>
+<li><p>Validate all queries return expected results</p></li>
+<li><p>Test failure scenarios (network errors, DB failures)</p></li>
+</ul>
+</section>
+<section id="production">
+<h3>Production<a class="headerlink" href="#production" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Use connection pooling for database</p></li>
+<li><p>Implement rate limiting for scraper</p></li>
+<li><p>Set up monitoring and alerting</p></li>
+<li><p>Regular database backups</p></li>
+<li><p>Document runbooks for common issues</p></li>
+<li><p>Use read replicas for analytics queries</p></li>
+</ul>
+</section>
+</section>
+<section id="backup-and-recovery">
+<h2>Backup and Recovery<a class="headerlink" href="#backup-and-recovery" title="Link to this heading"></a></h2>
+<section id="database-backups">
+<h3>Database Backups<a class="headerlink" href="#database-backups" title="Link to this heading"></a></h3>
+<p><strong>Full backup:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Backup database</span>
+pg_dump<span class="w"> </span><span class="nv">$DATABASE_URL</span><span class="w"> </span>&gt;<span class="w"> </span>backup_<span class="k">$(</span>date<span class="w"> </span>+%Y%m%d_%H%M%S<span class="k">)</span>.sql
+
+<span class="c1"># Restore database</span>
+psql<span class="w"> </span><span class="nv">$DATABASE_URL</span><span class="w"> </span>&lt;<span class="w"> </span>backup_20260214_150000.sql
+</pre></div>
+</div>
+<p><strong>Incremental backups:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Enable WAL archiving in postgresql.conf</span>
+<span class="nv">archive_mode</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>on
+<span class="nv">archive_command</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;cp %p /path/to/archive/%f&#39;</span>
+</pre></div>
+</div>
+<p><strong>Automated backups:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="ch">#!/bin/bash</span>
+<span class="c1"># backup.sh - Run daily via cron</span>
+
+<span class="nv">BACKUP_DIR</span><span class="o">=</span><span class="s2">&quot;/backups/postgresql&quot;</span>
+<span class="nv">TIMESTAMP</span><span class="o">=</span><span class="k">$(</span>date<span class="w"> </span>+%Y%m%d_%H%M%S<span class="k">)</span>
+<span class="nv">FILENAME</span><span class="o">=</span><span class="s2">&quot;applicants_</span><span class="si">${</span><span class="nv">TIMESTAMP</span><span class="si">}</span><span class="s2">.sql&quot;</span>
+
+pg_dump<span class="w"> </span>-t<span class="w"> </span>applicants<span class="w"> </span><span class="nv">$DATABASE_URL</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>gzip<span class="w"> </span>&gt;<span class="w"> </span><span class="s2">&quot;</span><span class="si">${</span><span class="nv">BACKUP_DIR</span><span class="si">}</span><span class="s2">/</span><span class="si">${</span><span class="nv">FILENAME</span><span class="si">}</span><span class="s2">.gz&quot;</span>
+
+<span class="c1"># Keep only last 30 days</span>
+find<span class="w"> </span><span class="nv">$BACKUP_DIR</span><span class="w"> </span>-name<span class="w"> </span><span class="s2">&quot;*.sql.gz&quot;</span><span class="w"> </span>-mtime<span class="w"> </span>+30<span class="w"> </span>-delete
+</pre></div>
+</div>
+</section>
+<section id="disaster-recovery">
+<h3>Disaster Recovery<a class="headerlink" href="#disaster-recovery" title="Link to this heading"></a></h3>
+<p><strong>Recovery procedures:</strong></p>
+<ol class="arabic simple">
+<li><p><strong>Restore from most recent backup</strong></p></li>
+<li><p><strong>Verify data integrity</strong> using health checks</p></li>
+<li><p><strong>Re-run scraper</strong> to fetch latest data</p></li>
+<li><p><strong>Validate query results</strong> against known values</p></li>
+<li><p><strong>Resume normal operations</strong></p></li>
+</ol>
+<p><strong>Testing recovery:</strong></p>
+<ul class="simple">
+<li><p>Practice recovery quarterly</p></li>
+<li><p>Document actual recovery time</p></li>
+<li><p>Update runbooks based on experience</p></li>
+<li><p>Test with both full and incremental backups</p></li>
+</ul>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="api.html" class="btn btn-neutral float-left" title="API Reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="testing.html" class="btn btn-neutral float-right" title="Testing Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Brad Ballinger.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
