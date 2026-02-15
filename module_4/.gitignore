@@ -35,6 +35,5 @@ setup_env.sh
 scripts/setup_env.sh
 
 # Documentation
-docs/_build/
-docs/_static/
-docs/_templates/
+# Built HTML is checked in for GitHub Pages
+# docs/_build/ is now tracked
