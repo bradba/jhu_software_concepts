@@ -33,13 +33,13 @@ The project includes shell scripts that handle environment variable setup automa
 
 ```bash
 # Step 1: Load data into database
-./run_load_data.sh
+./scripts/scripts/run_load_data.sh
 
 # Step 2: Run queries (optional)
-./run_queries.sh
+./scripts/scripts/run_queries.sh
 
 # Step 3: Start the web application
-./run_app.sh
+./scripts/scripts/run_app.sh
 ```
 
 These scripts use default environment variables and can be customized by setting environment variables before running.
@@ -117,14 +117,14 @@ python src/load_data.py
 For convenience, you can create a setup script from the example:
 
 ```bash
-cp setup_env_example.sh setup_env.sh
-# Edit setup_env.sh with your database credentials
-source setup_env.sh
+cp scripts/setup_env_example.sh scripts/setup_env.sh
+# Edit scripts/setup_env.sh with your database credentials
+source scripts/setup_env.sh
 ```
 
 Then run any command:
 ```bash
-./run_app.sh
+./scripts/scripts/run_app.sh
 # or
 python src/load_data.py
 ```
@@ -200,21 +200,21 @@ The project includes a comprehensive test suite with 100% code coverage (166 tes
 
 ```bash
 # Run all tests
-./run_tests.sh
+./scripts/scripts/run_tests.sh
 
 # Run with coverage report
-./run_tests.sh coverage
+./scripts/scripts/run_tests.sh coverage
 
 # Run specific test categories
-./run_tests.sh integration  # Integration tests only
-./run_tests.sh unit        # Unit tests only
-./run_tests.sh db          # Database tests
-./run_tests.sh buttons     # Flask endpoint tests
-./run_tests.sh verbose     # Verbose output
-./run_tests.sh quick       # Quick run without coverage
+./scripts/scripts/run_tests.sh integration  # Integration tests only
+./scripts/scripts/run_tests.sh unit        # Unit tests only
+./scripts/scripts/run_tests.sh db          # Database tests
+./scripts/scripts/run_tests.sh buttons     # Flask endpoint tests
+./scripts/scripts/run_tests.sh verbose     # Verbose output
+./scripts/scripts/run_tests.sh quick       # Quick run without coverage
 
 # Show all options
-./run_tests.sh help
+./scripts/scripts/run_tests.sh help
 ```
 
 ### Using pytest Directly
@@ -286,18 +286,18 @@ The project includes convenient shell scripts to simplify running the applicatio
 
 | Script | Description | Usage |
 |--------|-------------|-------|
-| `run_app.sh` | Start the Flask web application | `./run_app.sh` |
-| `run_load_data.sh` | Load data into the database | `./run_load_data.sh` |
-| `run_queries.sh` | Run all database queries | `./run_queries.sh` |
-| `run_tests.sh` | Run the test suite with options | `./run_tests.sh [option]` |
-| `setup_env_example.sh` | Example environment setup | `cp setup_env_example.sh setup_env.sh && source setup_env.sh` |
+| `scripts/run_app.sh` | Start the Flask web application | `./scripts/run_app.sh` |
+| `scripts/run_load_data.sh` | Load data into the database | `./scripts/run_load_data.sh` |
+| `scripts/run_queries.sh` | Run all database queries | `./scripts/run_queries.sh` |
+| `scripts/run_tests.sh` | Run the test suite with options | `./scripts/run_tests.sh [option]` |
+| `scripts/setup_env_example.sh` | Example environment setup | `cp scripts/setup_env_example.sh scripts/setup_env.sh && source scripts/setup_env.sh` |
 
 **Test Script Options:**
-- `./run_tests.sh` - Run all tests
-- `./run_tests.sh coverage` - Run with coverage report
-- `./run_tests.sh integration` - Run integration tests only
-- `./run_tests.sh unit` - Run unit tests only
-- `./run_tests.sh help` - Show all options
+- `./scripts/run_tests.sh` - Run all tests
+- `./scripts/run_tests.sh coverage` - Run with coverage report
+- `./scripts/run_tests.sh integration` - Run integration tests only
+- `./scripts/run_tests.sh unit` - Run unit tests only
+- `./scripts/run_tests.sh help` - Show all options
 
 ## Project Structure
 
@@ -308,11 +308,20 @@ module_4/
 ├── .gitignore                          # Git ignore file
 ├── .env.example                        # Example environment configuration
 ├── llm_extend_applicant_data.json      # Initial data (26MB)
-├── run_app.sh                          # Script to run Flask application
-├── run_load_data.sh                    # Script to load data into database
-├── run_queries.sh                      # Script to run database queries
-├── run_tests.sh                        # Script to run test suite
-├── setup_env_example.sh                # Example environment setup script
+├── scripts/                            # Shell scripts directory
+│   ├── run_app.sh                      # Script to run Flask application
+│   ├── run_load_data.sh                # Script to load data into database
+│   ├── run_queries.sh                  # Script to run database queries
+│   ├── run_tests.sh                    # Script to run test suite
+│   └── setup_env_example.sh            # Example environment setup script
+├── docs/                               # Sphinx documentation
+│   ├── Makefile                        # Documentation build file
+│   ├── conf.py                         # Sphinx configuration
+│   ├── index.rst                       # Documentation home page
+│   ├── setup.rst                       # Setup guide
+│   ├── architecture.rst                # Architecture documentation
+│   ├── api.rst                         # API reference
+│   └── testing.rst                     # Testing guide
 ├── src/                                # Source code directory
 │   ├── __init__.py                     # Package initialization
 │   ├── app.py                          # Flask web app (includes /pull-data endpoint)

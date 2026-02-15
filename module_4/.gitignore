@@ -32,6 +32,7 @@ Thumbs.db
 # Environment configuration
 .env
 setup_env.sh
+scripts/setup_env.sh
 
 # Documentation
 docs/_build/
