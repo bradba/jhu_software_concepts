@@ -4,11 +4,14 @@ Tests the complete workflow with a real PostgreSQL database.
 Uses a test table to avoid interfering with production data.
 """
 
-import pytest
-import sys
-import os
 import json
+import os
+import re
+import sys
+from urllib.parse import urlparse
+
 import psycopg
+import pytest
 
 # Add src directory to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
@@ -32,7 +35,6 @@ class _TestTableCursorWrapper:
         # Replace 'applicants' with 'test_applicants' in the query
         # Use regex to avoid replacing if it's already test_applicants
         if isinstance(query, str):
-            import re
             # Match 'applicants' but not 'test_applicants'
             # Use negative lookbehind to ensure 'applicants' is not preceded by 'test_'
             modified_query = re.sub(r'(?<!test_)applicants\b', 'test_applicants', query)
@@ -97,9 +99,6 @@ def test_db_connection():
     Uses the same database but with a test-specific table.
     Respects DATABASE_URL and DB_* environment variables for test database configuration.
     """
-    import os
-    from urllib.parse import urlparse
-
     database_url = os.environ.get('TEST_DATABASE_URL') or os.environ.get('DATABASE_URL')
 
     if database_url:

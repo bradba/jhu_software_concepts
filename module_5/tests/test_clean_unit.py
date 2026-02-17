@@ -3,11 +3,15 @@ Unit tests for clean.py utility functions
 Tests data cleaning, HTML stripping, and LLM standardization functions.
 """
 
-import pytest
-import sys
-import os
+import importlib
 import json
+import os
+import runpy
+import sys
 from unittest.mock import MagicMock
+
+import pytest
+import urllib3
 
 # Add src directory to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
@@ -203,7 +207,7 @@ class TestSaveData:
 
         # Verify file was created and contains correct data
         assert output_file.exists()
-        with open(output_file, 'r') as f:
+        with open(output_file, 'r', encoding='utf-8') as f:
             loaded = json.load(f)
         assert len(loaded) == 2
         assert loaded[0]['name'] == 'Test1'
@@ -270,11 +274,8 @@ class TestStandardizeUniversityWithLLM:
     def test_standardize_uses_env_var_for_api_url(self, monkeypatch):
         """Test that LLM API uses LLM_API_URL environment variable."""
         # Reload the module to pick up the new environment variable
-        import importlib
-        import clean as clean_module
-
         monkeypatch.setenv('LLM_API_URL', 'http://envapi:8080/standardize')
-        importlib.reload(clean_module)
+        importlib.reload(clean)
 
         entry = {'university': 'CMU', 'program_name': 'CS'}
 
@@ -293,13 +294,13 @@ class TestStandardizeUniversityWithLLM:
         monkeypatch.setattr('clean._http', MockHTTP())
 
         # Call without explicit api_url - should use environment variable
-        clean_module._standardize_university_with_llm(entry)
+        clean._standardize_university_with_llm(entry)
 
         assert called_urls[0] == 'http://envapi:8080/standardize'
 
         # Reload again with default
         monkeypatch.delenv('LLM_API_URL', raising=False)
-        importlib.reload(clean_module)
+        importlib.reload(clean)
 
     def test_standardize_with_api_error(self, monkeypatch, capsys):
         """Test handling of API errors."""
@@ -330,7 +331,7 @@ class TestStandardizeUniversityWithLLM:
 
         class MockHTTP:
             def request(self, *args, **kwargs):
-                raise Exception("Network error")
+                raise ConnectionError("Network error")
 
         monkeypatch.setattr('clean._http', MockHTTP())
 
@@ -403,7 +404,6 @@ class TestCleanMainBlock:
 
     def test_main_basic(self, tmp_path, monkeypatch):
         """Test __main__ block without --standardize."""
-        import runpy
         input_file = tmp_path / "input.json"
         output_file = tmp_path / "output.json"
         input_file.write_text('[{"university": "Stanford", "description": null}]')
@@ -416,19 +416,15 @@ class TestCleanMainBlock:
 
     def test_main_standardize_no_existing(self, tmp_path, monkeypatch):
         """Test __main__ block with --standardize and no existing output file."""
-        import runpy
-        import urllib3
-
         class MockPoolManager:
             def request(self, method, url, body=None, headers=None):
-                import json as _json
-                entries = _json.loads(body) if body else []
+                entries = json.loads(body) if body else []
                 for e in entries:
                     e['llm-generated-university'] = 'Mock University'
                     e['llm-generated-program'] = 'Mock Program'
                 resp = MagicMock()
                 resp.status = 200
-                resp.data = _json.dumps(entries).encode('utf-8')
+                resp.data = json.dumps(entries).encode('utf-8')
                 return resp
 
         input_file = tmp_path / "input.json"
@@ -445,20 +441,15 @@ class TestCleanMainBlock:
 
     def test_main_standardize_with_existing(self, tmp_path, monkeypatch):
         """Test __main__ block with --standardize and existing output with LLM entries."""
-        import runpy
-        import json
-        import urllib3
-
         class MockPoolManager:
             def request(self, method, url, body=None, headers=None):
-                import json as _json
-                entries = _json.loads(body) if body else []
+                entries = json.loads(body) if body else []
                 for e in entries:
                     e['llm-generated-university'] = 'Mock University'
                     e['llm-generated-program'] = 'Mock Program'
                 resp = MagicMock()
                 resp.status = 200
-                resp.data = _json.dumps(entries).encode('utf-8')
+                resp.data = json.dumps(entries).encode('utf-8')
                 return resp
 
         input_file = tmp_path / "input.json"

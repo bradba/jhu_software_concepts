@@ -3,40 +3,15 @@ Unit tests for Button Endpoints and Busy-State Behavior
 Tests the POST endpoints for pull-data and update-analysis, including busy-state gating.
 """
 
-import pytest
-import sys
-import os
 import json
+import os
+import sys
+
+import pytest
+from conftest import MockSubprocessResult
 
 # Add src directory to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
-
-
-class MockSubprocessResult:
-    """Mock object for subprocess.run() results."""
-    def __init__(self, returncode=0, stdout='', stderr=''):
-        self.returncode = returncode
-        self.stdout = stdout
-        self.stderr = stderr
-
-
-class MockConnection:
-    """Mock database connection."""
-    def __init__(self):
-        self.committed = False
-        self.closed = False
-        self._cursor = None
-
-    def cursor(self):
-        if self._cursor is None:
-            self._cursor = MockCursor()
-        return self._cursor
-
-    def commit(self):
-        self.committed = True
-
-    def close(self):
-        self.closed = True
 
 
 class MockCursor:
@@ -52,42 +27,6 @@ class MockCursor:
     def close(self):
         self.closed = True
 
-
-@pytest.fixture
-def mock_query_functions(monkeypatch):
-    """Mock all query_data functions."""
-    def mock_get_connection():
-        return MockConnection()
-
-    monkeypatch.setattr('query_data.get_connection', mock_get_connection)
-    monkeypatch.setattr('query_data.question_1', lambda _conn: 1500)
-    monkeypatch.setattr('query_data.question_2', lambda _conn: 50.25)
-    monkeypatch.setattr('query_data.question_3', lambda _conn: {'avg_gpa': 3.75, 'avg_gre': 325.5})
-    monkeypatch.setattr('query_data.question_4', lambda _conn: 3.80)
-    monkeypatch.setattr('query_data.question_5', lambda _conn: 45.67)
-    monkeypatch.setattr('query_data.question_6', lambda _conn: 3.85)
-    monkeypatch.setattr('query_data.question_7', lambda _conn: 250)
-    monkeypatch.setattr('query_data.question_8', lambda _conn: 45)
-    monkeypatch.setattr('query_data.question_9', lambda _conn: [50, 45])
-    monkeypatch.setattr('query_data.question_10', lambda _conn: [])
-    monkeypatch.setattr('query_data.question_11', lambda _conn: [])
-
-
-@pytest.fixture
-def app(mock_query_functions):
-    """Create and configure a test Flask application instance."""
-    from app import app as flask_app
-
-    flask_app.config['TESTING'] = True
-    flask_app.config['DEBUG'] = False
-
-    return flask_app
-
-
-@pytest.fixture
-def client(app):
-    """Create a test client for the Flask application."""
-    return app.test_client()
 
 
 @pytest.mark.buttons
@@ -214,11 +153,17 @@ class TestPullDataEndpoint:
                 call_count['cursor_execute'] += 1
                 super().execute(query, params)
 
-        class CountingMockConnection(MockConnection):
+        class CountingMockConnection:
             def cursor(self):
                 return CountingMockCursor()
 
-        monkeypatch.setattr('query_data.get_connection', lambda: CountingMockConnection())
+            def commit(self):
+                pass
+
+            def close(self):
+                pass
+
+        monkeypatch.setattr('query_data.get_connection', CountingMockConnection)
 
         # Make request
         response = client.post('/pull-data')

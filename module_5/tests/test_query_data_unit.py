@@ -3,12 +3,17 @@ Unit tests for query_data.py query functions
 Tests all database query functions to achieve 100% coverage.
 """
 
-import pytest
-import sys
 import os
+import runpy
+import sys
+
+import psycopg
+import pytest
 
 # Add src directory to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
+
+import query_data
 
 
 class MockCursor:
@@ -53,7 +58,6 @@ class MockConnection:
 
     def close(self):
         """Mock close connection."""
-        pass
 
 
 @pytest.mark.db
@@ -62,7 +66,6 @@ class TestGetConnection:
 
     def test_get_connection_parameters(self, monkeypatch):
         """Test that get_connection uses correct parameters."""
-        import query_data
 
         called = []
 
@@ -83,7 +86,6 @@ class TestGetConnection:
 
     def test_get_connection_with_database_url(self, monkeypatch):
         """Test that get_connection parses DATABASE_URL correctly."""
-        import query_data
 
         called = []
 
@@ -105,7 +107,6 @@ class TestGetConnection:
 
     def test_get_connection_with_individual_env_vars(self, monkeypatch):
         """Test that get_connection uses individual DB_* environment variables."""
-        import query_data
 
         called = []
 
@@ -137,7 +138,6 @@ class TestQuestion1:
 
     def test_question_1_returns_count(self, capsys):
         """Test that question_1 returns correct count."""
-        import query_data
 
         mock_cursor = MockCursor(return_values=[(1500,)])
         mock_conn = MockConnection(cursor=mock_cursor)
@@ -159,7 +159,6 @@ class TestQuestion2:
 
     def test_question_2_returns_percentage(self, capsys):
         """Test that question_2 returns correct percentage."""
-        import query_data
 
         mock_cursor = MockCursor(return_values=[(1000,), (450,)])  # total, international
         mock_conn = MockConnection(cursor=mock_cursor)
@@ -181,7 +180,6 @@ class TestQuestion3:
 
     def test_question_3_returns_averages(self, capsys):
         """Test that question_3 returns correct averages."""
-        import query_data
 
         # avg_gpa, gpa_count, avg_gre, gre_count, avg_gre_v, gre_v_count, avg_gre_aw, gre_aw_count
         mock_cursor = MockCursor(return_values=[
@@ -209,7 +207,6 @@ class TestQuestion4:
 
     def test_question_4_returns_average(self, capsys):
         """Test that question_4 returns correct average."""
-        import query_data
 
         mock_cursor = MockCursor(return_values=[(3.85, 250)])  # avg_gpa, count
         mock_conn = MockConnection(cursor=mock_cursor)
@@ -230,7 +227,6 @@ class TestQuestion5:
 
     def test_question_5_returns_percentage(self, capsys):
         """Test that question_5 returns correct percentage."""
-        import query_data
 
         mock_cursor = MockCursor(return_values=[(1000,), (650,)])  # total, admitted
         mock_conn = MockConnection(cursor=mock_cursor)
@@ -251,7 +247,6 @@ class TestQuestion6:
 
     def test_question_6_returns_average(self, capsys):
         """Test that question_6 returns correct average."""
-        import query_data
 
         mock_cursor = MockCursor(return_values=[(3.90, 180)])  # avg_gpa, count
         mock_conn = MockConnection(cursor=mock_cursor)
@@ -272,7 +267,6 @@ class TestQuestion7:
 
     def test_question_7_returns_count(self, capsys):
         """Test that question_7 returns correct count."""
-        import query_data
 
         mock_cursor = MockCursor(return_values=[(250,)])
         mock_conn = MockConnection(cursor=mock_cursor)
@@ -293,7 +287,6 @@ class TestQuestion8:
 
     def test_question_8_returns_count(self, capsys):
         """Test that question_8 returns correct count."""
-        import query_data
 
         mock_cursor = MockCursor(return_values=[(350,)])
         mock_conn = MockConnection(cursor=mock_cursor)
@@ -314,7 +307,6 @@ class TestQuestion9:
 
     def test_question_9_returns_counts(self, capsys):
         """Test that question_9 returns correct counts."""
-        import query_data
 
         # Returns count_llm, count_original
         mock_cursor = MockCursor(return_values=[(50,), (45,)])
@@ -338,7 +330,6 @@ class TestQuestion10:
 
     def test_question_10_returns_top_programs(self, capsys):
         """Test that question_10 returns correct top programs."""
-        import query_data
 
         # Mock cursor needs to return the data for fetchall()
         class MockCursor10:
@@ -377,7 +368,6 @@ class TestQuestion11:
 
     def test_question_11_returns_comparison(self, capsys):
         """Test that question_11 returns correct comparison."""
-        import query_data
 
         # Mock cursor needs to return the data for fetchall()
         class MockCursor11:
@@ -416,7 +406,6 @@ class TestQueryDataEdgeCases:
 
     def test_question_9_with_same_counts(self, capsys):
         """Test question_9 when counts are the same."""
-        import query_data
 
         class MockCursor9:
             def __init__(self):
@@ -451,7 +440,6 @@ class TestQueryDataEdgeCases:
 
     def test_question_9_with_different_counts(self, capsys):
         """Test question_9 when counts are different."""
-        import query_data
 
         class MockCursor9:
             def __init__(self):
@@ -493,7 +481,6 @@ class TestQueryDataMainBlock:
 
     def test_main_function_structure(self):
         """Test that query_data main functions exist."""
-        import query_data
 
         # Verify all question functions exist
         for i in range(1, 12):
@@ -501,7 +488,6 @@ class TestQueryDataMainBlock:
 
     def test_main_success_path(self, monkeypatch, capsys):
         """Test main() success path."""
-        import query_data
 
         class MockConnection:
             def close(self):
@@ -525,8 +511,6 @@ class TestQueryDataMainBlock:
 
     def test_main_with_psycopg_error(self, monkeypatch, capsys):
         """Test main() handling of psycopg errors."""
-        import query_data
-        import psycopg
 
         def mock_get_connection():
             raise psycopg.Error("Connection failed")
@@ -541,7 +525,6 @@ class TestQueryDataMainBlock:
 
     def test_main_with_generic_exception(self, monkeypatch, capsys):
         """Test main() handling of generic exceptions."""
-        import query_data
 
         def mock_get_connection():
             raise ValueError("Unexpected error")
@@ -561,41 +544,19 @@ class TestMainExecution:
 
     def test_main_guard(self, monkeypatch, capsys):
         """Test that main execution block is covered."""
-        import query_data as qd_module
-
-        # Mock get_connection to avoid actual DB connection
-        class MockConn:
-            def cursor(self):
-                return MockCursor(return_values=[
-                    (1000,),  # q1
-                    (1000,), (500,),  # q2
-                    (3.75, 500, 325.5, 450, 162.3, 445, 4.2, 440),  # q3
-                    (3.85,),  # q4
-                    (1000,), (650,),  # q5
-                    (3.90,),  # q6
-                    (250,),  # q7
-                    (350,),  # q8
-                    [],  # q9
-                    [],  # q10
-                    []  # q11
-                ])
-
-            def close(self):
-                pass
-
         # Verify module has all required functions
-        assert hasattr(qd_module, 'get_connection')
-        assert hasattr(qd_module, 'question_1')
-        assert hasattr(qd_module, 'question_2')
-        assert hasattr(qd_module, 'question_3')
-        assert hasattr(qd_module, 'question_4')
-        assert hasattr(qd_module, 'question_5')
-        assert hasattr(qd_module, 'question_6')
-        assert hasattr(qd_module, 'question_7')
-        assert hasattr(qd_module, 'question_8')
-        assert hasattr(qd_module, 'question_9')
-        assert hasattr(qd_module, 'question_10')
-        assert hasattr(qd_module, 'question_11')
+        assert hasattr(query_data, 'get_connection')
+        assert hasattr(query_data, 'question_1')
+        assert hasattr(query_data, 'question_2')
+        assert hasattr(query_data, 'question_3')
+        assert hasattr(query_data, 'question_4')
+        assert hasattr(query_data, 'question_5')
+        assert hasattr(query_data, 'question_6')
+        assert hasattr(query_data, 'question_7')
+        assert hasattr(query_data, 'question_8')
+        assert hasattr(query_data, 'question_9')
+        assert hasattr(query_data, 'question_10')
+        assert hasattr(query_data, 'question_11')
 
 
 @pytest.mark.db
@@ -604,8 +565,6 @@ class TestQueryDataIfNameMain:
 
     def test_if_name_main_block(self, monkeypatch):
         """Test __main__ block executes main() via runpy."""
-        import runpy
-
         class _Cursor:
             _values = [
                 (1000,),                                         # q1

@@ -50,6 +50,7 @@ See Also:
 
 from __future__ import annotations
 
+import argparse
 import json
 import re
 import time
@@ -149,35 +150,35 @@ def _extract_entries_from_page(html: str, source_url: str) -> List[Dict[str, Opt
 
     rows = table.find_all('tr')
     entries = []
-    
+
     i = 1  # Skip header row
     while i < len(rows):
         row1 = rows[i]
-    
+
         # Check if this is a data row (not header, has td elements)
         cells = row1.find_all('td')
         if len(cells) < 4:
             i += 1
             continue
-        
+
         # Extract from row 1: university, program, degree, date, decision
         university = cells[0].get_text(strip=True)
-    
+
         # Program cell contains both program name and degree
         program_cell = cells[1]
         program_spans = program_cell.find_all('span')
         program = program_spans[0].get_text(strip=True) if len(program_spans) > 0 else ""
         degree = program_spans[1].get_text(strip=True) if len(program_spans) > 1 else None
-    
+
         date_posted = cells[2].get_text(strip=True) if len(cells) > 2 else None
-    
+
         # Decision cell (Accepted/Rejected on date)
         decision_text = cells[3].get_text(strip=True) if len(cells) > 3 else ""
-    
+
         # Parse decision and date from decision_text (e.g., "Rejected on 28 Jan")
         status_match = re.search(r'(Accepted|Rejected|Interview|Wait\s?listed)', decision_text, re.IGNORECASE)
         status = status_match.group(1) if status_match else None
-    
+
         accepted_date = None
         rejected_date = None
         if status:
@@ -187,7 +188,7 @@ def _extract_entries_from_page(html: str, source_url: str) -> List[Dict[str, Opt
                 accepted_date = decision_date
             elif status.lower() == 'rejected':
                 rejected_date = decision_date
-    
+
         # Initialize other fields
         start_term = None
         citizenship = None
@@ -196,47 +197,47 @@ def _extract_entries_from_page(html: str, source_url: str) -> List[Dict[str, Opt
         gre_v = None
         gre_aw = None
         comments = None
-    
+
         # Row 2: Additional details (if exists)
         if i + 1 < len(rows):
             row2 = rows[i + 1]
             # Row 2 has colspan and contains badges/chips with additional info
             if row2.find('td', colspan=True):
                 details_text = row2.get_text()
-            
+
                 # Extract term (e.g., "Fall 2026")
                 term_match = re.search(r'(Fall|Spring|Summer|Winter)\s+\d{4}', details_text)
                 start_term = term_match.group(0) if term_match else None
-            
+
                 # Extract citizenship
                 if 'International' in details_text:
                     citizenship = 'International'
                 elif 'American' in details_text or 'Domestic' in details_text:
                     citizenship = 'American'
-            
+
                 # Extract GPA
                 gpa_match = re.search(r'GPA\s+([\d\.]+)', details_text)
                 gpa = gpa_match.group(1) if gpa_match else None
-            
+
                 # Extract GRE scores
                 gre_match = re.search(r'GRE\s+(?:General\s+)?(\d+)', details_text)
                 gre_score = gre_match.group(1) if gre_match else None
-            
+
                 gre_v_match = re.search(r'GRE\s+V\s*(\d+)', details_text)
                 gre_v = gre_v_match.group(1) if gre_v_match else None
-            
+
                 gre_aw_match = re.search(r'(?:GRE\s+)?AW\s+([\d\.]+)', details_text)
                 gre_aw = gre_aw_match.group(1) if gre_aw_match else None
-            
+
                 # Look for comments - text that's not part of standard badges
                 comments = _clean_comment_text(details_text)
-            
+
                 i += 2  # Skip both rows
             else:
                 i += 1  # Only skip row 1
         else:
             i += 1
-    
+
         # Find the link to the individual result page for comments
         result_link = None
         if len(cells) > 4:
@@ -251,7 +252,7 @@ def _extract_entries_from_page(html: str, source_url: str) -> List[Dict[str, Opt
             rich_comments = _extract_comments_from_result_page(result_link)
             if rich_comments:
                 comments = rich_comments
-    
+
         entry = {
             "program_name": program,
             "university": university,
@@ -351,14 +352,12 @@ def save_data(data: List[Dict[str, Optional[str]]], output_path: str = JSON_OUTP
 
 
 if __name__ == "__main__":
-    import argparse
-
     parser = argparse.ArgumentParser(description="Scrape The Grad Cafe")
     parser.add_argument("--base", help="Base URL to scrape", default=DEFAULT_BASE)
     parser.add_argument("--limit", help="Max number of posts to fetch", type=int, default=20)
     parser.add_argument("--out", help="Output JSON file", default=JSON_OUTPUT)
     args = parser.parse_args()
 
-    data = scrape_data(base_url=args.base, limit=args.limit)
-    save_data(data, args.out)
+    scraped_data = scrape_data(base_url=args.base, limit=args.limit)
+    save_data(scraped_data, args.out)
     print("Done.")

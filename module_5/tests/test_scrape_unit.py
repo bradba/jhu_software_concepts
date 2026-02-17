@@ -3,11 +3,11 @@ Unit tests for scrape.py web scraping functions
 Tests URL fetching, HTML parsing, and data extraction.
 """
 
-import pytest
-import sys
-import os
 import json
-import time
+import os
+import sys
+
+import pytest
 
 # Add src directory to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
@@ -223,7 +223,7 @@ class TestExtractEntriesFromPage:
 
         result = scrape._extract_entries_from_page(html_content, 'https://test.com')
 
-        assert result == []
+        assert not result
 
     def test_extract_entries_with_rich_comments(self, monkeypatch):
         """Test extracting entries with rich comments from result page."""
@@ -345,7 +345,7 @@ class TestSaveData:
 
         # Verify file exists and contains correct data
         assert output_file.exists()
-        with open(output_file, 'r') as f:
+        with open(output_file, 'r', encoding='utf-8') as f:
             loaded = json.load(f)
         assert len(loaded) == 2
         assert loaded[0]['university'] == 'Stanford'

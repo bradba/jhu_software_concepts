@@ -3,10 +3,15 @@ Unit tests for load_data.py utility functions
 Tests data parsing and cleaning functions to achieve 100% coverage.
 """
 
-import pytest
-import sys
+import json
 import os
+import runpy
+import sys
 from datetime import date
+from unittest.mock import MagicMock
+
+import psycopg
+import pytest
 
 # Add src directory to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
@@ -153,7 +158,7 @@ class TestCreateApplicantsTable:
                 self.queries = []
                 self.closed = False
 
-            def execute(self, query):
+            def execute(self, query, params=None):
                 self.queries.append(query)
 
             def executemany(self, query, params_list):
@@ -197,8 +202,24 @@ class TestLoadJSONData:
         """Test loading valid JSON data."""
         # Create temporary JSON file with correct field names
         json_file = tmp_path / "test_data.json"
-        json_content = """{"url": "https://test.com/result/12345", "program": "Stanford, CS", "comments": "Test", "date_added": "February 1, 2025", "applicant_status": "Accepted", "semester_year_start": "Fall 2025", "citizenship": "International", "gpa": "GPA 3.8", "gre": "GRE 325", "gre_v": "GRE V 165", "gre_aw": "GRE AW 4.5", "masters_or_phd": "PhD", "llm-generated-program": "CS", "llm-generated-university": "Stanford"}
-{"url": "https://test.com/result/67890", "program": "MIT, CS", "comments": null, "date_added": "February 2, 2025", "applicant_status": "Rejected", "semester_year_start": "Spring 2025", "citizenship": "US", "gpa": "3.5", "gre": "320", "gre_v": "160", "gre_aw": "4.0", "masters_or_phd": "Masters", "llm-generated-program": "CS", "llm-generated-university": "MIT"}"""
+        json_content = "\n".join([
+            json.dumps({
+                "url": "https://test.com/result/12345", "program": "Stanford, CS",
+                "comments": "Test", "date_added": "February 1, 2025",
+                "applicant_status": "Accepted", "semester_year_start": "Fall 2025",
+                "citizenship": "International", "gpa": "GPA 3.8", "gre": "GRE 325",
+                "gre_v": "GRE V 165", "gre_aw": "GRE AW 4.5", "masters_or_phd": "PhD",
+                "llm-generated-program": "CS", "llm-generated-university": "Stanford",
+            }),
+            json.dumps({
+                "url": "https://test.com/result/67890", "program": "MIT, CS",
+                "comments": None, "date_added": "February 2, 2025",
+                "applicant_status": "Rejected", "semester_year_start": "Spring 2025",
+                "citizenship": "US", "gpa": "3.5", "gre": "320",
+                "gre_v": "160", "gre_aw": "4.0", "masters_or_phd": "Masters",
+                "llm-generated-program": "CS", "llm-generated-university": "MIT",
+            }),
+        ])
         json_file.write_text(json_content)
 
         # Mock connection and cursor
@@ -409,7 +430,7 @@ class TestLoadDataErrorPaths:
                 self.closed = False
                 self.execute_count = 0
 
-            def execute(self, query):
+            def execute(self, query, params=None):
                 self.execute_count += 1
 
             def executemany(self, query, params_list):
@@ -424,10 +445,18 @@ class TestLoadDataErrorPaths:
                 if self.execute_count == 2:
                     # Sample records
                     return [
-                        (123, 'Stanford, Computer Science', 'Great program!', None, None, 'Accepted', 'Fall 2026', None, 3.8, None, None, None, 'PhD', None, None),
-                        (456, 'MIT, Computer Science', 'Tough program', None, None, 'Rejected', 'Fall 2026', None, 3.5, None, None, None, 'Masters', None, None)
+                        (
+                            123, 'Stanford, Computer Science', 'Great program!',
+                            None, None, 'Accepted', 'Fall 2026', None, 3.8,
+                            None, None, None, 'PhD', None, None,
+                        ),
+                        (
+                            456, 'MIT, Computer Science', 'Tough program',
+                            None, None, 'Rejected', 'Fall 2026', None, 3.5,
+                            None, None, None, 'Masters', None, None,
+                        ),
                     ]
-                elif self.execute_count == 3:
+                if self.execute_count == 3:
                     # Status statistics
                     return [('Accepted', 650), ('Rejected', 300), ('Waitlist', 50)]
                 return []
@@ -543,8 +572,6 @@ class TestLoadDataMainBlock:
 
     def test_main_with_psycopg_error(self, monkeypatch, capsys):
         """Test main() handling of psycopg errors."""
-        import psycopg
-
         def mock_connect(**kwargs):
             raise psycopg.Error("Connection failed")
 
@@ -695,32 +722,12 @@ class TestMainExecution:
 
     def test_main_guard(self, monkeypatch):
         """Test that main execution block is covered."""
-        # This tests the if __name__ == '__main__': block
-        import load_data as ld_module
-
-        # Mock everything to avoid actual execution
-        class MockConnection:
-            def cursor(self):
-                return self
-
-            def execute(self, query):
-                pass
-
-            def commit(self):
-                pass
-
-            def close(self):
-                pass
-
-        def mock_get_connection():
-            return MockConnection()
-
         # Check if the module has the required structure
-        assert hasattr(ld_module, 'parse_gpa')
-        assert hasattr(ld_module, 'parse_gre_score')
-        assert hasattr(ld_module, 'parse_date')
-        assert hasattr(ld_module, 'extract_p_id_from_url')
-        assert hasattr(ld_module, 'clean_string')
+        assert hasattr(load_data, 'parse_gpa')
+        assert hasattr(load_data, 'parse_gre_score')
+        assert hasattr(load_data, 'parse_date')
+        assert hasattr(load_data, 'extract_p_id_from_url')
+        assert hasattr(load_data, 'clean_string')
 
 
 class MockCursor:
@@ -745,9 +752,6 @@ class TestLoadDataIfNameMain:
 
     def test_if_name_main_block(self, monkeypatch):
         """Test __main__ block executes main() via runpy."""
-        import runpy
-        from unittest.mock import MagicMock
-
         monkeypatch.setattr('psycopg.connect', lambda **kwargs: MagicMock())
         src_path = os.path.join(os.path.dirname(__file__), '..', 'src', 'load_data.py')
         runpy.run_path(src_path, run_name='__main__')

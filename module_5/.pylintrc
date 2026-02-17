@@ -1,0 +1,48 @@
+[MASTER]
+init-hook='import sys; sys.path.insert(0, "src"); sys.path.insert(0, "tests")'
+
+[MESSAGES CONTROL]
+disable=
+    # Test mock classes are intentionally minimal — adding docstrings/methods
+    # to every inline helper would obscure the test logic.
+    missing-function-docstring,
+    missing-class-docstring,
+    too-few-public-methods,
+
+    # Mock method signatures must match the real API being mocked, even if
+    # the parameters aren't used in the mock body.
+    unused-argument,
+
+    # Tests legitimately access private members of the modules under test.
+    protected-access,
+
+    # Pytest fixture parameter names must match fixture names exactly;
+    # renaming them breaks the pytest dependency-injection mechanism.
+    redefined-outer-name,
+
+    # psycopg Connection/Cursor types are not recognised by pylint's static
+    # analysis, producing false-positive no-member errors on .cursor(),
+    # .commit(), .close() etc.
+    no-member,
+
+    # Flask route handlers use a final "except Exception" safety net so the
+    # server never returns an unhandled 500 for unexpected errors.
+    broad-exception-caught,
+
+    # Local imports inside fixture functions must come after sys.path.insert;
+    # moving them to the top would break the import order.
+    import-outside-toplevel,
+    wrong-import-position,
+
+    # Naturally similar test-data structures (scraped-entry dicts, MockFile
+    # context managers) are flagged as duplicate code but are intentional.
+    duplicate-code
+
+[FORMAT]
+max-line-length=120
+
+[DESIGN]
+max-locals=50
+max-returns=10
+max-branches=20
+max-statements=80

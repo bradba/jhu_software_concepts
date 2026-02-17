@@ -27,13 +27,29 @@ See Also:
     - :mod:`scrape`: For web scraping applicant data
 """
 
-import psycopg
-from psycopg import sql
 import json
-import re
 import os
+import re
 from datetime import datetime
-from urllib.parse import urlparse
+
+import psycopg
+
+from db import get_connection
+
+
+def _parse_numeric_str(s):
+    """Extract the first numeric value from a string.
+
+    Args:
+        s (str): Input string, e.g. ``'GPA 3.89'`` or ``'GRE 327'``.
+
+    Returns:
+        float: First numeric value found, or None if absent or input is falsy.
+    """
+    if not s:
+        return None
+    match = re.search(r'(\d+\.?\d*)', s)
+    return float(match.group(1)) if match else None
 
 
 def parse_gpa(gpa_str):
@@ -55,10 +71,7 @@ def parse_gpa(gpa_str):
         >>> parse_gpa('invalid')
         None
     """
-    if not gpa_str:
-        return None
-    match = re.search(r'(\d+\.?\d*)', gpa_str)
-    return float(match.group(1)) if match else None
+    return _parse_numeric_str(gpa_str)
 
 
 def parse_gre_score(gre_str):
@@ -81,10 +94,7 @@ def parse_gre_score(gre_str):
         >>> parse_gre_score('GRE AW 3.50')
         3.5
     """
-    if not gre_str:
-        return None
-    match = re.search(r'(\d+\.?\d*)', gre_str)
-    return float(match.group(1)) if match else None
+    return _parse_numeric_str(gre_str)
 
 
 def parse_date(date_str):
@@ -108,7 +118,7 @@ def parse_date(date_str):
         return None
     try:
         return datetime.strptime(date_str, '%B %d, %Y').date()
-    except:
+    except ValueError:
         return None
 
 
@@ -257,10 +267,11 @@ def load_json_data(json_file_path, conn):
 
     records = []
     skipped = 0
+    line_num = 0
 
     print(f"\nReading data from {json_file_path}...")
 
-    with open(json_file_path, 'r') as f:
+    with open(json_file_path, 'r', encoding='utf-8') as f:
         for line_num, line in enumerate(f, 1):
             try:
                 data = json.loads(line.strip())
@@ -315,7 +326,7 @@ def load_json_data(json_file_path, conn):
     cursor.close()
 
     total_records = line_num - skipped
-    print(f"\nData loading complete!")
+    print("\nData loading complete!")
     print(f"Total records processed: {total_records}")
     print(f"Records skipped: {skipped}")
 
@@ -395,37 +406,12 @@ def main():
         The data file is expected at: ../llm_extend_applicant_data.json
         relative to this script's location.
     """
-    database_url = os.environ.get('DATABASE_URL')
-
-    if database_url:
-        # Parse DATABASE_URL
-        parsed = urlparse(database_url)
-        conn_params = {
-            'host': parsed.hostname or 'localhost',
-            'port': parsed.port or 5432,
-            'dbname': parsed.path.lstrip('/') if parsed.path else 'bradleyballinger',
-            'user': parsed.username or 'bradleyballinger',
-        }
-        if parsed.password:
-            conn_params['password'] = parsed.password
-    else:
-        # Use individual environment variables or defaults
-        conn_params = {
-            'host': os.environ.get('DB_HOST', 'localhost'),
-            'port': int(os.environ.get('DB_PORT', '5432')),
-            'dbname': os.environ.get('DB_NAME', 'bradleyballinger'),
-            'user': os.environ.get('DB_USER', 'bradleyballinger'),
-        }
-        if os.environ.get('DB_PASSWORD'):
-            conn_params['password'] = os.environ.get('DB_PASSWORD')
-
     # Path to data file in parent directory
     json_file_path = os.path.join(os.path.dirname(__file__), '..', 'llm_extend_applicant_data.json')
 
     try:
         # Establish connection
-        print(f"Connecting to database '{conn_params['dbname']}' at {conn_params['host']}:{conn_params['port']}...")
-        conn = psycopg.connect(**conn_params)
+        conn = get_connection()
 
         # Create table
         create_applicants_table(conn)

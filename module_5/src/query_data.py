@@ -30,47 +30,8 @@ See Also:
 """
 
 import psycopg
-from psycopg import sql
-import os
-from urllib.parse import urlparse
 
-
-def get_connection():
-    """Create and return a database connection.
-
-    Uses DATABASE_URL environment variable if set (format: postgresql://user:password@host:port/database)
-    Otherwise uses individual environment variables or defaults:
-    - DB_HOST (default: localhost)
-    - DB_PORT (default: 5432)
-    - DB_NAME (default: bradleyballinger)
-    - DB_USER (default: bradleyballinger)
-    - DB_PASSWORD (default: empty)
-    """
-    database_url = os.environ.get('DATABASE_URL')
-
-    if database_url:
-        # Parse DATABASE_URL (e.g., postgresql://user:password@host:port/database)
-        parsed = urlparse(database_url)
-        conn_params = {
-            'host': parsed.hostname or 'localhost',
-            'port': parsed.port or 5432,
-            'dbname': parsed.path.lstrip('/') if parsed.path else 'bradleyballinger',
-            'user': parsed.username or 'bradleyballinger',
-        }
-        if parsed.password:
-            conn_params['password'] = parsed.password
-    else:
-        # Use individual environment variables or defaults
-        conn_params = {
-            'host': os.environ.get('DB_HOST', 'localhost'),
-            'port': int(os.environ.get('DB_PORT', '5432')),
-            'dbname': os.environ.get('DB_NAME', 'bradleyballinger'),
-            'user': os.environ.get('DB_USER', 'bradleyballinger'),
-        }
-        if os.environ.get('DB_PASSWORD'):
-            conn_params['password'] = os.environ.get('DB_PASSWORD')
-
-    return psycopg.connect(**conn_params)
+from db import get_connection
 
 
 def question_1(conn):
@@ -450,7 +411,7 @@ def question_10(conn):
     print(f"{'Rank':<6}{'University':<40}{'Program':<30}{'Apps':<8}{'Accept Rate':<12}")
     print("-" * 96)
 
-    for i, (university, program, total, acceptances, rate) in enumerate(results, 1):
+    for i, (university, program, total, _acceptances, rate) in enumerate(results, 1):
         print(f"{i:<6}{university[:39]:<40}{program[:29]:<30}{total:<8}{rate:.2f}%")
 
     print()
@@ -521,7 +482,7 @@ def main():
 
     try:
         conn = get_connection()
-        print(f"Connected to database successfully.\n")
+        print("Connected to database successfully.\n")
 
         # Run all questions
         question_1(conn)

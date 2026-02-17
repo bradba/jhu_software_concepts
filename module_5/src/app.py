@@ -36,21 +36,24 @@ See Also:
     - :mod:`load_data`: Data loading utilities
 """
 
-from flask import Flask, render_template, jsonify
-import query_data
-import sys
-import os
 import json
+import os
 import subprocess
-from datetime import datetime
+import sys
 import threading
 from contextlib import contextmanager
+from datetime import datetime
+
+from flask import Flask, render_template, jsonify
+
+import load_data
+import query_data
 
 app = Flask(__name__)
 
 # Busy-state management
 _busy_lock = threading.Lock()
-_is_busy = False
+_is_busy = False  # pylint: disable=invalid-name
 
 
 def is_busy():
@@ -65,7 +68,6 @@ def is_busy():
     Note:
         This is used to prevent concurrent operations that could conflict.
     """
-    global _is_busy
     with _busy_lock:
         return _is_busy
 
@@ -88,7 +90,7 @@ def busy_state():
         ...     # Perform exclusive operation
         ...     scrape_data()
     """
-    global _is_busy
+    global _is_busy  # pylint: disable=global-statement
 
     # Try to acquire busy state
     with _busy_lock:
@@ -208,7 +210,8 @@ def pull_data():
                 [sys.executable, script_path, '--limit', '50', '--out', output_path],
                 capture_output=True,
                 text=True,
-                timeout=300  # 5 minute timeout
+                timeout=300,  # 5 minute timeout
+                check=False
             )
 
             if scrape_result.returncode != 0:
@@ -229,7 +232,7 @@ def pull_data():
 
             # Step 3: Load scraped data and convert to database format
             print("[pull-data] Loading new data into database...")
-            with open(new_data_path, 'r') as f:
+            with open(new_data_path, 'r', encoding='utf-8') as f:
                 scraped_data = json.load(f)
 
             if not scraped_data:
@@ -240,7 +243,6 @@ def pull_data():
                 })
 
             # Step 4: Insert into database using load_data functions
-            import load_data
             conn = query_data.get_connection()
 
             # Convert scraped format to database format and insert
@@ -304,7 +306,7 @@ def pull_data():
             # Clean up temporary file
             try:
                 os.remove(new_data_path)
-            except:
+            except OSError:
                 pass
 
             print(f"[pull-data] Completed: {inserted} inserted, {skipped} skipped")
@@ -369,8 +371,7 @@ def update_analysis():
         with busy_state():
             print("[update-analysis] Starting LLM analysis update...")
 
-            # TODO: Call LLM processing script when available
-            # For now, return success with placeholder message
+            # Call LLM processing script (placeholder until update_llm.py is ready)
             # Future implementation:
             # script_path = os.path.join(os.path.dirname(__file__), 'scripts', 'update_llm.py')
             # result = subprocess.run([sys.executable, script_path], ...)
@@ -379,7 +380,8 @@ def update_analysis():
                 [sys.executable, '-c', 'print("LLM analysis update placeholder")'],
                 capture_output=True,
                 text=True,
-                timeout=300
+                timeout=300,
+                check=False
             )
 
             if result.returncode != 0:

@@ -3,80 +3,20 @@ Unit tests for app.py error paths and edge cases
 Tests error handling in Flask endpoints to achieve 100% coverage.
 """
 
-import pytest
-import sys
-import os
 import json
+import os
 import subprocess
+import sys
+from contextlib import contextmanager
+
+import pytest
+from conftest import MockSubprocessResult
 
 # Add src directory to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
 
-
-class MockSubprocessResult:
-    """Mock object for subprocess.run() results."""
-    def __init__(self, returncode=0, stdout='', stderr=''):
-        self.returncode = returncode
-        self.stdout = stdout
-        self.stderr = stderr
-
-
-class MockConnection:
-    """Mock database connection."""
-    def __init__(self):
-        self.committed = False
-        self.closed = False
-
-    def cursor(self):
-        return self
-
-    def commit(self):
-        self.committed = True
-
-    def close(self):
-        self.closed = True
-
-
-@pytest.fixture
-def mock_query_functions(monkeypatch):
-    """Mock all query_data functions."""
-    def mock_get_connection():
-        return MockConnection()
-
-    monkeypatch.setattr('query_data.get_connection', mock_get_connection)
-    monkeypatch.setattr('query_data.question_1', lambda _conn: 1500)
-    monkeypatch.setattr('query_data.question_2', lambda _conn: 50.25)
-    monkeypatch.setattr('query_data.question_3', lambda _conn: {
-        'avg_gpa': 3.75,
-        'avg_gre': 325.5,
-        'avg_gre_v': 162.3,
-        'avg_gre_aw': 4.2
-    })
-    monkeypatch.setattr('query_data.question_4', lambda _conn: 3.80)
-    monkeypatch.setattr('query_data.question_5', lambda _conn: 45.67)
-    monkeypatch.setattr('query_data.question_6', lambda _conn: 3.85)
-    monkeypatch.setattr('query_data.question_7', lambda _conn: 250)
-    monkeypatch.setattr('query_data.question_8', lambda _conn: 45)
-    monkeypatch.setattr('query_data.question_9', lambda _conn: [50, 45])
-    monkeypatch.setattr('query_data.question_10', lambda _conn: [])
-    monkeypatch.setattr('query_data.question_11', lambda _conn: [])
-
-
-@pytest.fixture
-def app(mock_query_functions):
-    """Create and configure a test Flask application instance."""
-    from app import app as flask_app
-
-    flask_app.config['TESTING'] = True
-    flask_app.config['DEBUG'] = False
-
-    return flask_app
-
-
-@pytest.fixture
-def client(app):
-    """Create a test client for the Flask application."""
-    return app.test_client()
+import app as app_module
+from app import busy_state, _busy_lock
 
 
 @pytest.mark.buttons
@@ -240,7 +180,7 @@ class TestUpdateAnalysisErrorPaths:
     def test_llm_script_generic_error(self, client, monkeypatch):
         """Test generic error handling in update-analysis."""
         def mock_subprocess_run(*_args, **_kwargs):
-            raise Exception("Unexpected error")
+            raise ValueError("Unexpected error")
 
         monkeypatch.setattr('subprocess.run', mock_subprocess_run)
         monkeypatch.setattr('app.is_busy', lambda: False)
@@ -259,12 +199,8 @@ class TestBusyStateRuntimeError:
 
     def test_busy_state_context_manager_raises_on_double_acquisition(self):
         """Test that busy_state context manager raises RuntimeError if already busy."""
-        from app import busy_state, _busy_lock, _is_busy
-        import threading
-
         # Manually set busy state
         with _busy_lock:
-            import app as app_module
             app_module._is_busy = True
 
         try:
@@ -280,12 +216,10 @@ class TestBusyStateRuntimeError:
 
     def test_update_analysis_runtime_error(self, client, monkeypatch):
         """Test update-analysis handling of RuntimeError from busy_state."""
-        from contextlib import contextmanager
-
         @contextmanager
         def mock_busy_state():
             raise RuntimeError("System is already busy")
-            yield
+            yield  # pylint: disable=unreachable
 
         monkeypatch.setattr('app.busy_state', mock_busy_state)
         monkeypatch.setattr('app.is_busy', lambda: False)
@@ -303,8 +237,6 @@ class TestAdditionalPullDataErrors:
 
     def test_pull_data_database_insert_error(self, client, tmp_path, monkeypatch, capsys):
         """Test pull-data handling of database insert errors."""
-        import query_data
-
         # Create temporary JSON file with valid data
         json_file = tmp_path / "new_applicant_data.json"
         json_data = [{
@@ -333,7 +265,7 @@ class TestAdditionalPullDataErrors:
         # Mock cursor to raise exception on execute
         class MockCursor:
             def execute(self, query, params=None):
-                raise Exception("Database insert failed")
+                raise RuntimeError("Database insert failed")
             def close(self):
                 pass
             rowcount = 0
@@ -375,8 +307,6 @@ class TestAdditionalPullDataErrors:
 
     def test_pull_data_file_removal_error(self, client, tmp_path, monkeypatch):
         """Test pull-data when file removal fails (bare except)."""
-        import query_data
-
         json_file = tmp_path / "new_applicant_data.json"
         json_data = [{
             "url": "https://www.thegradcafe.com/survey/result/888888",
@@ -436,13 +366,11 @@ class TestAdditionalPullDataErrors:
 
     def test_pull_data_generic_exception(self, client, monkeypatch):
         """Test pull-data handling of generic exceptions."""
-        from contextlib import contextmanager
-
         # Mock busy_state to raise a generic exception
         @contextmanager
         def mock_busy_state():
             raise ValueError("Unexpected error in busy state")
-            yield
+            yield  # pylint: disable=unreachable
 
         monkeypatch.setattr('app.busy_state', mock_busy_state)
         monkeypatch.setattr('app.is_busy', lambda: False)
@@ -455,13 +383,11 @@ class TestAdditionalPullDataErrors:
 
     def test_pull_data_runtime_error_from_context_manager(self, client, monkeypatch):
         """Test pull-data handling of RuntimeError from busy_state context manager."""
-        from contextlib import contextmanager
-
         # Mock busy_state to raise RuntimeError
         @contextmanager
         def mock_busy_state():
             raise RuntimeError("System is already busy")
-            yield
+            yield  # pylint: disable=unreachable
 
         monkeypatch.setattr('app.busy_state', mock_busy_state)
         monkeypatch.setattr('app.is_busy', lambda: False)

@@ -54,6 +54,7 @@ See Also:
 
 from __future__ import annotations
 
+import argparse
 import json
 import re
 import warnings
@@ -238,7 +239,7 @@ def _standardize_university_with_llm(
             body=payload,
             headers={"Content-Type": "application/json"}
         )
-        
+
         if resp.status == 200:
             result = json.loads(resp.data.decode("utf-8"))
             # API returns a list, extract the first (and only) entry
@@ -248,7 +249,7 @@ def _standardize_university_with_llm(
             print(f"[llm-api] HTTP {resp.status} from {api_url}")
     except Exception as e:
         print(f"[llm-api] error calling {api_url}: {e}")
-    
+
     return entry
 
 
@@ -289,9 +290,6 @@ def _standardize_with_llm(
 
 
 if __name__ == "__main__":
-    import argparse
-    import os
-
     parser = argparse.ArgumentParser(description="Clean and standardize GradCafe application data")
     parser.add_argument("--input", help="Input JSON file", default="applicant_data.json")
     parser.add_argument("--output", help="Output JSON file", default="applicant_data_clean.json")
@@ -300,11 +298,11 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     print(f"[clean] loading data from {args.input}")
-    data = load_data(args.input)
-    
-    print(f"[clean] cleaning {len(data)} entries")
-    cleaned = clean_data(data)
-    
+    raw_data = load_data(args.input)
+
+    print(f"[clean] cleaning {len(raw_data)} entries")
+    cleaned_data = clean_data(raw_data)
+
     if args.standardize:
         print(f"[clean] standardizing with LLM API at {args.api}")
         # Check if output already exists and resume from there
@@ -315,9 +313,9 @@ if __name__ == "__main__":
             existing_count = len([e for e in existing if 'llm-generated-university' in e])
             if existing_count > 0:
                 print(f"[clean] found {existing_count} already processed entries")
-                cleaned = existing + cleaned[existing_count:]
-        cleaned = _standardize_with_llm(cleaned, args.api, output_path=args.output, flush_every=100)
-    
+                cleaned_data = existing + cleaned_data[existing_count:]
+        cleaned_data = _standardize_with_llm(cleaned_data, args.api, output_path=args.output, flush_every=100)
+
     print(f"[clean] saving to {args.output}")
-    save_data(cleaned, args.output)
+    save_data(cleaned_data, args.output)
     print("Done.")

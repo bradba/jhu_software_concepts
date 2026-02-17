@@ -344,4 +344,27 @@ module_4/
 ```
 ---
 
+## Code Quality — Pylint
+
+Pylint is used to enforce code style and catch errors across all Python source and test files.
+
+**Run Pylint:**
+
+```bash
+.venv/bin/pylint src/ tests/
+```
+
+**Configuration** is in [`.pylintrc`](.pylintrc) at the project root. Key settings:
+- `init-hook` adds `src/` to `sys.path` so local imports resolve correctly
+- `max-line-length = 120`
+- Design limits raised to accommodate data pipeline functions (e.g., `max-locals = 50`)
+
+**Expected result:**
+
+```
+Your code has been rated at 10.00/10
+```
+
+---
+
 **Johns Hopkins University - Modern Python Course**

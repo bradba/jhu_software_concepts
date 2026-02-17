@@ -3,10 +3,13 @@ Unit tests for Flask application - Page Rendering and Routes
 Tests the Flask app factory, configuration, and page rendering.
 """
 
-import pytest
-import sys
 import os
-from unittest.mock import Mock, patch, MagicMock
+import runpy
+import sys
+from unittest.mock import patch, MagicMock
+
+import flask
+import pytest
 
 # Add src directory to path so we can import the app
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
@@ -233,8 +236,6 @@ class TestAppMainBlock:
 
     def test_app_main(self, monkeypatch):
         """Test __main__ block by patching Flask.run to prevent server startup."""
-        import runpy
-        import flask
         monkeypatch.setattr(flask.Flask, 'run', lambda self, **kwargs: None)
         src_path = os.path.join(os.path.dirname(__file__), '..', 'src', 'app.py')
         runpy.run_path(src_path, run_name='__main__')
