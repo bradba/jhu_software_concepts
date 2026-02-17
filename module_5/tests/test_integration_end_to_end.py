@@ -32,14 +32,15 @@ class _TestTableCursorWrapper:
 
     def execute(self, query, params=None):
         """Execute query with table name replacement."""
-        # Replace 'applicants' with 'test_applicants' in the query
-        # Use regex to avoid replacing if it's already test_applicants
-        if isinstance(query, str):
-            # Match 'applicants' but not 'test_applicants'
-            # Use negative lookbehind to ensure 'applicants' is not preceded by 'test_'
-            modified_query = re.sub(r'(?<!test_)applicants\b', 'test_applicants', query)
-        else:
-            modified_query = query
+        # sql.Composed objects must be rendered to a string before we can do
+        # the table-name substitution.  as_string() uses the real cursor as a
+        # quoting context so identifiers and placeholders are rendered correctly.
+        if not isinstance(query, str):
+            query = query.as_string(self._cursor)
+
+        # Match 'applicants' but not 'test_applicants'
+        # Use negative lookbehind to ensure 'applicants' is not preceded by 'test_'
+        modified_query = re.sub(r'(?<!test_)applicants\b', 'test_applicants', query)
 
         return self._cursor.execute(modified_query, params)
 

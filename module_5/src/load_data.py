@@ -33,8 +33,31 @@ import re
 from datetime import datetime
 
 import psycopg
+from psycopg import sql
 
 from db import get_connection
+
+# Maximum rows returned by any SELECT that supports a caller-supplied limit.
+_LIMIT_MAX = 100
+
+# Column order shared by load_json_data and app.pull_data.
+_APPLICANT_COLS = (
+    "p_id", "program", "comments", "date_added", "url", "status", "term",
+    "us_or_international", "gpa", "gre", "gre_v", "gre_aw", "degree",
+    "llm_generated_program", "llm_generated_university",
+)
+
+# Composed INSERT statement: table/column identifiers are quoted by psycopg;
+# values stay as %s placeholders so the driver handles escaping.
+APPLICANT_INSERT = sql.SQL(
+    "INSERT INTO {table} ({cols}) VALUES ({vals})"
+    " ON CONFLICT ({pk}) DO NOTHING"
+).format(
+    table=sql.Identifier("applicants"),
+    cols=sql.SQL(", ").join(map(sql.Identifier, _APPLICANT_COLS)),
+    vals=sql.SQL(", ").join(sql.Placeholder() for _ in _APPLICANT_COLS),
+    pk=sql.Identifier("p_id"),
+)
 
 
 def _parse_numeric_str(s):
@@ -253,18 +276,6 @@ def load_json_data(json_file_path, conn):
     """
     cursor = conn.cursor()
 
-    # Prepare insert query
-    insert_query = """
-    INSERT INTO applicants (
-        p_id, program, comments, date_added, url, status, term,
-        us_or_international, gpa, gre, gre_v, gre_aw, degree,
-        llm_generated_program, llm_generated_university
-    ) VALUES (
-        %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
-    )
-    ON CONFLICT (p_id) DO NOTHING;
-    """
-
     records = []
     skipped = 0
     line_num = 0
@@ -306,7 +317,7 @@ def load_json_data(json_file_path, conn):
 
                 # Batch insert every 1000 records
                 if len(records) >= 1000:
-                    cursor.executemany(insert_query, records)
+                    cursor.executemany(APPLICANT_INSERT, records)
                     conn.commit()
                     print(f"Inserted {line_num - skipped} records...")
                     records = []
@@ -320,7 +331,7 @@ def load_json_data(json_file_path, conn):
 
     # Insert remaining records
     if records:
-        cursor.executemany(insert_query, records)
+        cursor.executemany(APPLICANT_INSERT, records)
         conn.commit()
 
     cursor.close()
@@ -363,14 +374,17 @@ def verify_data(conn):
     for row in cursor.fetchall():
         print(f"  p_id: {row[0]}, program: {row[1][:50]}...")
 
-    # Show statistics by status
-    cursor.execute("""
-        SELECT status, COUNT(*)
-        FROM applicants
-        WHERE status IS NOT NULL
-        GROUP BY status
-        ORDER BY COUNT(*) DESC;
-    """)
+    # Show statistics by status (LIMIT caps the rows returned)
+    _status_stmt = sql.SQL(
+        "SELECT {status}, COUNT(*) FROM {table}"
+        " WHERE {status} IS NOT NULL"
+        " GROUP BY {status} ORDER BY COUNT(*) DESC"
+        " LIMIT 100"
+    ).format(
+        table=sql.Identifier("applicants"),
+        status=sql.Identifier("status"),
+    )
+    cursor.execute(_status_stmt)
     print("\nRecords by status:")
     for status, count in cursor.fetchall():
         print(f"  {status}: {count}")

@@ -30,8 +30,12 @@ See Also:
 """
 
 import psycopg
+from psycopg import sql
 
 from db import get_connection
+
+# Hard ceiling on caller-supplied LIMIT values (clamp to 1–_LIMIT_MAX).
+_LIMIT_MAX = 100
 
 
 def question_1(conn):
@@ -360,13 +364,14 @@ def question_9(conn):
     return count_llm, count_original
 
 
-def question_10(conn):
-    """Find the top 10 most popular programs for Fall 2026.
+def question_10(conn, limit=10):
+    """Find the top N most popular programs for Fall 2026.
 
     Ranks programs by application volume and calculates acceptance rates.
 
     Args:
         conn (psycopg.Connection): Active database connection
+        limit (int): Maximum rows to return; clamped to 1–100 (default: 10)
 
     Returns:
         list of tuple: Each tuple contains:
@@ -386,24 +391,40 @@ def question_10(conn):
         >>> for uni, prog, apps, acc, rate in top_programs:
         ...     print(f"{uni} - {prog}: {apps} applications")
     """
+    # Enforce maximum: caller cannot request more than _LIMIT_MAX rows.
+    limit = max(1, min(int(limit), _LIMIT_MAX))
+
     cursor = conn.cursor()
 
-    query = """
+    # SQL statement constructed with sql.SQL so identifiers are quoted by the
+    # driver.  The LIMIT value is passed as a parameter (%s) — never embedded
+    # in the SQL text — so the driver handles type safety.
+    stmt = sql.SQL("""
         SELECT
-            llm_generated_university,
-            llm_generated_program,
-            COUNT(*) as total_applications,
-            SUM(CASE WHEN status = 'Accepted' THEN 1 ELSE 0 END) as acceptances,
-            ROUND(100.0 * SUM(CASE WHEN status = 'Accepted' THEN 1 ELSE 0 END) / COUNT(*), 2) as acceptance_rate
-        FROM applicants
-        WHERE term = 'Fall 2026'
-            AND llm_generated_university IS NOT NULL
-            AND llm_generated_program IS NOT NULL
-        GROUP BY llm_generated_university, llm_generated_program
+            {univ},
+            {prog},
+            COUNT(*) AS total_applications,
+            SUM(CASE WHEN {status} = 'Accepted' THEN 1 ELSE 0 END) AS acceptances,
+            ROUND(
+                100.0 * SUM(CASE WHEN {status} = 'Accepted' THEN 1 ELSE 0 END) / COUNT(*),
+                2
+            ) AS acceptance_rate
+        FROM {table}
+        WHERE {term} = 'Fall 2026'
+            AND {univ} IS NOT NULL
+            AND {prog} IS NOT NULL
+        GROUP BY {univ}, {prog}
         ORDER BY total_applications DESC
-        LIMIT 10;
-    """
-    cursor.execute(query)
+        LIMIT {lim}
+    """).format(
+        table=sql.Identifier("applicants"),
+        univ=sql.Identifier("llm_generated_university"),
+        prog=sql.Identifier("llm_generated_program"),
+        status=sql.Identifier("status"),
+        term=sql.Identifier("term"),
+        lim=sql.Placeholder(),
+    )
+    cursor.execute(stmt, [limit])
     results = cursor.fetchall()
     cursor.close()
 
@@ -422,20 +443,37 @@ def question_11(conn):
     """How do acceptance rates compare between PhD and Masters programs?"""
     cursor = conn.cursor()
 
-    query = """
+    # Identifiers are quoted via sql.SQL so any future rename stays safe.
+    # LIMIT 100 provides an inherent upper bound on rows returned.
+    stmt = sql.SQL("""
         SELECT
-            degree,
-            COUNT(*) as total_applications,
-            SUM(CASE WHEN status = 'Accepted' THEN 1 ELSE 0 END) as acceptances,
-            ROUND(100.0 * SUM(CASE WHEN status = 'Accepted' THEN 1 ELSE 0 END) / COUNT(*), 2) as acceptance_rate,
-            ROUND(CAST(AVG(CASE WHEN status = 'Accepted' AND gpa IS NOT NULL THEN gpa END) AS numeric), 2) as avg_gpa_accepted,
-            COUNT(CASE WHEN status = 'Accepted' AND gpa IS NOT NULL THEN 1 END) as gpa_count
-        FROM applicants
-        WHERE degree IN ('PhD', 'Masters')
-        GROUP BY degree
-        ORDER BY degree;
-    """
-    cursor.execute(query)
+            {degree},
+            COUNT(*) AS total_applications,
+            SUM(CASE WHEN {status} = 'Accepted' THEN 1 ELSE 0 END) AS acceptances,
+            ROUND(
+                100.0 * SUM(CASE WHEN {status} = 'Accepted' THEN 1 ELSE 0 END) / COUNT(*),
+                2
+            ) AS acceptance_rate,
+            ROUND(
+                CAST(
+                    AVG(CASE WHEN {status} = 'Accepted' AND {gpa} IS NOT NULL THEN {gpa} END)
+                    AS numeric
+                ),
+                2
+            ) AS avg_gpa_accepted,
+            COUNT(CASE WHEN {status} = 'Accepted' AND {gpa} IS NOT NULL THEN 1 END) AS gpa_count
+        FROM {table}
+        WHERE {degree} IN ('PhD', 'Masters')
+        GROUP BY {degree}
+        ORDER BY {degree}
+        LIMIT 100
+    """).format(
+        table=sql.Identifier("applicants"),
+        degree=sql.Identifier("degree"),
+        status=sql.Identifier("status"),
+        gpa=sql.Identifier("gpa"),
+    )
+    cursor.execute(stmt)
     results = cursor.fetchall()
     cursor.close()
 

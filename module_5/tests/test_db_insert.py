@@ -25,10 +25,12 @@ class MockCursor:
 
     def execute(self, query, params=None):
         """Track executed queries and simulate ON CONFLICT behavior."""
-        self.executed_queries.append((query, params))
+        # sql.Composed objects are not strings; convert so substring checks work.
+        query_str = query if isinstance(query, str) else str(query)
+        self.executed_queries.append((query_str, params))
 
         # Simulate ON CONFLICT DO NOTHING behavior
-        if params and 'ON CONFLICT' in query:
+        if params and 'ON CONFLICT' in query_str:
             # Use p_id (first param) as unique identifier
             p_id = params[0]
             if p_id in self._duplicate_check:

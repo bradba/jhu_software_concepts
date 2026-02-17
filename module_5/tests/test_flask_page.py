@@ -3,6 +3,7 @@ Unit tests for Flask application - Page Rendering and Routes
 Tests the Flask app factory, configuration, and page rendering.
 """
 
+import json
 import os
 import runpy
 import sys
@@ -228,6 +229,25 @@ class TestPageContent:
         # Check for JavaScript functions
         assert 'pullNewData' in html_content, "Page should contain pullNewData() function"
         assert 'updateAnalysis' in html_content, "Page should contain updateAnalysis() function"
+
+
+@pytest.mark.web
+class TestIndexErrorHandling:
+    """Test that index() returns 500 when database access fails (lines 220-222)."""
+
+    def test_index_returns_500_on_database_error(self, client, monkeypatch):
+        """index() catches any Exception from get_connection and returns 500."""
+        def _fail():
+            raise RuntimeError("Database unavailable")
+
+        monkeypatch.setattr('query_data.get_connection', _fail)
+
+        response = client.get('/')
+
+        assert response.status_code == 500
+        data = json.loads(response.data)
+        assert data['status'] == 'error'
+        assert 'unavailable' in data['message'].lower()
 
 
 @pytest.mark.web

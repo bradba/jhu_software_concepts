@@ -16,7 +16,7 @@ from conftest import MockSubprocessResult
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
 
 import app as app_module
-from app import busy_state, _busy_lock
+from app import busy_state, _busy_lock, _safe_float
 
 
 @pytest.mark.buttons
@@ -397,6 +397,19 @@ class TestAdditionalPullDataErrors:
         assert response.status_code == 409
         data = json.loads(response.data)
         assert data['status'] == 'busy'
+
+
+@pytest.mark.buttons
+class TestSafeHelpers:
+    """Direct unit tests for _safe_float input-sanitisation helper."""
+
+    def test_safe_float_non_numeric_string_returns_none(self):
+        """_safe_float returns None when float() raises ValueError (lines 78-79)."""
+        assert _safe_float('not-a-number', 0.0, 10.0) is None
+
+    def test_safe_float_out_of_range_returns_none(self):
+        """_safe_float returns None when value exceeds upper bound (line 83)."""
+        assert _safe_float('999', 0.0, 10.0) is None
 
 
 # Run tests with pytest

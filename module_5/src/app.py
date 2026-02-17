@@ -51,6 +51,57 @@ import query_data
 
 app = Flask(__name__)
 
+
+# ---------------------------------------------------------------------------
+# Input-sanitisation helpers
+# ---------------------------------------------------------------------------
+
+def _safe_float(val, lo, hi):
+    """Return val as a float if lo <= val <= hi, otherwise None.
+
+    Rejects None, empty, non-numeric, NaN, Inf, and out-of-range values so
+    that no unvalidated scraped number ever reaches the database as SQL text.
+    Values travel through parameter binding (%s), not SQL construction.
+
+    Args:
+        val: Raw value from scraped/external data.
+        lo (float): Inclusive lower bound.
+        hi (float): Inclusive upper bound.
+
+    Returns:
+        float: Validated value, or None if invalid / out of range.
+    """
+    if not val:
+        return None
+    try:
+        result = float(val)
+    except (ValueError, TypeError):
+        return None
+    # 'not lo <= result <= hi' also catches NaN because NaN comparisons
+    # always return False, making the 'not' branch True.
+    if not lo <= result <= hi:
+        return None
+    return result
+
+
+def _safe_str(val, max_len):
+    """Return at most max_len characters of val, or None if val is falsy.
+
+    Prevents runaway-length strings from reaching the database.
+
+    Args:
+        val: Raw value from scraped/external data.
+        max_len (int): Maximum allowed length in characters.
+
+    Returns:
+        str: Truncated string, or None.
+    """
+    if not val:
+        return None
+    return str(val)[:max_len]
+
+
+# ---------------------------------------------------------------------------
 # Busy-state management
 _busy_lock = threading.Lock()
 _is_busy = False  # pylint: disable=invalid-name
@@ -121,49 +172,57 @@ def index():
         is properly closed after all queries complete.
     """
 
-    # Connect to database
-    conn = query_data.get_connection()
+    try:
+        # Connect to database
+        conn = query_data.get_connection()
 
-    # Run all queries and collect results
-    results = {}
+        # Run all queries and collect results
+        results = {}
 
-    # Query 1
-    results['q1_count'] = query_data.question_1(conn)
+        # Query 1
+        results['q1_count'] = query_data.question_1(conn)
 
-    # Query 2
-    results['q2_percentage'] = query_data.question_2(conn)
+        # Query 2
+        results['q2_percentage'] = query_data.question_2(conn)
 
-    # Query 3
-    results['q3_averages'] = query_data.question_3(conn)
+        # Query 3
+        results['q3_averages'] = query_data.question_3(conn)
 
-    # Query 4
-    results['q4_avg_gpa'] = query_data.question_4(conn)
+        # Query 4
+        results['q4_avg_gpa'] = query_data.question_4(conn)
 
-    # Query 5
-    results['q5_percentage'] = query_data.question_5(conn)
+        # Query 5
+        results['q5_percentage'] = query_data.question_5(conn)
 
-    # Query 6
-    results['q6_avg_gpa'] = query_data.question_6(conn)
+        # Query 6
+        results['q6_avg_gpa'] = query_data.question_6(conn)
 
-    # Query 7
-    results['q7_count'] = query_data.question_7(conn)
+        # Query 7
+        results['q7_count'] = query_data.question_7(conn)
 
-    # Query 8
-    results['q8_count'] = query_data.question_8(conn)
+        # Query 8
+        results['q8_count'] = query_data.question_8(conn)
 
-    # Query 9
-    results['q9_counts'] = query_data.question_9(conn)
+        # Query 9
+        results['q9_counts'] = query_data.question_9(conn)
 
-    # Query 10
-    results['q10_top_programs'] = query_data.question_10(conn)
+        # Query 10
+        results['q10_top_programs'] = query_data.question_10(conn)
 
-    # Query 11
-    results['q11_comparison'] = query_data.question_11(conn)
+        # Query 11
+        results['q11_comparison'] = query_data.question_11(conn)
 
-    # Close connection
-    conn.close()
+        # Close connection
+        conn.close()
 
-    return render_template('index.html', results=results)
+        return render_template('index.html', results=results)
+
+    except Exception as e:
+        print(f"[index] Dashboard error: {e}")
+        return jsonify({
+            'status': 'error',
+            'message': 'Dashboard temporarily unavailable'
+        }), 500
 
 
 @app.route('/pull-data', methods=['POST'])
@@ -257,36 +316,39 @@ def pull_data():
                         skipped += 1
                         continue
 
-                    # Parse and clean data
+                    # Build the program string from length-capped parts so a
+                    # malicious scraper cannot inject unbounded text.
+                    university = _safe_str(entry.get('university'), 200) or ''
+                    program_name = _safe_str(entry.get('program_name'), 200) or ''
+
+                    # All string fields are length-capped via _safe_str then NUL-
+                    # stripped via clean_string.  All numeric fields are range-
+                    # checked via _safe_float; out-of-range values become None.
+                    # Every value reaches the DB through parameter binding (%s),
+                    # never embedded in SQL text.
                     record = (
                         p_id,
-                        load_data.clean_string(entry.get('university', '') + ', ' + entry.get('program_name', '')),
-                        load_data.clean_string(entry.get('comments')),
+                        load_data.clean_string(f"{university}, {program_name}"),
+                        load_data.clean_string(_safe_str(entry.get('comments'), 2000)),
                         load_data.parse_date(entry.get('date_posted')),
-                        load_data.clean_string(entry.get('url')),
-                        load_data.clean_string(entry.get('applicant_status')),
-                        load_data.clean_string(entry.get('start_term')),
-                        load_data.clean_string(entry.get('citizenship')),
-                        float(entry.get('gpa')) if entry.get('gpa') else None,
-                        float(entry.get('gre_score')) if entry.get('gre_score') else None,
-                        float(entry.get('gre_v')) if entry.get('gre_v') else None,
-                        float(entry.get('gre_aw')) if entry.get('gre_aw') else None,
-                        load_data.clean_string(entry.get('degree')),
+                        load_data.clean_string(_safe_str(entry.get('url'), 500)),
+                        load_data.clean_string(_safe_str(entry.get('applicant_status'), 50)),
+                        load_data.clean_string(_safe_str(entry.get('start_term'), 50)),
+                        load_data.clean_string(_safe_str(entry.get('citizenship'), 50)),
+                        _safe_float(entry.get('gpa'), 0.0, 10.0),
+                        _safe_float(entry.get('gre_score'), 0, 400),
+                        _safe_float(entry.get('gre_v'), 0, 200),
+                        _safe_float(entry.get('gre_aw'), 0.0, 6.0),
+                        load_data.clean_string(_safe_str(entry.get('degree'), 50)),
                         None,  # llm_generated_program
                         None   # llm_generated_university
                     )
 
-                    # Insert into database
+                    # Insert using the shared composed statement from load_data:
+                    # table/column identifiers are quoted by the driver; values
+                    # remain as %s parameters so the driver handles escaping.
                     cursor = conn.cursor()
-                    insert_query = """
-                        INSERT INTO applicants (
-                            p_id, program, comments, date_added, url, status, term,
-                            us_or_international, gpa, gre, gre_v, gre_aw, degree,
-                            llm_generated_program, llm_generated_university
-                        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-                        ON CONFLICT (p_id) DO NOTHING;
-                    """
-                    cursor.execute(insert_query, record)
+                    cursor.execute(load_data.APPLICANT_INSERT, record)
 
                     if cursor.rowcount > 0:
                         inserted += 1
