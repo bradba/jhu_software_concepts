@@ -7,6 +7,7 @@ import pytest
 import sys
 import os
 import json
+from unittest.mock import MagicMock
 
 # Add src directory to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
@@ -394,6 +395,92 @@ class TestStandardizeWithLLM:
         # Check that progress was flushed
         captured = capsys.readouterr()
         assert 'flushed progress' in captured.out
+
+
+@pytest.mark.db
+class TestCleanMainBlock:
+    """Test clean.py __main__ entry point."""
+
+    def test_main_basic(self, tmp_path, monkeypatch):
+        """Test __main__ block without --standardize."""
+        import runpy
+        input_file = tmp_path / "input.json"
+        output_file = tmp_path / "output.json"
+        input_file.write_text('[{"university": "Stanford", "description": null}]')
+        monkeypatch.setattr(sys, 'argv', [
+            'clean.py', '--input', str(input_file), '--output', str(output_file)
+        ])
+        src_path = os.path.join(os.path.dirname(__file__), '..', 'src', 'clean.py')
+        runpy.run_path(src_path, run_name='__main__')
+        assert output_file.exists()
+
+    def test_main_standardize_no_existing(self, tmp_path, monkeypatch):
+        """Test __main__ block with --standardize and no existing output file."""
+        import runpy
+        import urllib3
+
+        class MockPoolManager:
+            def request(self, method, url, body=None, headers=None):
+                import json as _json
+                entries = _json.loads(body) if body else []
+                for e in entries:
+                    e['llm-generated-university'] = 'Mock University'
+                    e['llm-generated-program'] = 'Mock Program'
+                resp = MagicMock()
+                resp.status = 200
+                resp.data = _json.dumps(entries).encode('utf-8')
+                return resp
+
+        input_file = tmp_path / "input.json"
+        output_file = tmp_path / "output.json"
+        input_file.write_text('[{"university": "Stanford", "program_name": "CS"}]')
+        monkeypatch.setattr(urllib3, 'PoolManager', MockPoolManager)
+        monkeypatch.setattr(sys, 'argv', [
+            'clean.py', '--input', str(input_file), '--output', str(output_file),
+            '--standardize'
+        ])
+        src_path = os.path.join(os.path.dirname(__file__), '..', 'src', 'clean.py')
+        runpy.run_path(src_path, run_name='__main__')
+        assert output_file.exists()
+
+    def test_main_standardize_with_existing(self, tmp_path, monkeypatch):
+        """Test __main__ block with --standardize and existing output with LLM entries."""
+        import runpy
+        import json
+        import urllib3
+
+        class MockPoolManager:
+            def request(self, method, url, body=None, headers=None):
+                import json as _json
+                entries = _json.loads(body) if body else []
+                for e in entries:
+                    e['llm-generated-university'] = 'Mock University'
+                    e['llm-generated-program'] = 'Mock Program'
+                resp = MagicMock()
+                resp.status = 200
+                resp.data = _json.dumps(entries).encode('utf-8')
+                return resp
+
+        input_file = tmp_path / "input.json"
+        output_file = tmp_path / "output.json"
+        input_file.write_text(json.dumps([
+            {"university": "Stanford", "program_name": "CS"},
+            {"university": "MIT", "program_name": "EE"},
+        ]))
+        # Pre-create output with one LLM-processed entry
+        output_file.write_text(json.dumps([
+            {"university": "Stanford", "program_name": "CS",
+             "llm-generated-university": "Stanford University",
+             "llm-generated-program": "Computer Science"},
+        ]))
+        monkeypatch.setattr(urllib3, 'PoolManager', MockPoolManager)
+        monkeypatch.setattr(sys, 'argv', [
+            'clean.py', '--input', str(input_file), '--output', str(output_file),
+            '--standardize'
+        ])
+        src_path = os.path.join(os.path.dirname(__file__), '..', 'src', 'clean.py')
+        runpy.run_path(src_path, run_name='__main__')
+        assert output_file.exists()
 
 
 # Run tests with pytest

@@ -390,6 +390,22 @@ class TestScrapeRowWithFewCells:
         assert result[0]['university'] == 'Stanford University'
 
 
+@pytest.mark.integration
+class TestScrapeMainBlock:
+    """Test scrape.py __main__ entry point."""
+
+    def test_main_with_zero_limit(self, tmp_path, monkeypatch):
+        """Test __main__ block with limit=0 so scrape_data returns immediately."""
+        import runpy
+        output_file = tmp_path / "output.json"
+        monkeypatch.setattr(sys, 'argv', [
+            'scrape.py', '--limit', '0', '--out', str(output_file)
+        ])
+        src_path = os.path.join(os.path.dirname(__file__), '..', 'src', 'scrape.py')
+        runpy.run_path(src_path, run_name='__main__')
+        assert output_file.exists()
+
+
 # Run tests with pytest
 if __name__ == '__main__':
     pytest.main([__file__, '-v'])

@@ -227,6 +227,19 @@ class TestPageContent:
         assert 'updateAnalysis' in html_content, "Page should contain updateAnalysis() function"
 
 
+@pytest.mark.web
+class TestAppMainBlock:
+    """Test app.py __main__ entry point."""
+
+    def test_app_main(self, monkeypatch):
+        """Test __main__ block by patching Flask.run to prevent server startup."""
+        import runpy
+        import flask
+        monkeypatch.setattr(flask.Flask, 'run', lambda self, **kwargs: None)
+        src_path = os.path.join(os.path.dirname(__file__), '..', 'src', 'app.py')
+        runpy.run_path(src_path, run_name='__main__')
+
+
 # Run tests with pytest
 if __name__ == '__main__':
     pytest.main([__file__, '-v'])

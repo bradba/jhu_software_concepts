@@ -598,6 +598,57 @@ class TestMainExecution:
         assert hasattr(qd_module, 'question_11')
 
 
+@pytest.mark.db
+class TestQueryDataIfNameMain:
+    """Test query_data.py if __name__ == '__main__' entry point."""
+
+    def test_if_name_main_block(self, monkeypatch):
+        """Test __main__ block executes main() via runpy."""
+        import runpy
+
+        class _Cursor:
+            _values = [
+                (1000,),                                         # q1
+                (1000,), (500,),                                 # q2 (total, intl)
+                (3.75, 500, 325.5, 450, 162.3, 445, 4.2, 440), # q3
+                (3.85, 500),                                     # q4 (avg_gpa, count)
+                (1000,), (650,),                                 # q5 (total, accepted)
+                (3.90, 300),                                     # q6 (avg_gpa, count)
+                (250,),                                          # q7
+                (350,),                                          # q8
+                (45,), (50,),                                    # q9 (llm, original)
+            ]
+            _idx = 0
+
+            def execute(self, q, p=None):
+                pass
+
+            def fetchone(self):
+                if self._idx < len(self._values):
+                    v = self._values[self._idx]
+                    self.__class__._idx += 1
+                    return v
+                return (0,)
+
+            def fetchall(self):
+                return []
+
+            def close(self):
+                pass
+
+        class _Conn:
+            def cursor(self):
+                return _Cursor()
+
+            def close(self):
+                pass
+
+        _Cursor._idx = 0
+        monkeypatch.setattr('psycopg.connect', lambda **kwargs: _Conn())
+        src_path = os.path.join(os.path.dirname(__file__), '..', 'src', 'query_data.py')
+        runpy.run_path(src_path, run_name='__main__')
+
+
 # Run tests with pytest
 if __name__ == '__main__':
     pytest.main([__file__, '-v'])

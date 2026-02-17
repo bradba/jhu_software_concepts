@@ -739,6 +739,20 @@ class MockCursor:
         self.closed = True
 
 
+@pytest.mark.db
+class TestLoadDataIfNameMain:
+    """Test load_data.py if __name__ == '__main__' entry point."""
+
+    def test_if_name_main_block(self, monkeypatch):
+        """Test __main__ block executes main() via runpy."""
+        import runpy
+        from unittest.mock import MagicMock
+
+        monkeypatch.setattr('psycopg.connect', lambda **kwargs: MagicMock())
+        src_path = os.path.join(os.path.dirname(__file__), '..', 'src', 'load_data.py')
+        runpy.run_path(src_path, run_name='__main__')
+
+
 # Run tests with pytest
 if __name__ == '__main__':
     pytest.main([__file__, '-v'])
