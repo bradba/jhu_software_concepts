@@ -111,34 +111,20 @@ jobs:
       # ============================================================
       # CHECK 4: Snyk Security Scanning
       # ============================================================
-      # Note: If SNYK_TOKEN is not configured, install Snyk CLI and run manually
+      - name: Install Snyk CLI
+        uses: snyk/actions/setup@master
+
       - name: "✅ CHECK 4: Snyk dependency scan"
-        id: snyk-test
-        continue-on-error: true  # Don't fail if token missing or vulnerabilities found
-        uses: snyk/actions/python@master
+        continue-on-error: true
+        run: snyk test --severity-threshold=high
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        with:
-          args: --severity-threshold=high
 
       - name: "✅ CHECK 4b: Snyk Code scan (SAST)"
-        id: snyk-code
-        continue-on-error: true  # Don't fail on code issues (informational)
-        uses: snyk/actions/python@master
+        continue-on-error: true
+        run: snyk code test
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-        with:
-          command: code test
-
-      - name: "⚠️ Snyk scan status"
-        run: |
-          if [ "${{ steps.snyk-test.outcome }}" == "success" ]; then
-            echo "::notice::✅ Snyk dependency scan passed - no high severity vulnerabilities"
-          elif [ "${{ steps.snyk-test.outcome }}" == "failure" ]; then
-            echo "::warning::⚠️ Snyk dependency scan found issues - check logs above"
-          else
-            echo "::warning::⚠️ Snyk scan skipped - SNYK_TOKEN not configured (see README for setup)"
-          fi
 
       # ============================================================
       # CHECK 5: Pytest Coverage - Must be 100%
