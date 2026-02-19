@@ -53,9 +53,13 @@ setup(
         'Flask>=3.0.0',
         'reportlab>=4.0.0',
         'beautifulsoup4>=4.12.0',
-        'urllib3>=2.0.0',
-        'Pillow>=9.0.0',
+        'urllib3==2.6.3',  # Pinned: SNYK High severity fixes
+        'Pillow==12.1.1',  # Pinned: SNYK High severity Out-of-bounds Write fix
         'charset-normalizer>=3.0.0',
+        # Security patches for indirect dependencies
+        'jinja2==3.1.6',  # Pinned: XSS/Template Injection fixes (Flask dep)
+        'requests==2.32.4',  # Pinned: Sensitive info leakage fix (Sphinx dep)
+        'certifi==2024.7.4',  # Pinned: Verification issue fix
     ],
     extras_require={
         'dev': [

@@ -40,6 +40,10 @@ Thumbs.db
 setup_env.sh
 scripts/setup_env.sh
 
+# Security Reports
+snyk-report.json
+snyk-report.txt
+
 # Documentation
 # Built HTML is checked in for GitHub Pages
 # docs/_build/ is now tracked

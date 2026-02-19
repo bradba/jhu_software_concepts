@@ -12,11 +12,16 @@ reportlab>=4.0.0
 
 # Web Scraping
 beautifulsoup4>=4.12.0
-urllib3>=2.0.0
+urllib3==2.6.3  # Pinned to fix High severity vulnerabilities (SNYK scan 2026-02)
 
 # Additional dependencies (typically already included)
-Pillow>=9.0.0  # Required by reportlab for image handling
+Pillow==12.1.1  # Pinned to fix High severity Out-of-bounds Write (SNYK-PYTHON-PILLOW-15265439)
 charset-normalizer>=3.0.0  # Required by reportlab
+
+# Security patches for indirect dependencies
+jinja2==3.1.6  # Pinned to fix XSS/Template Injection (Flask dependency)
+requests==2.32.4  # Pinned to fix sensitive info leakage (Sphinx dependency)
+certifi==2024.7.4  # Pinned to fix verification issues
 
 # Testing
 pytest>=7.4.0
