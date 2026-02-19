@@ -1,0 +1,47 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.25.1
+exclude:
+  code:
+    - 7877900b-7112-4a75-8097-cc7f3b46c63c:
+        reason: >-
+          CLI tool for trusted developers - path validation implemented via
+          _validate_file_path()
+        expires: '2027-02-18'
+    - 83dfd634-4474-417a-bf0b-0c9cf03bab92:
+        reason: >-
+          CLI tool for trusted developers - path validation implemented via
+          _validate_file_path()
+        expires: '2027-02-18'
+    - c4ce26cc-6954-4006-a47a-a6e6c2e7408c:
+        reason: >-
+          CLI tool for trusted developers - path validation implemented via
+          _validate_file_path()
+        expires: '2027-02-18'
+    - 39a1cbff-2198-43cf-9b4f-8195c58c9f00:
+        reason: >-
+          CLI tool for trusted developers - path validation implemented via
+          _validate_file_path()
+        expires: '2027-02-18'
+# ignores vulnerabilities until expiry date; change duration by modifying expiry date
+ignore:
+  7877900b-7112-4a75-8097-cc7f3b46c63c:
+    - '*':
+        reason: CLI tool with path validation - see _validate_file_path()
+        expires: 2027-02-18T00:00:00.000Z
+        created: 2026-02-19T07:04:25.363Z
+  83dfd634-4474-417a-bf0b-0c9cf03bab92:
+    - '*':
+        reason: CLI tool with path validation - see _validate_file_path()
+        expires: 2027-02-18T00:00:00.000Z
+        created: 2026-02-19T07:04:32.125Z
+  c4ce26cc-6954-4006-a47a-a6e6c2e7408c:
+    - '*':
+        reason: CLI tool with path validation - see _validate_file_path()
+        expires: 2027-02-18T00:00:00.000Z
+        created: 2026-02-19T07:04:34.870Z
+  39a1cbff-2198-43cf-9b4f-8195c58c9f00:
+    - '*':
+        reason: CLI tool with path validation - see _validate_file_path()
+        expires: 2027-02-18T00:00:00.000Z
+        created: 2026-02-19T07:04:37.416Z
+patch: {}

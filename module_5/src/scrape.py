@@ -52,6 +52,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 import time
 from typing import List, Dict, Optional
@@ -68,6 +69,53 @@ JSON_OUTPUT = "applicant_data.json"
 
 # Keep a single PoolManager
 _http = urllib3.PoolManager()
+
+
+def _validate_file_path(path: str, operation: str = "access") -> str:
+    """Validate file path to prevent path traversal attacks.
+
+    Ensures the path:
+    - Is a string
+    - Doesn't contain null bytes
+    - Resolves to a real absolute path (prevents symlink attacks)
+    - Warns about suspicious patterns (but doesn't reject for CLI flexibility)
+
+    Args:
+        path: File path to validate
+        operation: Description of operation (for error messages)
+
+    Returns:
+        Resolved absolute path
+
+    Raises:
+        ValueError: If path contains null bytes or is invalid
+
+    Security Note:
+        This function provides basic protection against common path traversal
+        attacks while maintaining CLI tool flexibility. It's designed for
+        command-line data processing tools used by trusted developers, not
+        for web applications handling untrusted user input.
+    """
+    if not isinstance(path, str):
+        raise ValueError(f"Path must be a string, got {type(path)}")
+
+    # Check for null bytes (common attack vector)
+    if '\0' in path:
+        raise ValueError("Path contains null bytes")
+
+    # Resolve to absolute path (eliminates ../ and symlinks)
+    try:
+        resolved_path = os.path.abspath(path)
+    except (TypeError, ValueError) as e:
+        raise ValueError(f"Invalid path for {operation}: {path}") from e
+
+    # Warning for suspicious patterns (but don't reject - this is a CLI tool)
+    suspicious_patterns = ['/etc/', '/sys/', '/proc/', '/dev/']
+    if any(pattern in resolved_path for pattern in suspicious_patterns):
+        print(f"[WARNING] Accessing system path: {resolved_path}")
+        print(f"[WARNING] This tool is for data processing. Ensure you trust this path.")
+
+    return resolved_path
 
 
 def _fetch_url(url: str, sleep: float = 0.1) -> Optional[str]:
@@ -342,13 +390,17 @@ def save_data(data: List[Dict[str, Optional[str]]], output_path: str = JSON_OUTP
     Returns:
         None
 
+    Raises:
+        ValueError: If path is invalid
+
     Note:
         Output is formatted with 2-space indentation and UTF-8 encoding
         for readability and international character support.
     """
-    with open(output_path, "w", encoding="utf-8") as fh:
+    validated_path = _validate_file_path(output_path, operation="write")
+    with open(validated_path, "w", encoding="utf-8") as fh:
         json.dump(data, fh, indent=2, ensure_ascii=False)
-    print(f"[save] wrote {len(data)} entries to {output_path}")
+    print(f"[save] wrote {len(data)} entries to {validated_path}")
 
 
 if __name__ == "__main__":

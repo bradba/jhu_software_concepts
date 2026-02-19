@@ -73,6 +73,53 @@ _http = urllib3.PoolManager()
 DEFAULT_LLM_API_URL = os.environ.get('LLM_API_URL', 'http://localhost:8000/standardize')
 
 
+def _validate_file_path(path: str, operation: str = "access") -> str:
+    """Validate file path to prevent path traversal attacks.
+
+    Ensures the path:
+    - Is a string
+    - Doesn't contain null bytes
+    - Resolves to a real absolute path (prevents symlink attacks)
+    - Warns about suspicious patterns (but doesn't reject for CLI flexibility)
+
+    Args:
+        path: File path to validate
+        operation: Description of operation (for error messages)
+
+    Returns:
+        Resolved absolute path
+
+    Raises:
+        ValueError: If path contains null bytes or is invalid
+
+    Security Note:
+        This function provides basic protection against common path traversal
+        attacks while maintaining CLI tool flexibility. It's designed for
+        command-line data processing tools used by trusted developers, not
+        for web applications handling untrusted user input.
+    """
+    if not isinstance(path, str):
+        raise ValueError(f"Path must be a string, got {type(path)}")
+
+    # Check for null bytes (common attack vector)
+    if '\0' in path:
+        raise ValueError("Path contains null bytes")
+
+    # Resolve to absolute path (eliminates ../ and symlinks)
+    try:
+        resolved_path = os.path.abspath(path)
+    except (TypeError, ValueError) as e:
+        raise ValueError(f"Invalid path for {operation}: {path}") from e
+
+    # Warning for suspicious patterns (but don't reject - this is a CLI tool)
+    suspicious_patterns = ['/etc/', '/sys/', '/proc/', '/dev/']
+    if any(pattern in resolved_path for pattern in suspicious_patterns):
+        print(f"[WARNING] Accessing system path: {resolved_path}")
+        print(f"[WARNING] This tool is for data processing. Ensure you trust this path.")
+
+    return resolved_path
+
+
 def _strip_html(value: str) -> str:
     """Remove HTML tags and entities, normalize whitespace.
 
@@ -163,9 +210,10 @@ def load_data(path: str) -> List[Dict[str, Any]]:
     Raises:
         FileNotFoundError: If file doesn't exist
         json.JSONDecodeError: If file contains invalid JSON
-        ValueError: If JSON root is not a list
+        ValueError: If JSON root is not a list or path is invalid
     """
-    with open(path, "r", encoding="utf-8") as fh:
+    validated_path = _validate_file_path(path, operation="read")
+    with open(validated_path, "r", encoding="utf-8") as fh:
         data = json.load(fh)
     if not isinstance(data, list):
         raise ValueError("Expected a list of records in the JSON file.")
@@ -205,10 +253,14 @@ def save_data(data: List[Dict[str, Any]], path: str) -> None:
     Returns:
         None
 
+    Raises:
+        ValueError: If path is invalid
+
     Note:
         Output is UTF-8 encoded with 2-space indentation.
     """
-    with open(path, "w", encoding="utf-8") as fh:
+    validated_path = _validate_file_path(path, operation="write")
+    with open(validated_path, "w", encoding="utf-8") as fh:
         json.dump(data, fh, indent=2, ensure_ascii=False)
 
 

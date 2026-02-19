@@ -480,4 +480,8 @@ def update_analysis():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5001)
+    # Security: Debug mode disabled by default (enables interactive debugger + autoreload)
+    # Set FLASK_DEBUG=1 environment variable to enable during local development
+    import os
+    debug_mode = os.getenv('FLASK_DEBUG', '0') == '1'
+    app.run(debug=debug_mode, port=5001)

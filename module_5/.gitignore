@@ -43,6 +43,11 @@ scripts/setup_env.sh
 # Security Reports
 snyk-report.json
 snyk-report.txt
+snyk-report-clean.txt
+snyk-code-error.txt
+snyk-code-report.txt
+snyk-code-report-remediated.txt
+snyk-code-report-final.txt
 
 # Documentation
 # Built HTML is checked in for GitHub Pages
