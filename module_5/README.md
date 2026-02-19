@@ -350,10 +350,12 @@ The project includes convenient shell scripts to simplify running the applicatio
 ```
 module_5/
 ├── README.md                           # This file
-├── requirements.txt                    # Python dependencies
+├── setup.py                            # Package configuration (makes project installable)
+├── requirements.txt                    # Python dependencies (runtime + dev + docs)
 ├── .gitignore                          # Git ignore file (excludes .env)
 ├── .env.example                        # SAFE template - copy to .env and configure
 ├── .env                                # YOUR CREDENTIALS - never commit (gitignored)
+├── dependency.svg                      # Module dependency graph (pydeps + Graphviz)
 ├── llm_extend_applicant_data.json      # Initial data (26MB)
 ├── scripts/                            # Shell scripts directory
 │   ├── run_app.sh                      # Script to run Flask application
@@ -391,6 +393,61 @@ module_5/
     └── test_scrape_unit.py             # Scraper unit tests
 ```
 ---
+
+## Python Packaging & Reproducible Environments
+
+### Why Packaging Matters
+
+This project includes a [`setup.py`](setup.py) file that makes it installable as a proper Python package, providing several critical benefits for development, testing, and deployment:
+
+**1. Consistent Import Behavior**
+Without packaging, Python imports can behave differently depending on how the code is run (direct execution vs. module import vs. test runner). Installing the package with `pip install -e .` ensures imports work consistently everywhere—local development, CI/CD pipelines, and production environments. This eliminates "it works on my machine" issues caused by `sys.path` manipulation.
+
+**2. Dependency Management**
+The `setup.py` declares all runtime dependencies (`install_requires`) and optional development dependencies (`extras_require`). This enables tools like `pip`, `uv`, and `poetry` to automatically resolve and install the complete dependency tree, ensuring reproducible environments across different machines and time periods.
+
+**3. Editable Installs for Development**
+Running `pip install -e .` creates an editable install where changes to source files immediately reflect in the installed package—no reinstall needed. This dramatically improves the development workflow while maintaining proper import paths and package structure.
+
+**4. Distribution & Deployment**
+Packaging enables multiple distribution methods: uploading to PyPI for public sharing, building wheel files (`.whl`) for efficient installation, or installing directly from version control systems. This standardization makes the project portable and easier to deploy across different environments (development, staging, production).
+
+**5. Tool Integration**
+Modern Python tools like `uv` (ultra-fast package installer), `tox` (testing automation), and `setuptools-scm` (version management from git tags) all expect properly packaged projects. Packaging unlocks this ecosystem of productivity tools and ensures the project follows Python community best practices.
+
+### Installing the Package
+
+**Development installation (editable mode):**
+```bash
+# Install package in editable mode with all development tools
+pip install -e .[dev,docs]
+```
+
+**Production installation:**
+```bash
+# Install package with only runtime dependencies
+pip install .
+```
+
+**Using uv (faster alternative to pip):**
+```bash
+# Install uv if not already installed
+pip install uv
+
+# Create a virtual environment and install dependencies
+uv venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+uv pip install -e .[dev,docs]
+```
+
+### Requirements Files
+
+| File | Purpose | Used By |
+|------|---------|---------|
+| [`requirements.txt`](requirements.txt) | All dependencies (runtime + dev + docs) | Direct `pip install -r` workflow |
+| [`setup.py`](setup.py) | Package metadata + dependencies | `pip install -e .`, distribution, uv |
+
+The project supports both workflows: traditional `pip install -r requirements.txt` and modern `pip install -e .` for package-based development.
 
 ## Code Quality — Pylint
 
