@@ -42,6 +42,96 @@ nano .env
 
 See [Database Security - Least-Privilege User Setup](#database-security---least-privilege-user-setup) for creating a secure database user.
 
+### Fresh Install (Complete Setup from Scratch)
+
+This section shows how to set up the entire project in a brand new environment using either **pip** (traditional) or **uv** (modern/faster).
+
+#### Method 1: Fresh Install with pip (Traditional)
+
+```bash
+# Clone or download the project
+cd module_5/
+
+# Create a fresh virtual environment
+python -m venv .venv
+
+# Activate the virtual environment
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+
+# Option A: Install from requirements.txt (all dependencies)
+pip install -r requirements.txt
+
+# Option B: Install as editable package (recommended for development)
+pip install -e .[dev,docs]
+
+# Configure database credentials
+cp .env.example .env
+nano .env  # Edit with your database settings
+
+# Verify installation
+python -c "import flask; import psycopg; print('✓ All dependencies installed')"
+
+# Load initial data
+python src/load_data.py
+
+# Run the Flask web application
+python src/app.py
+```
+
+#### Method 2: Fresh Install with uv (Faster Alternative)
+
+[uv](https://github.com/astral-sh/uv) is a blazingly fast Python package installer written in Rust—up to 10-100x faster than pip.
+
+```bash
+# Clone or download the project
+cd module_5/
+
+# Install uv (if not already installed)
+pip install uv
+# Or on macOS/Linux: curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Create virtual environment with uv
+uv venv
+
+# Activate the virtual environment
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+
+# Option A: Install from requirements.txt
+uv pip install -r requirements.txt
+
+# Option B: Install as editable package (faster resolution)
+uv pip install -e .[dev,docs]
+
+# Configure database credentials
+cp .env.example .env
+nano .env  # Edit with your database settings
+
+# Verify installation
+python -c "import flask; import psycopg; print('✓ All dependencies installed')"
+
+# Load initial data
+python src/load_data.py
+
+# Run the Flask web application
+python src/app.py
+```
+
+#### Comparison: pip vs uv
+
+| Feature | pip | uv |
+|---------|-----|-----|
+| **Installation Speed** | Baseline | 10-100x faster |
+| **Dependency Resolution** | Can be slow on complex projects | Parallel resolution, extremely fast |
+| **Compatibility** | Standard Python tool | Drop-in replacement for pip |
+| **Cache** | Local cache | Global cache + optimizations |
+| **Best For** | Standard workflows, CI/CD | Development, large dependency trees |
+
+**When to use each:**
+- **Use pip:** Standard installations, maximum compatibility, CI/CD pipelines
+- **Use uv:** Local development, faster iteration, large projects with many dependencies
+
+Both methods produce identical results—uv is simply faster at resolving and installing the same packages.
+
 ### Using Convenience Scripts (Recommended)
 
 The project includes shell scripts that handle environment variable setup automatically:
