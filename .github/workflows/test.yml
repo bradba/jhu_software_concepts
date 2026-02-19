@@ -83,7 +83,7 @@ jobs:
         run: |
           echo "::group::Dependency Graph Generation"
           # Generate dependency graph
-          pydeps src --max-bacon=2 -o dependency.svg
+          pydeps src --max-bacon=2 -o dependency.svg --no-show
 
           # Verify the file was created
           if [ ! -f dependency.svg ]; then
