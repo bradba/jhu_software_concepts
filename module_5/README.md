@@ -15,7 +15,7 @@ This project analyzes graduate school application data using PostgreSQL and Flas
 
 ### Prerequisites
 
-**Install Dependencies:**
+**1. Install Dependencies:**
 ```bash
 pip install -r requirements.txt
 ```
@@ -25,7 +25,22 @@ Or install manually:
 pip install psycopg[binary] flask reportlab beautifulsoup4 urllib3
 ```
 
-**Ensure PostgreSQL is running** on localhost:5432
+**2. Configure Database Connection:**
+
+Create your `.env` file from the template:
+```bash
+cp .env.example .env
+```
+
+Edit `.env` with your database credentials (see [Database Configuration](#database-configuration) section for details):
+```bash
+# Edit with your database credentials
+nano .env
+```
+
+**3. Ensure PostgreSQL is running** on localhost:5432
+
+See [Database Security - Least-Privilege User Setup](#database-security---least-privilege-user-setup) for creating a secure database user.
 
 ### Using Convenience Scripts (Recommended)
 
@@ -129,30 +144,62 @@ Then run any command:
 python src/load_data.py
 ```
 
-### Using .env File
+### Using .env File (Recommended for Local Development)
 
-Copy `.env.example` to `.env` and configure:
-```bash
-cp .env.example .env
-# Edit .env with your settings
-```
+**⚠️ SECURITY WARNING:** Never commit `.env` files to version control. They contain real credentials and are automatically excluded by `.gitignore`.
 
-Example `.env` file:
-```bash
-# Database Configuration
-DATABASE_URL=postgresql://username:password@localhost:5432/mydb
-# OR use individual variables:
-# DB_HOST=localhost
-# DB_PORT=5432
-# DB_NAME=mydb
-# DB_USER=myuser
-# DB_PASSWORD=mypassword
+#### Quick Start
 
-# LLM API Configuration
-LLM_API_URL=http://localhost:8000/standardize
-```
+1. **Copy the template** - [`.env.example`](.env.example) is a safe template file (committed to git):
+   ```bash
+   cp .env.example .env
+   ```
 
-**Note:** The application reads environment variables directly. If using a `.env` file, you'll need to load it with a tool like `python-dotenv` or manually export the variables before running the application.
+2. **Edit with your credentials** - Replace placeholder values in `.env`:
+   ```bash
+   nano .env  # or use your preferred editor
+   ```
+
+3. **Configure database connection** - Choose one of two formats:
+
+   **Option A: CONNECTION_URL (single line):**
+   ```bash
+   DATABASE_URL=postgresql://gradcafe_app_user:your_password@localhost:5432/your_db
+   ```
+
+   **Option B: Individual variables (more readable):**
+   ```bash
+   DB_HOST=localhost
+   DB_PORT=5432
+   DB_NAME=your_database_name
+   DB_USER=gradcafe_app_user
+   DB_PASSWORD=your_secure_password_here
+   ```
+
+4. **Load environment variables** before running the app:
+   ```bash
+   # Export all variables from .env
+   export $(cat .env | xargs)
+
+   # Then run the application
+   python src/app.py
+   ```
+
+   Or use the convenience scripts which handle this automatically:
+   ```bash
+   ./scripts/run_app.sh
+   ```
+
+#### What Goes in Each File?
+
+| File | Purpose | Committed to Git? | Contents |
+|------|---------|-------------------|----------|
+| `.env.example` | Template with placeholder values | ✅ Yes (safe) | `DB_USER=gradcafe_app_user` |
+| `.env` | Your actual credentials | ❌ **NO** (in .gitignore) | `DB_PASSWORD=MyRealPassword123!` |
+
+**Note:** The application reads environment variables directly from the shell environment. The `.env` file is just a convenient way to store them locally. You must manually export the variables before running Python (or use scripts that do this automatically).
+
+For production deployments, set environment variables directly in your hosting platform (Heroku, AWS, etc.) rather than using `.env` files.
 
 ### Default Configuration
 
@@ -193,7 +240,7 @@ After building, open `docs/_build/html/index.html` in your browser to view the A
 
 ## Running Tests
 
-The project includes a comprehensive test suite with 100% code coverage (166 tests).
+The project includes a comprehensive test suite with 100% code coverage (176 tests).
 
 ### Using Test Script (Recommended)
 
@@ -301,11 +348,12 @@ The project includes convenient shell scripts to simplify running the applicatio
 ## Project Structure
 
 ```
-module_4/
+module_5/
 ├── README.md                           # This file
 ├── requirements.txt                    # Python dependencies
-├── .gitignore                          # Git ignore file
-├── .env.example                        # Example environment configuration
+├── .gitignore                          # Git ignore file (excludes .env)
+├── .env.example                        # SAFE template - copy to .env and configure
+├── .env                                # YOUR CREDENTIALS - never commit (gitignored)
 ├── llm_extend_applicant_data.json      # Initial data (26MB)
 ├── scripts/                            # Shell scripts directory
 │   ├── run_app.sh                      # Script to run Flask application
@@ -330,7 +378,7 @@ module_4/
 │   │       └── style.css               # JHU-themed stylesheet
 │   └── templates/                      # HTML templates
 │       └── index.html                  # Web template (with control panel)
-└── tests/                              # Test suite (166 tests, 100% coverage)
+└── tests/                              # Test suite (176 tests, 100% coverage)
     ├── test_analysis_format.py         # Analysis format tests
     ├── test_app_errors.py              # Flask endpoint error tests
     ├── test_buttons.py                 # Button functionality tests
