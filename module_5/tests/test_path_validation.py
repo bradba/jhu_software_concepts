@@ -1,7 +1,9 @@
 """Tests for path validation in clean.py and scrape.py."""
 
-import pytest
 from unittest import mock
+
+import pytest
+
 from clean import _validate_file_path as clean_validate
 from scrape import _validate_file_path as scrape_validate
 

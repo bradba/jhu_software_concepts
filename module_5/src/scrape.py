@@ -113,7 +113,7 @@ def _validate_file_path(path: str, operation: str = "access") -> str:
     suspicious_patterns = ['/etc/', '/sys/', '/proc/', '/dev/']
     if any(pattern in resolved_path for pattern in suspicious_patterns):
         print(f"[WARNING] Accessing system path: {resolved_path}")
-        print(f"[WARNING] This tool is for data processing. Ensure you trust this path.")
+        print("[WARNING] This tool is for data processing. Ensure you trust this path.")
 
     return resolved_path
 
